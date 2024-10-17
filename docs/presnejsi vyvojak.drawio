@@ -1,0 +1,55 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram name="Page-1" id="eODsZHfyAk8XZdAAYMWP">
+    <mxGraphModel dx="1674" dy="836" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="meK3nM89204dYSEs8Aw3-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="meK3nM89204dYSEs8Aw3-1" target="meK3nM89204dYSEs8Aw3-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-1" value="&lt;div&gt;checkpoin&lt;span style=&quot;background-color: initial;&quot;&gt;t&lt;/span&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="210" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="meK3nM89204dYSEs8Aw3-2" target="meK3nM89204dYSEs8Aw3-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-2" value="donekonečna&lt;div&gt;ale pomaleji&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="350" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="meK3nM89204dYSEs8Aw3-4" target="meK3nM89204dYSEs8Aw3-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-4" value="nastav BLE beacon" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="290" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="meK3nM89204dYSEs8Aw3-6" target="meK3nM89204dYSEs8Aw3-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-6" value="zapni BLE beacon" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="480" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="meK3nM89204dYSEs8Aw3-7" target="meK3nM89204dYSEs8Aw3-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-7" value="vyšli svoje ID" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="544.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="meK3nM89204dYSEs8Aw3-8" target="meK3nM89204dYSEs8Aw3-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="660" />
+              <mxPoint x="190" y="660" />
+              <mxPoint x="190" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-8" value="přejdi do spánku" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="600" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="meK3nM89204dYSEs8Aw3-11" value="doba např 5s +-1s (náhodně)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="190" y="670" width="100" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

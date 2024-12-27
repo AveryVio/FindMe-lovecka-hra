@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram name="Page-1" id="X1fKdzNJ7_C6b779opvF">
-    <mxGraphModel dx="3144" dy="2363" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2345" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -234,19 +234,19 @@
         <mxCell id="wpEJ-IihH82wH1X1R5QR-18" value="připojeno k koncovému bodu" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
           <mxGeometry x="190" y="300" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Evz5vJ_2obNAGlg3wRVu-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Evz5vJ_2obNAGlg3wRVu-1" target="Evz5vJ_2obNAGlg3wRVu-2" edge="1">
+        <mxCell id="Evz5vJ_2obNAGlg3wRVu-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Evz5vJ_2obNAGlg3wRVu-1" target="Evz5vJ_2obNAGlg3wRVu-2">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Evz5vJ_2obNAGlg3wRVu-1" value="&lt;div&gt;checkpoint&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="Evz5vJ_2obNAGlg3wRVu-1" value="&lt;div&gt;checkpoint&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1190" y="30" width="80" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="Evz5vJ_2obNAGlg3wRVu-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="Evz5vJ_2obNAGlg3wRVu-2" target="Evz5vJ_2obNAGlg3wRVu-3" edge="1">
+        <mxCell id="Evz5vJ_2obNAGlg3wRVu-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Evz5vJ_2obNAGlg3wRVu-2" target="Evz5vJ_2obNAGlg3wRVu-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Evz5vJ_2obNAGlg3wRVu-2" value="donekonečna&lt;div&gt;ale pomaleji&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="Evz5vJ_2obNAGlg3wRVu-2" value="donekonečna&lt;div&gt;ale pomaleji&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="1185.5" y="110" width="89" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="Evz5vJ_2obNAGlg3wRVu-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="Evz5vJ_2obNAGlg3wRVu-3" target="Evz5vJ_2obNAGlg3wRVu-2" edge="1">
+        <mxCell id="Evz5vJ_2obNAGlg3wRVu-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Evz5vJ_2obNAGlg3wRVu-3" target="Evz5vJ_2obNAGlg3wRVu-2">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1150" y="260" />
@@ -254,7 +254,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="Evz5vJ_2obNAGlg3wRVu-3" value="vysílej svůj id + validační hash" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" parent="1" vertex="1">
+        <mxCell id="Evz5vJ_2obNAGlg3wRVu-3" value="vysílej svůj id + validační hash" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
           <mxGeometry x="1170" y="230" width="120" height="60" as="geometry" />
         </mxCell>
       </root>

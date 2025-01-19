@@ -1,0 +1,26 @@
+# setup the environmnent
+FROM python:3.13.1-alpine3.21
+WORKDIR /app
+
+RUN echo "API container made"
+
+# setup pip
+RUN pip install --upgrade pip
+
+# install packages for python
+COPY ../api/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN echo "Python and psycopg installed"
+
+# add html docs
+COPY ../websites/conntest.html .
+
+# add python scripts
+COPY ../api/main.py .
+COPY ../api/posgtres_fucntions.py .
+
+RUN echo "Python files iported"
+
+#run python script
+CMD sleep 1;python main.py

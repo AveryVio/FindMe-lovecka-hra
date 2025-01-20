@@ -14,32 +14,214 @@ print("imported http functions")
 import psycopg
 print("imported psycopg")
 
-# mine for visual clarity
-try:
-    from posgtres_fucntions import *
-    dbapi_test()
-except:
-    print("failed to import postgres functions")
+####################################################################################################################################################################################
+####################################################################################################################################################################################
 
-# not final db column strucutre
-'''
-table whale (testing)
-    id serial primary
-    name text
-    data integer
-table Hunts
-    id serial primary
-    HuntID text
-    TimesCompleted integer
-table Users
-    id serial primary
-    HuntsMade integer
-    AsociatedHunts text
-'''
+# create functions
+# create table
+def create_table(dbname, user, host, port, table_name, columns):
+    """
+    Create a custom table in a PostgreSQL database.
 
-# http customizable info
-hostName = "0.0.0.0"
-serverPort = 5000
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the new table.
+        columns (dict): A dictionary where keys are column names and values are their SQL types.
+
+    Returns:
+    bool: True if the table was created successfully, False otherwise.
+    """
+    try:
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            dbname=dbname,
+            user=user,
+            host=host,
+            port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                # Build the CREATE TABLE query dynamically
+                column_definitions = ", ".join([f'"{col}" {col_type}' for col, col_type in columns.items()])
+                query = f"CREATE TABLE IF NOT EXISTS {table_name} ({column_definitions});"
+                
+                cursor.execute(query)
+                conn.commit()
+                
+                print(f"Table '{table_name}' created successfully!")
+                return True
+
+    except (Exception, psycopg.Error) as error:
+        print("Error creating table:", error)
+        return False
+
+# fetch functions
+# fetch specific columns
+def fetch_columns_from_table(dbname, user, host, port, table_name, columns):
+    """
+    Fetch specific columns from a table in a PostgreSQL database.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+        columns (list): List of column names to fetch.
+
+    Returns:
+    list: Rows fetched from the specified columns.
+    """
+    try:
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            dbname=dbname,
+            user=user,
+            host=host,
+            port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                # Build the query dynamically
+                column_list = ", ".join([f'"{col}"' for col in columns])  # Safe column names
+                query = f"SELECT {column_list} FROM {table_name};"
+                
+                cursor.execute(query)
+                rows = cursor.fetchall()
+                
+                return rows
+
+    except (Exception, psycopg.Error) as error:
+        print("Error fetching data:", error)
+        return None
+
+# fetch column row filter combo
+def fetch_from_table(dbname, user, host, port, table_name, column_name, value):
+    """
+    Fetch data from a PostgreSQL table based on a filter.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+        column_name (str): The column to filter by.
+        value (str, int, float, etc.): The value to filter by.
+
+    Returns:
+        list: A list of dictionaries where each dictionary represents a row in the result set.
+        Each dictionary's keys are column names and values are the corresponding values in the row.
+    """
+    try:
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            dbname=dbname,
+            user=user,
+            host=host,
+            port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                # Build the SELECT query dynamically with filtering
+                query = f"""
+                    SELECT * 
+                    FROM {table_name} 
+                    WHERE "{column_name}" = %s
+                """
+                
+                # Execute the query with the given value for filtering
+                cursor.execute(query, (value,))
+                
+                # Fetch all matching rows
+                rows = cursor.fetchall()
+
+                # Return the result as a list of dictionaries (one dictionary per row)
+                columns = [desc[0] for desc in cursor.description]  # Extract column names
+                result = [dict(zip(columns, row)) for row in rows]
+
+                return result
+
+    except (Exception, psycopg.Error) as error:
+        print("Error fetching data:", error)
+        return []
+
+#insert functions
+# insert function
+def insert_into_table(dbname, user, host, port, table_name, data):
+    """
+    Insert data into a PostgreSQL table.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+        data (dict): A dictionary where keys are column names and values are the values to insert.
+            data = {
+                'id': 1,
+                'name': 'John Doe',
+                'email': 'john.doe@example.com'
+            }
+
+    Returns:
+    bool: True if the insertion was successful, False otherwise.
+    """
+    try:
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            dbname=dbname,
+            user=user,
+            host=host,
+            port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                # Build the INSERT query dynamically
+                columns = ", ".join([f'"{col}"' for col in data.keys()])
+                placeholders = ", ".join([f"%({col})s" for col in data.keys()])
+                query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
+                
+                # Execute the query with data
+                cursor.execute(query, data)
+                conn.commit()
+                
+                print("Data inserted successfully!")
+                return True
+
+    except (Exception, psycopg.Error) as error:
+        print("Error inserting data:", error)
+        return False
+
+
+####################################################################################################################################################################################
+####################################################################################################################################################################################
+
+
+
+tablee = {
+    'id': 'BIGSERIAL PRIMARY KEY',
+    'number': 'INTEGER',
+    'name': 'TEXT'
+}
+
+create_table("mydb", "master", "slon", 5432, "taable", tablee)
+
+data0 = {
+    'number': 1,
+    'name': 'uwu'
+}
+data1 = {
+    'number': 1,
+    'name': 'owo'
+}
+
+insert_into_table("mydb", "master", "slon", 5432, "taable", data0)
+insert_into_table("mydb", "master", "slon", 5432, "taable", data1)
+
+
+
+
 
 '''
 # client get function
@@ -64,6 +246,34 @@ def CreateHunt(HuntNumber)
 
 
 
+
+
+
+
+
+
+
+
+
+# not final db column strucutre
+'''
+table whale (testing)
+    id serial primary
+    name text
+    data integer
+table Hunts
+    id serial primary
+    HuntID text
+    TimesCompleted integer
+table Users
+    id serial primary
+    HuntsMade integer
+    AsociatedHunts text
+'''
+
+# http customizable info
+hostName = "0.0.0.0"
+serverPort = 5000
 
 
 # --- HTTP Server ---
@@ -135,56 +345,4 @@ Your custom function should return something like:
   "status": "success",
   "message": "Data added successfully"
 }
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'''
-    # Open a cursor to perform database operations
-    with conn.cursor() as cur:
-
-        # Execute a command: this creates a new table
-        cur.execute("""
-            CREATE TABLE test (
-                id serial PRIMARY KEY,
-                num integer,
-                data text)
-            """)
-
-        # Pass data to fill a query placeholders and let Psycopg perform
-        # the correct conversion (no SQL injections!)
-        cur.execute(
-            "INSERT INTO test (num, data) VALUES (%s, %s)",
-            (100, "abc'def"))
-
-        # Query the database and obtain data as Python objects.
-        cur.execute("SELECT * FROM test")
-        cur.fetchone()
-        # will return (1, 100, "abc'def")
-
-        # You can use `cur.fetchmany()`, `cur.fetchall()` to return a list
-        # of several records, or even iterate on the cursor
-        for record in cur:
-            print(record)
-
-        # Make the changes to the database persistent
-        conn.commit()
 '''

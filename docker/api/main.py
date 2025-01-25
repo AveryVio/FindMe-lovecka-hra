@@ -220,6 +220,34 @@ insert_into_table("mydb", "master", "slon", 5432, "taable", data0)
 insert_into_table("mydb", "master", "slon", 5432, "taable", data1)
 
 
+class DBConn:
+    name = "mydb"
+    user = "master"
+    host = "slon"
+    port = 5432
+
+class tableWhale:
+    name = "placeholder"
+    columnsList = {
+        'id': 'BIGSERIAL PRIMARY KEY',
+        'number': 'INTEGER',
+        'name': 'TEXT'
+    }
+    testingData0 = {
+        'number': 1,
+        'name': 'uwu'
+    }
+    testingData1 = {
+        'number': 1,
+        'name': 'owo'
+    }
+
+class tableHunts
+    name = "Hunts"
+    s
+
+
+####################################################################################################################################################################################
 
 
 

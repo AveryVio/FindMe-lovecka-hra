@@ -57,7 +57,49 @@ def create_table(dbname, user, host, port, table_name, columns):
         print("Error creating table:", error)
         return False
 
+
 # fetch functions
+#fetch whole table
+def fetch_all_from_table(dbname, user, host, port, table_name):
+    """
+    Fetch all rows from a PostgreSQL table.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+
+    Returns:
+        list: A list of dictionaries representing the table rows, where keys are column names.
+    """
+    try:
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            dbname=dbname,
+            user=user,
+            host=host,
+            port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                # Fetch all data from the table
+                query = f'SELECT * FROM {table_name}'
+                cursor.execute(query)
+                
+                # Retrieve column names
+                col_names = [desc[0] for desc in cursor.description]
+
+                # Fetch all rows and convert them to dictionaries
+                rows = cursor.fetchall()
+                result = [dict(zip(col_names, row)) for row in rows]
+                
+                return result
+
+    except (Exception, psycopg.Error) as error:
+        print("Error fetching data:", error)
+        return False
+
 # fetch specific columns
 def fetch_columns_from_table(dbname, user, host, port, table_name, columns):
     """
@@ -96,8 +138,8 @@ def fetch_columns_from_table(dbname, user, host, port, table_name, columns):
         print("Error fetching data:", error)
         return None
 
-# fetch column row filter combo
-def fetch_from_table(dbname, user, host, port, table_name, column_name, value):
+# fetch rows with filter
+def fetch_from_table_with_filter(dbname, user, host, port, table_name, column_name, value):
     """
     Fetch data from a PostgreSQL table based on a filter.
 
@@ -146,6 +188,7 @@ def fetch_from_table(dbname, user, host, port, table_name, column_name, value):
         print("Error fetching data:", error)
         return []
 
+
 #insert functions
 # insert function
 def insert_into_table(dbname, user, host, port, table_name, data):
@@ -191,47 +234,6 @@ def insert_into_table(dbname, user, host, port, table_name, data):
 
     except (Exception, psycopg.Error) as error:
         print("Error inserting data:", error)
-        return False
-
-
-def fetch_all_from_table(dbname, user, host, port, table_name):
-    """
-    Fetch all rows from a PostgreSQL table.
-
-    Parameters:
-        dbname (str): Database name.
-        user (str): Username.
-        host (str): Host address.
-        port (int): Port number.
-        table_name (str): Name of the table.
-
-    Returns:
-        list: A list of dictionaries representing the table rows, where keys are column names.
-    """
-    try:
-        # Connect to the PostgreSQL database
-        with psycopg.connect(
-            dbname=dbname,
-            user=user,
-            host=host,
-            port=port
-        ) as conn:
-            with conn.cursor() as cursor:
-                # Fetch all data from the table
-                query = f'SELECT * FROM {table_name}'
-                cursor.execute(query)
-                
-                # Retrieve column names
-                col_names = [desc[0] for desc in cursor.description]
-
-                # Fetch all rows and convert them to dictionaries
-                rows = cursor.fetchall()
-                result = [dict(zip(col_names, row)) for row in rows]
-                
-                return result
-
-    except (Exception, psycopg.Error) as error:
-        print("Error fetching data:", error)
         return False
 
 
@@ -303,6 +305,8 @@ insert_into_table(connection_data.name, connection_data.user, connection_data.ho
 
 
 print(fetch_all_from_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name))
+print(fetch_from_table_with_filter(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, "name", "owo"))
+print(fetch_columns_from_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, ["name"]))
 
 ####################################################################################################################################################################################
 

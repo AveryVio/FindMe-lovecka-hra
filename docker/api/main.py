@@ -194,30 +194,51 @@ def insert_into_table(dbname, user, host, port, table_name, data):
         return False
 
 
+def fetch_all_from_table(dbname, user, host, port, table_name):
+    """
+    Fetch all rows from a PostgreSQL table.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+
+    Returns:
+        list: A list of dictionaries representing the table rows, where keys are column names.
+    """
+    try:
+        # Connect to the PostgreSQL database
+        with psycopg.connect(
+            dbname=dbname,
+            user=user,
+            host=host,
+            port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                # Fetch all data from the table
+                query = f'SELECT * FROM {table_name}'
+                cursor.execute(query)
+                
+                # Retrieve column names
+                col_names = [desc[0] for desc in cursor.description]
+
+                # Fetch all rows and convert them to dictionaries
+                rows = cursor.fetchall()
+                result = [dict(zip(col_names, row)) for row in rows]
+                
+                return result
+
+    except (Exception, psycopg.Error) as error:
+        print("Error fetching data:", error)
+        return False
+
+
+
 ####################################################################################################################################################################################
 ####################################################################################################################################################################################
 
-
-
-tablee = {
-    'id': 'BIGSERIAL PRIMARY KEY',
-    'number': 'INTEGER',
-    'name': 'TEXT'
-}
-
-create_table("mydb", "master", "slon", 5432, "taable", tablee)
-
-data0 = {
-    'number': 1,
-    'name': 'uwu'
-}
-data1 = {
-    'number': 1,
-    'name': 'owo'
-}
-
-insert_into_table("mydb", "master", "slon", 5432, "taable", data0)
-insert_into_table("mydb", "master", "slon", 5432, "taable", data1)
 
 
 class DBConn:
@@ -226,8 +247,8 @@ class DBConn:
     host = "slon"
     port = 5432
 
-class tableWhale:
-    name = "placeholder"
+class tableWhaleClass:
+    name = "whale"
     columnsList = {
         'id': 'BIGSERIAL PRIMARY KEY',
         'number': 'INTEGER',
@@ -242,10 +263,46 @@ class tableWhale:
         'name': 'owo'
     }
 
-class tableHunts
+class tableHuntsClass:
     name = "Hunts"
-    s
+    columnsList = {
+        'id': 'BIGSERIAL PRIMARY KEY',
+        'huntid': 'TEXT'
+    }
+    testingData0 = {
+        'huntid': 'MQ=='
+    }
+    testingData1 = {
+        'huntid': 'Mg=='
+    }
 
+class tableUsersClass:
+    name = "Users"
+    columnsList = {
+        'id': 'BIGSERIAL PRIMARY KEY',
+        'userid': 'TEXT'
+    }
+    testingData0 = {
+        'userid': 'mqtt'
+    }
+    testingData1 = {
+        'userid': 'spi'
+    }
+
+connection_data = DBConn()
+tableWhale = tableWhaleClass()
+tableHunts = tableHuntsClass()
+tableUsers = tableUsersClass()
+
+
+create_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.columnsList)
+
+insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.testingData0)
+insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.testingData1)
+insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.testingData1)
+
+
+print(fetch_all_from_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name))
 
 ####################################################################################################################################################################################
 

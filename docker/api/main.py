@@ -59,7 +59,7 @@ def create_table(dbname, user, host, port, table_name, columns):
 
 
 # fetch functions
-#fetch whole table
+# fetch whole table
 def fetch_all_from_table(dbname, user, host, port, table_name):
     """
     Fetch all rows from a PostgreSQL table.
@@ -189,7 +189,7 @@ def fetch_from_table_with_filter(dbname, user, host, port, table_name, column_na
         return []
 
 
-#insert functions
+# insert functions
 # insert function
 def insert_into_table(dbname, user, host, port, table_name, data):
     """

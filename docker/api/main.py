@@ -316,8 +316,15 @@ class MyServer(BaseHTTPRequestHandler):
                     self.wfile.write(file.read())
             else:
                 self.send_error(404, "File not found")
+
         if self.path == '/spse':
-            return "http://spseplzen.cz"
+            self.send_response(301)
+            self.send_header('Location','http://spseplzen.cz')
+            self.end_headers()
+        
+        if self.path == '/i_venture_forth_to_hunt'
+            # here goes the return for retrieve hunts
+            print("test")
 
     def do_HEAD(self):
         if self.path == '/conntest':
@@ -352,7 +359,7 @@ class MyServer(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "error", "message": str(errorMessage)}).encode())
 
 webServer = HTTPServer((hostName, serverPort), MyServer)
-print("Server started http://%s:%s" % (hostName, serverPort))
+print("HTTP server started http://%s:%s" % (hostName, serverPort))
 webServer.serve_forever()
 
 

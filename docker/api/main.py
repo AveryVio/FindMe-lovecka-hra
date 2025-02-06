@@ -312,38 +312,6 @@ print(fetch_columns_from_table(connection_data.name, connection_data.user, conne
 
 
 
-'''
-# client get function
-def GetHuntInfo(HuntNumber):
-    with psycopg.connect("dbname=mydb user=master host=slon port=5432") as conn:
-        with conn.cursor() as cur:
-            cur.execute("") # get the info
-            cur.fetchone()
-            # now you have the record thin in cur and can send it
-
-# client create hunt action
-def CreateHunt(HuntNumber)
-    with psycopg.connect("dbname=mydb user=master host=slon port=5432") as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT * FROM whale WHERE HuntID LIKE HuntNumber") # try if record exists
-            try:
-            for record in cur:
-                print(record)
-        except: print("nothing in table")
-'''
-
-
-
-
-
-
-
-
-
-
-
-
-
 # not final db column strucutre
 '''
 table whale (testing)

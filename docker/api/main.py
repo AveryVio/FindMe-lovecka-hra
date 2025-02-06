@@ -352,7 +352,17 @@ class MyServer(BaseHTTPRequestHandler):
             self.end_headers()
         
         if self.path == '/i_venture_forth_to_hunt'
-            # here goes the return for retrieve hunts
+            try:
+                data = fetch_all_from_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name)
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps(data).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
             print("test")
 
     def do_HEAD(self):
@@ -370,8 +380,7 @@ class MyServer(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             try:
                 data = json.loads(post_data)
-                # Call your custom DB function with the parsed data
-                response = your_custom_db_function(data)
+                response = insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, data)
                 self.send_response(200 if response.get('status') == 'success' else 500)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()

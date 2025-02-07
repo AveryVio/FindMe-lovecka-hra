@@ -298,6 +298,8 @@ tableUsers = tableUsersClass()
 
 
 create_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.columnsList)
+create_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, tableHunts.columnsList)
+create_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableUsers.name, tableUsers.columnsList)
 
 insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.testingData0)
 insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableWhale.name, tableWhale.testingData1)
@@ -346,12 +348,14 @@ class MyServer(BaseHTTPRequestHandler):
             else:
                 self.send_error(404, "File not found")
 
-        if self.path == '/spse':
-            self.send_response(301)
-            self.send_header('Location','http://spseplzen.cz')
+        if self.path == '/add':
+            self.send_response(200)
+            self.send_header("Content-type", "html")  # Adjust MIME type if necessary
             self.end_headers()
+            self.wfile.write(bytes("<html><body><p>this is only for data input</p></body></html>","utf-8"))
+
         
-        if self.path == '/i_venture_forth_to_hunt'
+        if self.path == '/i_venture_forth_to_hunt':
             try:
                 data = fetch_all_from_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name)
                 self.send_response(200)
@@ -363,7 +367,11 @@ class MyServer(BaseHTTPRequestHandler):
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
                 self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
-            print("test")
+
+        if self.path == '/spse':
+            self.send_response(301)
+            self.send_header('Location','http://spseplzen.cz')
+            self.end_headers()
 
     def do_HEAD(self):
         if self.path == '/conntest':
@@ -380,7 +388,9 @@ class MyServer(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             try:
                 data = json.loads(post_data)
-                response = insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, data)
+                response_result = insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, data)
+                response = {"get":response_result}
+                
                 self.send_response(200 if response.get('status') == 'success' else 500)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
@@ -406,9 +416,7 @@ for POST
 
 Example Request (cURL):
 
-curl -X POST http://localhost:8080/add \
--H "Content-Type: application/json" \
--d '{"name": "item1", "value": 100}'
+curl -X POST http://localhost:5000/add -H "Content-Type: application/json" -d '{"column":"data"}'
 
 ✅ Expected Response:
 

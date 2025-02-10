@@ -383,14 +383,34 @@ class MyServer(BaseHTTPRequestHandler):
                 self.send_error(404, "File not found")
 
     def do_POST(self):
-        if self.path == '/add':  # Endpoint for adding data
+        if self.path == '/add_hunt':  # Endpoint for adding data
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             try:
                 data = json.loads(post_data)
                 response_result = insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, data)
                 response = {"get":response_result}
-                
+                self.send_response(200 if response.get('status') == 'success' else 500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps(response).encode())
+            except json.JSONDecodeError:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": "Invalid JSON"}).encode())
+            except Exception as errorMessage:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "message": str(errorMessage)}).encode())
+        if self.path == '/add_user':  # Endpoint for adding data
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data)
+                response_result = insert_into_table(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableUsers.name, data)
+                response = {"get":response_result}
                 self.send_response(200 if response.get('status') == 'success' else 500)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()

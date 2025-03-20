@@ -152,9 +152,9 @@ WOLFSSL_API void wolfSSL_SetLoggingPrefix(const char* prefix);
     WOLFSSL_API void WOLFSSL_END(int funcNum);
     WOLFSSL_API void WOLFSSL_TIME(int count);
 #else
-    #define WOLFSSL_START(n) WC_DO_NOTHING
-    #define WOLFSSL_END(n)   WC_DO_NOTHING
-    #define WOLFSSL_TIME(n)  WC_DO_NOTHING
+    #define WOLFSSL_START(n) do{} while(0)
+    #define WOLFSSL_END(n)   do{} while(0)
+    #define WOLFSSL_TIME(n)  do{} while(0)
 #endif
 
 #if defined(DEBUG_WOLFSSL) && !defined(WOLFSSL_DEBUG_ERRORS_ONLY)
@@ -185,14 +185,14 @@ WOLFSSL_API void wolfSSL_SetLoggingPrefix(const char* prefix);
 
 #else
 
-    #define WOLFSSL_ENTER(m)      WC_DO_NOTHING
-    #define WOLFSSL_LEAVE(m, r)   WC_DO_NOTHING
-    #define WOLFSSL_STUB(m)       WC_DO_NOTHING
+    #define WOLFSSL_ENTER(m)      do{} while(0)
+    #define WOLFSSL_LEAVE(m, r)   do{} while(0)
+    #define WOLFSSL_STUB(m)       do{} while(0)
     #define WOLFSSL_IS_DEBUG_ON() 0
 
-    #define WOLFSSL_MSG_EX(...)   WC_DO_NOTHING
-    #define WOLFSSL_MSG(m)        WC_DO_NOTHING
-    #define WOLFSSL_BUFFER(b, l)  WC_DO_NOTHING
+    #define WOLFSSL_MSG_EX(...)   do{} while(0)
+    #define WOLFSSL_MSG(m)        do{} while(0)
+    #define WOLFSSL_BUFFER(b, l)  do{} while(0)
 
 #endif /* DEBUG_WOLFSSL && !WOLFSSL_DEBUG_ERRORS_ONLY */
 

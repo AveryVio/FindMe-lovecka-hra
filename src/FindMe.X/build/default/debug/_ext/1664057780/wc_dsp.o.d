@@ -1,5 +1,6 @@
-build/default/debug/_ext/1171490990/interrupts.o: \
- ../src/config/default/interrupts.c ../src/config/default/configuration.h \
+build/default/debug/_ext/1664057780/wc_dsp.o: \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/src/wc_dsp.c \
+ ../src/config/default/config.h ../src/config/default/configuration.h \
  ../src/config/default/user.h ../src/config/default/device.h \
  ../src/packs/WBZ451_DFP/wbz451.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/core_cm4.h \
@@ -95,55 +96,16 @@ build/default/debug/_ext/1171490990/interrupts.o: \
  ../src/config/default/device_cache.h \
  ../src/config/default/toolchain_specifics.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
- ../src/config/default/device_vectors.h \
- ../src/config/default/interrupts.h ../src/config/default/definitions.h \
- ../src/config/default/crypto/crypto.h \
- ../src/config/default/ble/lib/include/bt_sys.h \
- ../src/config/default/peripheral/evsys/plib_evsys.h \
- ../src/config/default/device.h \
- ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h \
- ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h \
- ../src/config/default/driver/pds/include/pds.h \
- ../src/config/default/driver/pds/include/pds_config.h \
- ../src/config/default/peripheral/clk/plib_clk.h \
- ../src/config/default/peripheral/gpio/plib_gpio.h \
- ../src/config/default/peripheral/nvic/plib_nvic.h \
- ../src/config/default/peripheral/cmcc/plib_cmcc.h \
- ../src/config/default/peripheral/nvm/plib_nvm.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_wolfcryptcb.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h \
- ../src/config/default/FreeRTOSConfig.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/projdefs.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/portable.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h \
- ../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F/portmacro.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/task.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/list.h \
- ../src/config/default/driver/device_support/include/info_block.h \
- ../src/config/default/driver/device_support/include/rf_system.h \
- ../src/config/default/driver/device_support/include/pmu_system.h \
- ../src/config/default/driver/device_support/include/rf_system.h \
- ../src/config/default/driver/device_support/include/sleep_system.h \
- ../src/config/default/framework_defs.h \
- ../src/config/default/osal/osal_freertos_extend.h \
- ../src/config/default/osal/osal_freertos.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/queue.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/task.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/semphr.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/queue.h \
- ../src/app_idle_task.h ../src/config/default/system/int/sys_int.h \
- ../src/config/default/system/int/sys_int_mapping.h \
- ../src/config/default/system/cache/sys_cache.h \
- ../src/config/default/osal/osal.h ../src/config/default/configuration.h \
- ../src/config/default/osal/osal_definitions.h \
- ../src/config/default/osal/osal_freertos.h \
- ../src/config/default/system/debug/sys_debug.h \
- ../src/config/default/system/system.h \
- ../src/config/default/system/system_common.h \
- ../src/config/default/system/system_module.h \
- ../src/config/default/system/system_common.h ../src/app.h \
- ../src/config/default/osal/osal_freertos_extend.h
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/logging.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/src/misc.c \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/misc.h
+
+../src/config/default/config.h:
 
 ../src/config/default/configuration.h:
 
@@ -339,108 +301,18 @@ build/default/debug/_ext/1171490990/interrupts.o: \
 
 ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h:
 
-../src/config/default/device_vectors.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h:
 
-../src/config/default/interrupts.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h:
 
-../src/config/default/definitions.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h:
 
-../src/config/default/crypto/crypto.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h:
 
-../src/config/default/ble/lib/include/bt_sys.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h:
 
-../src/config/default/peripheral/evsys/plib_evsys.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/logging.h:
 
-../src/config/default/device.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/src/misc.c:
 
-../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h:
-
-../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h:
-
-../src/config/default/driver/pds/include/pds.h:
-
-../src/config/default/driver/pds/include/pds_config.h:
-
-../src/config/default/peripheral/clk/plib_clk.h:
-
-../src/config/default/peripheral/gpio/plib_gpio.h:
-
-../src/config/default/peripheral/nvic/plib_nvic.h:
-
-../src/config/default/peripheral/cmcc/plib_cmcc.h:
-
-../src/config/default/peripheral/nvm/plib_nvm.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_wolfcryptcb.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h:
-
-../src/config/default/FreeRTOSConfig.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/projdefs.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/portable.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h:
-
-../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F/portmacro.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/task.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/list.h:
-
-../src/config/default/driver/device_support/include/info_block.h:
-
-../src/config/default/driver/device_support/include/rf_system.h:
-
-../src/config/default/driver/device_support/include/pmu_system.h:
-
-../src/config/default/driver/device_support/include/rf_system.h:
-
-../src/config/default/driver/device_support/include/sleep_system.h:
-
-../src/config/default/framework_defs.h:
-
-../src/config/default/osal/osal_freertos_extend.h:
-
-../src/config/default/osal/osal_freertos.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/queue.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/task.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/semphr.h:
-
-../src/third_party/rtos/FreeRTOS/Source/include/queue.h:
-
-../src/app_idle_task.h:
-
-../src/config/default/system/int/sys_int.h:
-
-../src/config/default/system/int/sys_int_mapping.h:
-
-../src/config/default/system/cache/sys_cache.h:
-
-../src/config/default/osal/osal.h:
-
-../src/config/default/configuration.h:
-
-../src/config/default/osal/osal_definitions.h:
-
-../src/config/default/osal/osal_freertos.h:
-
-../src/config/default/system/debug/sys_debug.h:
-
-../src/config/default/system/system.h:
-
-../src/config/default/system/system_common.h:
-
-../src/config/default/system/system_module.h:
-
-../src/config/default/system/system_common.h:
-
-../src/app.h:
-
-../src/config/default/osal/osal_freertos_extend.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/misc.h:

@@ -98,12 +98,12 @@ build/default/debug/_ext/1171490990/exceptions.o: \
  ../src/config/default/interrupts.h ../src/config/default/definitions.h \
  ../src/config/default/crypto/crypto.h \
  ../src/config/default/ble/lib/include/bt_sys.h \
- ../src/config/default/driver/pds/include/pds.h \
- ../src/config/default/driver/pds/include/pds_config.h \
  ../src/config/default/peripheral/evsys/plib_evsys.h \
  ../src/config/default/device.h \
  ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h \
  ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h \
+ ../src/config/default/driver/pds/include/pds.h \
+ ../src/config/default/driver/pds/include/pds_config.h \
  ../src/config/default/peripheral/clk/plib_clk.h \
  ../src/config/default/peripheral/gpio/plib_gpio.h \
  ../src/config/default/peripheral/nvic/plib_nvic.h \
@@ -346,10 +346,6 @@ build/default/debug/_ext/1171490990/exceptions.o: \
 
 ../src/config/default/ble/lib/include/bt_sys.h:
 
-../src/config/default/driver/pds/include/pds.h:
-
-../src/config/default/driver/pds/include/pds_config.h:
-
 ../src/config/default/peripheral/evsys/plib_evsys.h:
 
 ../src/config/default/device.h:
@@ -357,6 +353,10 @@ build/default/debug/_ext/1171490990/exceptions.o: \
 ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h:
 
 ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h:
+
+../src/config/default/driver/pds/include/pds.h:
+
+../src/config/default/driver/pds/include/pds_config.h:
 
 ../src/config/default/peripheral/clk/plib_clk.h:
 

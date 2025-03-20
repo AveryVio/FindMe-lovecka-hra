@@ -12,8 +12,6 @@ build/default/debug/_ext/1171490990/freertos_hooks.o: \
  ../src/config/default/definitions.h \
  ../src/config/default/crypto/crypto.h \
  ../src/config/default/ble/lib/include/bt_sys.h \
- ../src/config/default/driver/pds/include/pds.h \
- ../src/config/default/driver/pds/include/pds_config.h \
  ../src/config/default/peripheral/evsys/plib_evsys.h \
  ../src/config/default/device.h ../src/packs/WBZ451_DFP/wbz451.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/core_cm4.h \
@@ -111,6 +109,8 @@ build/default/debug/_ext/1171490990/freertos_hooks.o: \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
  ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h \
  ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h \
+ ../src/config/default/driver/pds/include/pds.h \
+ ../src/config/default/driver/pds/include/pds_config.h \
  ../src/config/default/peripheral/clk/plib_clk.h \
  ../src/config/default/peripheral/gpio/plib_gpio.h \
  ../src/config/default/peripheral/nvic/plib_nvic.h \
@@ -166,10 +166,6 @@ build/default/debug/_ext/1171490990/freertos_hooks.o: \
 ../src/config/default/crypto/crypto.h:
 
 ../src/config/default/ble/lib/include/bt_sys.h:
-
-../src/config/default/driver/pds/include/pds.h:
-
-../src/config/default/driver/pds/include/pds_config.h:
 
 ../src/config/default/peripheral/evsys/plib_evsys.h:
 
@@ -368,6 +364,10 @@ build/default/debug/_ext/1171490990/freertos_hooks.o: \
 ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h:
 
 ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h:
+
+../src/config/default/driver/pds/include/pds.h:
+
+../src/config/default/driver/pds/include/pds_config.h:
 
 ../src/config/default/peripheral/clk/plib_clk.h:
 

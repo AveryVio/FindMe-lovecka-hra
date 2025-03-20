@@ -1,7 +1,8 @@
-build/default/debug/_ext/1171490990/interrupts.o: \
- ../src/config/default/interrupts.c ../src/config/default/configuration.h \
- ../src/config/default/user.h ../src/config/default/device.h \
- ../src/packs/WBZ451_DFP/wbz451.h \
+build/default/debug/_ext/172253694/crypt_rsa_pukcl.o: \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/src/port/pic32/crypt_rsa_pukcl.c \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_rsa_pukcl.h \
+ ../src/config/default/configuration.h ../src/config/default/user.h \
+ ../src/config/default/device.h ../src/packs/WBZ451_DFP/wbz451.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/core_cm4.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_version.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
@@ -95,55 +96,59 @@ build/default/debug/_ext/1171490990/interrupts.o: \
  ../src/config/default/device_cache.h \
  ../src/config/default/toolchain_specifics.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
- ../src/config/default/device_vectors.h \
- ../src/config/default/interrupts.h ../src/config/default/definitions.h \
- ../src/config/default/crypto/crypto.h \
- ../src/config/default/ble/lib/include/bt_sys.h \
- ../src/config/default/peripheral/evsys/plib_evsys.h \
- ../src/config/default/device.h \
- ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h \
- ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h \
- ../src/config/default/driver/pds/include/pds.h \
- ../src/config/default/driver/pds/include/pds_config.h \
- ../src/config/default/peripheral/clk/plib_clk.h \
- ../src/config/default/peripheral/gpio/plib_gpio.h \
- ../src/config/default/peripheral/nvic/plib_nvic.h \
- ../src/config/default/peripheral/cmcc/plib_cmcc.h \
- ../src/config/default/peripheral/nvm/plib_nvm.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_wolfcryptcb.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h \
- ../src/config/default/FreeRTOSConfig.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/projdefs.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/portable.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h \
- ../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F/portmacro.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/task.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/list.h \
- ../src/config/default/driver/device_support/include/info_block.h \
- ../src/config/default/driver/device_support/include/rf_system.h \
- ../src/config/default/driver/device_support/include/pmu_system.h \
- ../src/config/default/driver/device_support/include/rf_system.h \
- ../src/config/default/driver/device_support/include/sleep_system.h \
- ../src/config/default/framework_defs.h \
- ../src/config/default/osal/osal_freertos_extend.h \
- ../src/config/default/osal/osal_freertos.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/queue.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/task.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/semphr.h \
- ../src/third_party/rtos/FreeRTOS/Source/include/queue.h \
- ../src/app_idle_task.h ../src/config/default/system/int/sys_int.h \
- ../src/config/default/system/int/sys_int_mapping.h \
- ../src/config/default/system/cache/sys_cache.h \
- ../src/config/default/osal/osal.h ../src/config/default/configuration.h \
- ../src/config/default/osal/osal_definitions.h \
- ../src/config/default/osal/osal_freertos.h \
- ../src/config/default/system/debug/sys_debug.h \
- ../src/config/default/system/system.h \
- ../src/config/default/system/system_common.h \
- ../src/config/default/system/system_module.h \
- ../src/config/default/system/system_common.h ../src/app.h \
- ../src/config/default/osal/osal_freertos_extend.h
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/cryptocb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/aes.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_aes_hw.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_aes_u2238.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/sha256.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/rsa.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_pukcl_functions.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Headers_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_typedef_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Services_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_cf_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Rc_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ClearFlags_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Comp_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_CondCopy_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_CRT_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Div_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ExpMod_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_FastCopy_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Fill_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Fmult_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GCD_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_PrimeGen_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_RedMod_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Rng_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_SelfTest_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Smult_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Square_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Swap_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_JumpTable_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccAdd_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccAddSub_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccDbl_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccMul_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccQuickDualMul_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccConv_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEcDsa_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccAdd_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccDbl_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccMul_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccConv_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEcDsa_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Hardware_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_mapping_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Headers_pb.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/random.h
+
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_rsa_pukcl.h:
 
 ../src/config/default/configuration.h:
 
@@ -339,108 +344,104 @@ build/default/debug/_ext/1171490990/interrupts.o: \
 
 ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h:
 
-../src/config/default/device_vectors.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/cryptocb.h:
 
-../src/config/default/interrupts.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h:
 
-../src/config/default/definitions.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h:
 
-../src/config/default/crypto/crypto.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h:
 
-../src/config/default/ble/lib/include/bt_sys.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h:
 
-../src/config/default/peripheral/evsys/plib_evsys.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/aes.h:
 
-../src/config/default/device.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_aes_hw.h:
 
-../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_aes_u2238.h:
 
-../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/sha256.h:
 
-../src/config/default/driver/pds/include/pds.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/rsa.h:
 
-../src/config/default/driver/pds/include/pds_config.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h:
 
-../src/config/default/peripheral/clk/plib_clk.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_pukcl_functions.h:
 
-../src/config/default/peripheral/gpio/plib_gpio.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Headers_pb.h:
 
-../src/config/default/peripheral/nvic/plib_nvic.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_typedef_pb.h:
 
-../src/config/default/peripheral/cmcc/plib_cmcc.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Services_pb.h:
 
-../src/config/default/peripheral/nvm/plib_nvm.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_cf_pb.h:
 
-../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_wolfcryptcb.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Rc_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/FreeRTOS.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ClearFlags_pb.h:
 
-../src/config/default/FreeRTOSConfig.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Comp_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/projdefs.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_CondCopy_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/portable.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_CRT_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/deprecated_definitions.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Div_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/portable/GCC/SAM/ARM_CM4F/portmacro.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ExpMod_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/mpu_wrappers.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_FastCopy_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/task.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Fill_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/list.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Fmult_pb.h:
 
-../src/config/default/driver/device_support/include/info_block.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GCD_pb.h:
 
-../src/config/default/driver/device_support/include/rf_system.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_PrimeGen_pb.h:
 
-../src/config/default/driver/device_support/include/pmu_system.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_RedMod_pb.h:
 
-../src/config/default/driver/device_support/include/rf_system.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Rng_pb.h:
 
-../src/config/default/driver/device_support/include/sleep_system.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_SelfTest_pb.h:
 
-../src/config/default/framework_defs.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Smult_pb.h:
 
-../src/config/default/osal/osal_freertos_extend.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Square_pb.h:
 
-../src/config/default/osal/osal_freertos.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Swap_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/queue.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_JumpTable_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/task.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccAdd_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/semphr.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccAddSub_pb.h:
 
-../src/third_party/rtos/FreeRTOS/Source/include/queue.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccDbl_pb.h:
 
-../src/app_idle_task.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccMul_pb.h:
 
-../src/config/default/system/int/sys_int.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccQuickDualMul_pb.h:
 
-../src/config/default/system/int/sys_int_mapping.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEccConv_pb.h:
 
-../src/config/default/system/cache/sys_cache.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_ZpEcDsa_pb.h:
 
-../src/config/default/osal/osal.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccAdd_pb.h:
 
-../src/config/default/configuration.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccDbl_pb.h:
 
-../src/config/default/osal/osal_definitions.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccMul_pb.h:
 
-../src/config/default/osal/osal_freertos.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEccConv_pb.h:
 
-../src/config/default/system/debug/sys_debug.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_GF2NEcDsa_pb.h:
 
-../src/config/default/system/system.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Hardware_pb.h:
 
-../src/config/default/system/system_common.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_mapping_pb.h:
 
-../src/config/default/system/system_module.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Headers_pb.h:
 
-../src/config/default/system/system_common.h:
-
-../src/app.h:
-
-../src/config/default/osal/osal_freertos_extend.h:
+../src/third_party/wolfssl/wolfssl/wolfcrypt/random.h:

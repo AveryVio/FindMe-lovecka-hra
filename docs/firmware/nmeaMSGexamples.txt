@@ -1,0 +1,22 @@
+sections GLL = 
+    $
+    message ID
+    latitude
+    North / South
+    longitude
+    East / West
+    UTC time
+    Data Valid
+    Positioning Mode
+    End character data field
+    Hexadecimal checksum
+    each of message
+
+format GLL = 
+    $,--GLL,ddmm.mmmm,N/S,ddmm.mmmm,E/W,hhmmss.sss,A/V,N/A/D*Checksum<CR><LF>
+
+examples GLL = 
+    $GNGLL,3150.7856,N,11711.9479,E,102243.000,A,D*4B<CR><LF>
+    $GPGLL,3150.7872,N,11711.9405,E,102708.000,A,D*52<CR><LF>
+
+

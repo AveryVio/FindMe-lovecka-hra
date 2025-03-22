@@ -26,3 +26,5 @@ This starts the containers, and builds them if necessary.
 Here the same errors apply.
 
 The default configuration works out of the box, however if you wish to, you can configure it according to the [following document](config.md)
+
+# Firmware

@@ -1,6 +1,6 @@
 # server
 
-The server runs on containers through Docker Compose, currently there are two containers, one for the database and one containing the python made API.
+The server runs on containers through Docker Compose, currently there are two containers, one for the database and one containing the python made API.  
 The explanation of every function is [here](API-functions-explanation.md).
 
 ## DB

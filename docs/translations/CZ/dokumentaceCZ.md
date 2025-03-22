@@ -1,6 +1,6 @@
 # server
 
-Server běží na kontejnerech pomocí Docker Compose, aktuálně používáme dva kontejnery, jeden pro databázi a jeden pro API vytvořené pomocí Pythonu. Vysvětlení funkcí v API je [zde](./API-funkce-vysvetleniCZ.md).
+Server běží na kontejnerech pomocí Docker Compose, aktuálně používáme dva kontejnery, jeden pro databázi a jeden pro API vytvořené pomocí Pythonu. Vysvětlení funkcí v API je [zde](API-funkce-vysvetleniCZ.md).
 
 
 ## Databáze
@@ -33,7 +33,7 @@ TableUsers - musí být vyvinut (bude pro ukládání uživatelů a možná i sy
 
 API je z Pythonu, používající standartní knihovny a [psycopg3](https://psycopg.org/) pro komunikace s databází a hostování http/https serveru.
 
-Server komunikuje přímo s klientem přes http/https, formát komunikace je probrán [zde](./komunikaceCZ.md).  Komunikace mezi API a databází probíhá přes vnitřní síť, ale to je mimo rozsah této dokumentace, můžete zjistit více v [dokumentace psycopg3](https://www.psycopg.org/psycopg3/docs/).
+Server komunikuje přímo s klientem přes http/https, formát komunikace je probrán [zde](komunikaceCZ.md).  Komunikace mezi API a databází probíhá přes vnitřní síť, ale to je mimo rozsah této dokumentace, můžete zjistit více v [dokumentace psycopg3](https://www.psycopg.org/psycopg3/docs/).
 
 ----
 # firmware

@@ -5,7 +5,7 @@ A digital hunting  game for exploring fun sites and interesting places.
 > [!Notice]
 > This project is a long term school project and has some additional information not relevant to the maintenance project itself, but for grading purposes.
 
-🌍docs: [English](./docs/docs.md), [České](./docs/translations/CZ/dokumentaceCZ.md)
+🌍docs: [English](docs/docs.md), [České](docs/translations/CZ/dokumentaceCZ.md)
 
 -----
 
@@ -30,7 +30,7 @@ Find me is a digital game where a web interface communicates with nodes and the 
 
 In this repository exist two separate parts of this project. Documentation for both of them is found in this repository. And documentation for the web interface can be found in a [separate repository]() at GitLab.
 
-[Complete docs for how server and firmware work.](./docs/docs.md)
+[Complete docs for how server and firmware work.](docs/docs.md)
 
 # Instalation
 

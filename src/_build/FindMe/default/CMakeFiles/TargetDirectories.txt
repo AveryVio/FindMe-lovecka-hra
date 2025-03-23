@@ -1,0 +1,5 @@
+C:/Users/ondrejstepan/Documents/school/3.O/IoT/roncnikovka/FindMe-lovecka-hra/src/_build/FindMe/default/CMakeFiles/FindMe_default_default_XC32_compile.dir
+C:/Users/ondrejstepan/Documents/school/3.O/IoT/roncnikovka/FindMe-lovecka-hra/src/_build/FindMe/default/CMakeFiles/FindMe_default_default.elf.dir
+C:/Users/ondrejstepan/Documents/school/3.O/IoT/roncnikovka/FindMe-lovecka-hra/src/_build/FindMe/default/CMakeFiles/FindMe_default_Bin2Hex.dir
+C:/Users/ondrejstepan/Documents/school/3.O/IoT/roncnikovka/FindMe-lovecka-hra/src/_build/FindMe/default/CMakeFiles/edit_cache.dir
+C:/Users/ondrejstepan/Documents/school/3.O/IoT/roncnikovka/FindMe-lovecka-hra/src/_build/FindMe/default/CMakeFiles/rebuild_cache.dir

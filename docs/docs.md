@@ -1,7 +1,7 @@
 # server
 
-The server runs on containers through Docker Compose, currently there are two containers, one for the database and one containing the python made API.
-The explanation of every function is [here](./API-functions-explanation.md).
+The server runs on containers through Docker Compose, currently there are two containers, one for the database and one containing the python made API.  
+The explanation of every function is [here](API-functions-explanation.md).
 
 ## DB
 
@@ -34,7 +34,7 @@ TableUsers - to be developed on (will be for storing users for analytics and mab
 
 The API is built using Python, utilizing standard packages and [psycopg3](https://psycopg.org/) for communicating with the database, and hosting the http/https server. 
 
-The server communicates directly with the client through http/https, the format of communication is discussed [here](./communication.md). Communication between the API and DB is through internal network, however that is beyond the scope of this documentation, you can learn more in the [psycopg3 documentation](https://www.psycopg.org/psycopg3/docs/).
+The server communicates directly with the client through http/https, the format of communication is discussed [here](communication.md). Communication between the API and DB is through internal network, however that is beyond the scope of this documentation, you can learn more in the [psycopg3 documentation](https://www.psycopg.org/psycopg3/docs/).
 
 ----
 # firmware

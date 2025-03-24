@@ -29,6 +29,9 @@
 #include <wolfssl/wolfcrypt/settings.h>
 #include <wolfssl/wolfcrypt/visibility.h>
 
+// NOTE: I HATE MPLAB AND THIS IS JUST A SCETCHY PATCH
+#define SINGLE_THREADED
+
 #ifdef __cplusplus
     extern "C" {
 #endif

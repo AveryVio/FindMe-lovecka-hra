@@ -2855,7 +2855,7 @@ int wolfSSL_CryptHwMutexUnLock(void)
 #else
     #warning No mutex handling defined
 
-#endif
+#endif/* THIS IS YUCKY AND I HAVE MPLAB FOR IT
 #if !defined(WOLFSSL_USE_RWLOCK) || defined(SINGLE_THREADED)
     int wc_InitRwLock(wolfSSL_RwLock* m)
     {
@@ -2881,7 +2881,7 @@ int wolfSSL_CryptHwMutexUnLock(void)
     {
         return wc_UnLockMutex(m);
     }
-#endif
+#endif*/
 
 #ifndef NO_ASN_TIME
 #if defined(_WIN32_WCE)

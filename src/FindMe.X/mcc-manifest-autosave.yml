@@ -2,7 +2,7 @@
 
 manifest_file_version: 1.0.0
 project: FindMe
-creation_date: 2025-03-24T23:10:17.251+01:00[Europe/Prague]
+creation_date: 2025-04-01T16:36:02.593+02:00[Europe/Prague]
 operating_system: Windows 10
 mcc_mode: IDE
 mcc_mode_version: v6.20
@@ -15,7 +15,7 @@ is_mcc_offline: false
 is_using_prerelease_versions: false
 mcc_content_registries: https://registry.npmjs.org/
 device_library: {library_class: com.microchip.mcc.harmony.Harmony3Library, name: Harmony
-    V3, version: 1.5.4}
+    V3, version: 1.5.5}
 packs: {name: PIC32CX-BZ_DFP, version: 1.4.243}
 modules:
 - {name: csp, type: HARMONY, version: v3.22.2}
@@ -24,5 +24,5 @@ modules:
 - {name: wireless_ble, type: HARMONY, version: v1.3.0}
 - {name: CMSIS_5, type: HARMONY, version: 5.9.0}
 - {name: FreeRTOS-Kernel, type: HARMONY, version: V11.1.0}
-- {name: wolfssl, type: HARMONY, version: v5.7.0}
+- {name: wolfssl, type: HARMONY, version: v5.4.0}
 - {name: crypto, type: HARMONY, version: v3.8.2}

@@ -1,6 +1,6 @@
 /* signature.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -67,9 +67,9 @@ static int wc_SignatureDerEncode(enum wc_HashType hash_type, byte* hash_data,
     }
     oid = ret;
 
-    ret = (int)wc_EncodeSignature(hash_data, hash_data, hash_len, oid);
+    ret = wc_EncodeSignature(hash_data, hash_data, hash_len, oid);
     if (ret > 0) {
-        *hash_enc_len = (word32)ret;
+        *hash_enc_len = ret;
         ret = 0;
     }
 
@@ -192,16 +192,13 @@ int wc_SignatureVerifyHash(
             ret = cc310_RsaSSL_Verify(hash_data, hash_len, (byte*)sig,
                 (RsaKey*)key, cc310_hashModeRSA(hash_type, 1));
         }
-        if (ret != 0) {
-            ret = SIG_VERIFY_E;
-        }
     #else
 
             word32 plain_len = hash_len;
         #if defined(WOLFSSL_SMALL_STACK) && !defined(WOLFSSL_NO_MALLOC)
             byte *plain_data;
         #else
-            ALIGN64 byte plain_data[MAX_ENCODED_SIG_SZ];
+            byte  plain_data[MAX_ENCODED_SIG_SZ];
         #endif
 
             /* Make sure the plain text output is at least key size */
@@ -245,7 +242,8 @@ int wc_SignatureVerifyHash(
             }
     #endif /* WOLFSSL_CRYPTOCELL */
             if (ret != 0) {
-                WOLFSSL_MSG("RSA Signature Verify failed!");
+                WOLFSSL_MSG("RSA Signature Verify difference!");
+                ret = SIG_VERIFY_E;
             }
 #else
             ret = SIG_TYPE_E;
@@ -295,7 +293,7 @@ int wc_SignatureVerify(
         WOLFSSL_MSG("wc_SignatureVerify: Invalid hash type/len");
         return ret;
     }
-    hash_enc_len = hash_len = (word32)ret;
+    hash_enc_len = hash_len = ret;
 
 #ifndef NO_RSA
     if (sig_type == WC_SIGNATURE_TYPE_RSA_W_ENC) {
@@ -429,7 +427,7 @@ int wc_SignatureGenerateHash_ex(
             } while (ret == WC_PENDING_E);
     #endif /* WOLFSSL_CRYPTOCELL */
             if (ret >= 0) {
-                *sig_len = (word32)ret;
+                *sig_len = ret;
                 ret = 0; /* Success */
             }
 #else
@@ -494,7 +492,7 @@ int wc_SignatureGenerate_ex(
         WOLFSSL_MSG("wc_SignatureGenerate: Invalid hash type/len");
         return ret;
     }
-    hash_enc_len = hash_len = (word32)ret;
+    hash_enc_len = hash_len = ret;
 
 #if !defined(NO_RSA) && !defined(WOLFSSL_RSA_PUBLIC_ONLY)
     if (sig_type == WC_SIGNATURE_TYPE_RSA_W_ENC) {
@@ -525,10 +523,15 @@ int wc_SignatureGenerate_ex(
         #endif
         }
         if (ret == 0) {
-            /* Generate signature using hash (also handles verify) */
-            ret = wc_SignatureGenerateHash_ex(hash_type, sig_type, hash_data,
-                hash_enc_len, sig, sig_len, key, key_len, rng, verify);
+            /* Generate signature using hash */
+            ret = wc_SignatureGenerateHash(hash_type, sig_type,
+                hash_data, hash_enc_len, sig, sig_len, key, key_len, rng);
         }
+    }
+
+    if (ret == 0 && verify) {
+        ret = wc_SignatureVerifyHash(hash_type, sig_type, hash_data,
+            hash_enc_len, sig, *sig_len, key, key_len);
     }
 
 #if defined(WOLFSSL_SMALL_STACK) || defined(NO_ASN)

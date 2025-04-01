@@ -1,6 +1,6 @@
 /* compress.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -245,7 +245,6 @@ int wc_DeCompressDynamic(byte** out, int maxSz, int memoryType,
     stream.opaque = (voidpf)0;
 
     if (inflateInit2(&stream, DEFLATE_DEFAULT_WINDOWBITS | windowBits) != Z_OK) {
-        XFREE(tmp, heap, memoryType);
         return DECOMPRESS_INIT_E;
     }
 
@@ -287,7 +286,7 @@ int wc_DeCompressDynamic(byte** out, int maxSz, int memoryType,
             XFREE(tmp, heap, memoryType);
             tmp   = newTmp;
             stream.next_out  = tmp + stream.total_out;
-            stream.avail_out = stream.avail_out + (uInt)inSz;
+            stream.avail_out = stream.avail_out + (uInt)tmpSz;
             tmpSz  = newSz;
             result = inflate(&stream, Z_BLOCK);
         }

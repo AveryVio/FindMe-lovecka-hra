@@ -100,8 +100,7 @@ build/default/debug/_ext/1664057780/hmac.o: \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/logging.h
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h
 
 ../src/config/default/config.h:
 
@@ -308,5 +307,3 @@ build/default/debug/_ext/1664057780/hmac.o: \
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h:
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/logging.h:

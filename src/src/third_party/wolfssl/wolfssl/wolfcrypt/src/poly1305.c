@@ -1,6 +1,6 @@
 /* poly1305.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -55,7 +55,7 @@ and Daniel J. Bernstein
     #pragma warning(disable: 4127)
 #endif
 
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
     #include <emmintrin.h>
     #include <immintrin.h>
 
@@ -77,13 +77,12 @@ and Daniel J. Bernstein
     #endif
 #endif
 
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
 static word32 intel_flags = 0;
 static word32 cpu_flags_set = 0;
 #endif
 
-#if (defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)) || \
-        defined(POLY130564)
+#if defined(USE_INTEL_SPEEDUP) || defined(POLY130564)
     #if defined(_MSC_VER)
         #define POLY1305_NOINLINE __declspec(noinline)
     #elif defined(__GNUC__)
@@ -123,7 +122,7 @@ static word32 cpu_flags_set = 0;
     #endif
 #endif
 
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
 #ifdef __cplusplus
     extern "C" {
 #endif
@@ -211,14 +210,14 @@ extern void poly1305_final_avx2(Poly1305* ctx, byte* mac);
     }
 
     static void U64TO8(byte* p, word64 v) {
-        p[0] = (byte)v;
-        p[1] = (byte)(v >>  8);
-        p[2] = (byte)(v >> 16);
-        p[3] = (byte)(v >> 24);
-        p[4] = (byte)(v >> 32);
-        p[5] = (byte)(v >> 40);
-        p[6] = (byte)(v >> 48);
-        p[7] = (byte)(v >> 56);
+        p[0] = (v      ) & 0xff;
+        p[1] = (v >>  8) & 0xff;
+        p[2] = (v >> 16) & 0xff;
+        p[3] = (v >> 24) & 0xff;
+        p[4] = (v >> 32) & 0xff;
+        p[5] = (v >> 40) & 0xff;
+        p[6] = (v >> 48) & 0xff;
+        p[7] = (v >> 56) & 0xff;
     }
 #endif/* WOLFSSL_ARMASM */
 #else /* if not 64 bit then use 32 bit */
@@ -266,7 +265,7 @@ with a given ctx pointer to a Poly1305 structure.
 static int poly1305_blocks(Poly1305* ctx, const unsigned char *m,
                      size_t bytes)
 {
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
     /* AVX2 is handled in wc_Poly1305Update. */
     SAVE_VECTOR_REGISTERS(return _svr_ret;);
     poly1305_blocks_avx(ctx, m, bytes);
@@ -400,7 +399,7 @@ number of bytes is less than the block size.
 */
 static int poly1305_block(Poly1305* ctx, const unsigned char *m)
 {
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
     /* No call to poly1305_block when AVX2, AVX2 does 4 blocks at a time. */
     SAVE_VECTOR_REGISTERS(return _svr_ret;);
     poly1305_block_avx(ctx, m);
@@ -415,8 +414,7 @@ static int poly1305_block(Poly1305* ctx, const unsigned char *m)
 #if !defined(WOLFSSL_ARMASM) || !defined(__aarch64__)
 int wc_Poly1305SetKey(Poly1305* ctx, const byte* key, word32 keySz)
 {
-#if defined(POLY130564) && \
-    !(defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP))
+#if defined(POLY130564) && !defined(USE_INTEL_SPEEDUP)
     word64 t0,t1;
 #endif
 
@@ -437,7 +435,7 @@ int wc_Poly1305SetKey(Poly1305* ctx, const byte* key, word32 keySz)
     if (keySz != 32 || ctx == NULL)
         return BAD_FUNC_ARG;
 
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
     if (!cpu_flags_set) {
         intel_flags = cpuid_get_flags();
         cpu_flags_set = 1;
@@ -504,7 +502,7 @@ int wc_Poly1305SetKey(Poly1305* ctx, const byte* key, word32 keySz)
 
 int wc_Poly1305Final(Poly1305* ctx, byte* mac)
 {
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
 #elif defined(POLY130564)
 
     word64 h0,h1,h2,c;
@@ -523,7 +521,7 @@ int wc_Poly1305Final(Poly1305* ctx, byte* mac)
     if (ctx == NULL || mac == NULL)
         return BAD_FUNC_ARG;
 
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
     SAVE_VECTOR_REGISTERS(return _svr_ret;);
     #ifdef HAVE_INTEL_AVX2
     if (IS_INTEL_AVX2(intel_flags))
@@ -709,7 +707,7 @@ int wc_Poly1305Update(Poly1305* ctx, const byte* m, word32 bytes)
     printf("\n");
 #endif
 
-#if defined(WOLFSSL_X86_64_BUILD) && defined(USE_INTEL_SPEEDUP)
+#ifdef USE_INTEL_SPEEDUP
     #ifdef HAVE_INTEL_AVX2
     if (IS_INTEL_AVX2(intel_flags)) {
         SAVE_VECTOR_REGISTERS(return _svr_ret;);
@@ -778,7 +776,7 @@ int wc_Poly1305Update(Poly1305* ctx, const byte* m, word32 bytes)
 
         /* process full blocks */
         if (bytes >= POLY1305_BLOCK_SIZE) {
-            size_t want = ((size_t)bytes & ~((size_t)POLY1305_BLOCK_SIZE - 1));
+            size_t want = (bytes & ~(POLY1305_BLOCK_SIZE - 1));
 #if !defined(WOLFSSL_ARMASM) || !defined(__aarch64__)
             int ret;
             ret = poly1305_blocks(ctx, m, want);

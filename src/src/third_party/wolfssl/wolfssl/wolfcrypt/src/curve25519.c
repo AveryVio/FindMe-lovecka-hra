@@ -1,6 +1,6 @@
 /* curve25519.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -51,14 +51,6 @@
     #include <wolfssl/wolfcrypt/cryptocb.h>
 #endif
 
-#if defined(WOLFSSL_LINUXKM) && !defined(USE_INTEL_SPEEDUP)
-    /* force off unneeded vector register save/restore. */
-    #undef SAVE_VECTOR_REGISTERS
-    #define SAVE_VECTOR_REGISTERS(...) WC_DO_NOTHING
-    #undef RESTORE_VECTOR_REGISTERS
-    #define RESTORE_VECTOR_REGISTERS() WC_DO_NOTHING
-#endif
-
 const curve25519_set_type curve25519_sets[] = {
     {
         CURVE25519_KEYSIZE,
@@ -66,13 +58,7 @@ const curve25519_set_type curve25519_sets[] = {
     }
 };
 
-static const word32 kCurve25519BasePoint[CURVE25519_KEYSIZE/sizeof(word32)] = {
-#ifdef BIG_ENDIAN_ORDER
-    0x09000000
-#else
-    9
-#endif
-};
+static const unsigned char kCurve25519BasePoint[CURVE25519_KEYSIZE] = {9};
 
 /* Curve25519 private key must be less than order */
 /* These functions clamp private k and check it */
@@ -97,8 +83,8 @@ static WC_INLINE int curve25519_priv_clamp_check(const byte* priv)
 static WC_INLINE void curve25519_copy_point(byte* out, const byte* point,
     int endian)
 {
+    int i;
     if (endian == EC25519_BIG_ENDIAN) {
-        int i;
         /* put shared secret key in Big Endian format */
         for (i = 0; i < CURVE25519_KEYSIZE; i++) {
             out[i] = point[CURVE25519_KEYSIZE - i -1];
@@ -147,7 +133,7 @@ int wc_curve25519_make_pub(int public_size, byte* pub, int private_size,
 
     SAVE_VECTOR_REGISTERS(return _svr_ret;);
 
-    ret = curve25519(pub, priv, (byte*)kCurve25519BasePoint);
+    ret = curve25519(pub, priv, kCurve25519BasePoint);
 
     RESTORE_VECTOR_REGISTERS();
 #endif
@@ -214,7 +200,7 @@ int wc_curve25519_make_priv(WC_RNG* rng, int keysize, byte* key)
         return ECC_BAD_ARG_E;
 
     /* random number for private key */
-    ret = wc_RNG_GenerateBlock(rng, key, (word32)keysize);
+    ret = wc_RNG_GenerateBlock(rng, key, keysize);
     if (ret == 0) {
         /* Clamp the private key */
         ret = curve25519_priv_clamp(key);
@@ -339,10 +325,13 @@ int wc_curve25519_shared_secret_ex(curve25519_key* private_key,
         }
     }
 #endif
-    if (ret == 0) {
-        curve25519_copy_point(out, o.point, endian);
-        *outlen = CURVE25519_KEYSIZE;
+    if (ret != 0) {
+        ForceZero(&o, sizeof(o));
+        return ret;
     }
+
+    curve25519_copy_point(out, o.point, endian);
+    *outlen = CURVE25519_KEYSIZE;
 
     ForceZero(&o, sizeof(o));
 
@@ -383,7 +372,7 @@ int wc_curve25519_export_public_ex(curve25519_key* key, byte* out,
                                      (int)sizeof(key->k), key->k);
         key->pubSet = (ret == 0);
     }
-    /* export public point with endianness */
+    /* export public point with endianess */
     curve25519_copy_point(out, key->p.point, endian);
     *outLen = CURVE25519_KEYSIZE;
 
@@ -421,7 +410,7 @@ int wc_curve25519_import_public_ex(const byte* in, word32 inLen,
        return ECC_BAD_ARG_E;
     }
 
-    /* import public point with endianness */
+    /* import public point with endianess */
     curve25519_copy_point(key->p.point, in, endian);
     key->pubSet = 1;
 
@@ -546,7 +535,7 @@ int wc_curve25519_export_private_raw_ex(curve25519_key* key, byte* out,
         return ECC_BAD_ARG_E;
     }
 
-    /* export private scalar with endianness */
+    /* export private scalar with endianess */
     curve25519_copy_point(out, key->k, endian);
     *outLen = CURVE25519_KEYSIZE;
 
@@ -643,7 +632,7 @@ int wc_curve25519_import_private_ex(const byte* priv, word32 privSz,
     se050_curve25519_free_key(key);
 #endif
 
-    /* import private scalar with endianness */
+    /* import private scalar with endianess */
     curve25519_copy_point(key->k, priv, endian);
     key->privSet = 1;
 

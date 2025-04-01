@@ -102,7 +102,6 @@ build/default/debug/_ext/1664057780/wc_port.o: \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/logging.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/memory.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/cryptocb.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/aes.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_aes_hw.h \
@@ -317,8 +316,6 @@ build/default/debug/_ext/1664057780/wc_port.o: \
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h:
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/logging.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/memory.h:
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/cryptocb.h:
 

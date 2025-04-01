@@ -1,6 +1,6 @@
 /* wc_pkcs11.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -45,12 +45,6 @@
     #include <wolfcrypt/src/misc.c>
 #endif
 
-#ifndef WOLFSSL_HAVE_ECC_KEY_GET_PRIV
-    /* FIPS build has replaced ecc.h. */
-    #define wc_ecc_key_get_priv(key) (&((key)->k))
-    #define WOLFSSL_HAVE_ECC_KEY_GET_PRIV
-#endif
-
 #if defined(NO_PKCS11_RSA) && !defined(NO_RSA)
     #define NO_RSA
 #endif
@@ -74,7 +68,7 @@
 #endif
 
 
-/* Maximum length of the EC parameter string. */
+/* Maximim length of the EC parameter string. */
 #define MAX_EC_PARAM_LEN   16
 
 
@@ -403,11 +397,11 @@ static void pkcs11_val(const char* op, CK_ULONG val)
 }
 #else
 /* Disable logging of PKCS#11 calls and return value. */
-#define PKCS11_RV(op, ev) WC_DO_NOTHING
+#define PKCS11_RV(op, ev)
 /* Disable logging of PKCS#11 calls and value. */
-#define PKCS11_VAL(op, val) WC_DO_NOTHING
+#define PKCS11_VAL(op, val)
 /* Disable logging of PKCS#11 template. */
-#define PKCS11_DUMP_TEMPLATE(name, templ, cnt) WC_DO_NOTHING
+#define PKCS11_DUMP_TEMPLATE(name, templ, cnt)
 #endif
 
 /**
@@ -415,7 +409,6 @@ static void pkcs11_val(const char* op, CK_ULONG val)
  *
  * @param  [in]  dev      Device object.
  * @param  [in]  library  Library name including path.
- * @param  [in]  heap     Heap hint.
  * @return  BAD_FUNC_ARG when dev or library are NULL pointers.
  * @return  BAD_PATH_ERROR when dynamic library cannot be opened.
  * @return  WC_INIT_E when the initialization PKCS#11 fails.
@@ -424,28 +417,8 @@ static void pkcs11_val(const char* op, CK_ULONG val)
  */
 int wc_Pkcs11_Initialize(Pkcs11Dev* dev, const char* library, void* heap)
 {
-    return wc_Pkcs11_Initialize_ex(dev, library, heap, NULL);
-}
-
-/**
- * Load library, get function list and initialize PKCS#11.
- *
- * @param  [in]   dev      Device object.
- * @param  [in]   library  Library name including path.
- * @param  [in]   heap     Heap hint.
- * @param  [out]  rvp      PKCS#11 return value. Last return value seen.
- *                         May be NULL.
- * @return  BAD_FUNC_ARG when dev or library are NULL pointers.
- * @return  BAD_PATH_ERROR when dynamic library cannot be opened.
- * @return  WC_INIT_E when the initialization PKCS#11 fails.
- * @return  WC_HW_E when unable to get PKCS#11 function list.
- * @return  0 on success.
- */
-int wc_Pkcs11_Initialize_ex(Pkcs11Dev* dev, const char* library, void* heap,
-                            CK_RV* rvp)
-{
     int                  ret = 0;
-    CK_RV                rv = CKR_OK;
+    CK_RV                rv;
 #ifndef HAVE_PKCS11_STATIC
     void*                func;
 #endif
@@ -493,13 +466,8 @@ int wc_Pkcs11_Initialize_ex(Pkcs11Dev* dev, const char* library, void* heap,
         }
     }
 
-    if (rvp != NULL) {
-        *rvp = rv;
-    }
-
-    if (ret != 0) {
+    if (ret != 0)
         wc_Pkcs11_Finalize(dev);
-    }
 
     return ret;
 }
@@ -551,7 +519,8 @@ static int Pkcs11Slot_FindByTokenName(Pkcs11Dev* dev,
 
 /* lookup by slotId or tokenName */
 static int Pkcs11Token_Init(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
-    const char* tokenName, size_t tokenNameSz)
+    const char* tokenName, size_t tokenNameSz,
+    const unsigned char* userPin, size_t userPinSz)
 {
     int         ret = 0;
     CK_RV       rv;
@@ -608,9 +577,8 @@ static int Pkcs11Token_Init(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
         token->func = dev->func;
         token->slotId = (CK_SLOT_ID)slotId;
         token->handle = NULL_PTR;
-        token->userPin = NULL_PTR;
-        token->userPinSz = 0;
-        token->userPinLogin = 0;
+        token->userPin = (CK_UTF8CHAR_PTR)userPin;
+        token->userPinSz = (CK_ULONG)userPinSz;
     }
 
     if (slot != NULL) {
@@ -621,7 +589,7 @@ static int Pkcs11Token_Init(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
 }
 
 /**
- * Set up a token for use. Lookup by slotId or tokenName. Set User PIN.
+ * Set up a token for use. Lookup by slotId or tokenName
  *
  * @param  [in]  token      Token object.
  * @param  [in]  dev        PKCS#11 device object.
@@ -638,47 +606,16 @@ static int Pkcs11Token_Init(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
 int wc_Pkcs11Token_Init(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
     const char* tokenName, const unsigned char* userPin, int userPinSz)
 {
-    int ret;
-    size_t tokenNameSz = 0;
-
-    if (tokenName != NULL) {
-        tokenNameSz = XSTRLEN(tokenName);
-    }
-    ret = Pkcs11Token_Init(token, dev, slotId, tokenName, tokenNameSz);
-    if (ret == 0) {
-        token->userPin = (CK_UTF8CHAR_PTR)userPin;
-        token->userPinSz = (CK_ULONG)userPinSz;
-        token->userPinLogin = 1;
-    }
-
-    return ret;
-}
-
-/**
- * Set up a token for use. Lookup by slotId or tokenName.
- *
- * @param  [in]  token      Token object.
- * @param  [in]  dev        PKCS#11 device object.
- * @param  [in]  slotId     Slot number of the token.<br>
- *                          Passing -1 uses the first available slot.
- * @param  [in]  tokenName  Name of token to initialize (optional)
- * @return  BAD_FUNC_ARG when token, dev and/or tokenName is NULL.
- * @return  WC_INIT_E when initializing token fails.
- * @return  WC_HW_E when another PKCS#11 library call fails.
- * @return  0 on success.
- */
-int wc_Pkcs11Token_Init_NoLogin(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
-    const char* tokenName)
-{
     size_t tokenNameSz = 0;
     if (tokenName != NULL) {
         tokenNameSz = XSTRLEN(tokenName);
     }
-    return Pkcs11Token_Init(token, dev, slotId, tokenName, tokenNameSz);
+    return Pkcs11Token_Init(token, dev, slotId, tokenName, tokenNameSz,
+        userPin, (size_t)userPinSz);
 }
 
 /**
- * Set up a token for use. Lookup by slotId or tokenName/size. Set User PIN.
+ * Set up a token for use. Lookup by slotId or tokenName/size
  *
  * @param  [in]  token       Token object.
  * @param  [in]  dev         PKCS#11 device object.
@@ -692,37 +629,11 @@ int wc_Pkcs11Token_Init_NoLogin(Pkcs11Token* token, Pkcs11Dev* dev, int slotId,
  * @return  0 on success.
  */
 int wc_Pkcs11Token_InitName(Pkcs11Token* token, Pkcs11Dev* dev,
-    const char* tokenName, int tokenNameSz,
-    const unsigned char* userPin, int userPinSz)
+                             const char* tokenName, int tokenNameSz,
+                             const unsigned char* userPin, int userPinSz)
 {
-    int ret = Pkcs11Token_Init(token, dev, -1, tokenName, (size_t)tokenNameSz);
-    if (ret == 0) {
-        token->userPin = (CK_UTF8CHAR_PTR)userPin;
-        token->userPinSz = (CK_ULONG)userPinSz;
-        token->userPinLogin = 1;
-    }
-
-    return ret;
-}
-
-/**
- * Set up a token for use. Lookup by slotId or tokenName/size.
- *
- * @param  [in]  token       Token object.
- * @param  [in]  dev         PKCS#11 device object.
- * @param  [in]  tokenName   Name of token to initialize.
- * @param  [in]  tokenNameSz Name size for token
- * @param  [in]  userPin     PIN to use to login as user.
- * @param  [in]  userPinSz   Number of bytes in PIN.
- * @return  BAD_FUNC_ARG when token, dev and/or tokenName is NULL.
- * @return  WC_INIT_E when initializing token fails.
- * @return  WC_HW_E when another PKCS#11 library call fails.
- * @return  0 on success.
- */
-int wc_Pkcs11Token_InitName_NoLogin(Pkcs11Token* token, Pkcs11Dev* dev,
-    const char* tokenName, int tokenNameSz)
-{
-    return Pkcs11Token_Init(token, dev, -1, tokenName, (size_t)tokenNameSz);
+    return Pkcs11Token_Init(token, dev, -1, tokenName, (size_t)tokenNameSz,
+        userPin, (size_t)userPinSz);
 }
 
 /**
@@ -776,7 +687,7 @@ static int Pkcs11OpenSession(Pkcs11Token* token, Pkcs11Session* session,
             if (rv != CKR_OK) {
                 ret = WC_HW_E;
             }
-            if (ret == 0 && token->userPinLogin) {
+            if (ret == 0 && token->userPin != NULL) {
                 rv = token->func->C_Login(session->handle, CKU_USER,
                                               token->userPin, token->userPinSz);
                 PKCS11_RV("C_Login", rv);
@@ -1190,8 +1101,8 @@ static int Pkcs11CreateEccPrivateKey(CK_OBJECT_HANDLE* privateKey,
 
     ret = Pkcs11EccSetParams(private_key, keyTemplate, 3);
     if (ret == 0) {
-        keyTemplate[4].pValue     = wc_ecc_key_get_priv(private_key)->raw.buf;
-        keyTemplate[4].ulValueLen = wc_ecc_key_get_priv(private_key)->raw.len;
+        keyTemplate[4].pValue     = private_key->k.raw.buf;
+        keyTemplate[4].ulValueLen = private_key->k.raw.len;
 
         PKCS11_DUMP_TEMPLATE("Ec Private Key", keyTemplate, keyTmplCnt);
         rv = session->func->C_CreateObject(session->handle, keyTemplate,
@@ -1432,7 +1343,7 @@ int wc_Pkcs11StoreKey(Pkcs11Token* token, int type, int clear, void* key)
                         ret = ret2;
                 }
                 if (ret == 0 && clear)
-                    mp_forcezero(wc_ecc_key_get_priv(eccKey));
+                    mp_forcezero(&eccKey->k);
                 break;
             }
     #endif
@@ -1553,10 +1464,8 @@ static int Pkcs11FindKeyById(CK_OBJECT_HANDLE* key, CK_OBJECT_CLASS keyClass,
     int             ret = 0;
     CK_ULONG        count;
     CK_ATTRIBUTE    keyTemplate[] = {
-#ifndef WC_PKCS11_FIND_WITH_ID_ONLY
         { CKA_CLASS,           &keyClass, sizeof(keyClass) },
         { CKA_KEY_TYPE,        &keyType,  sizeof(keyType)  },
-#endif
         { CKA_ID,              id,        (CK_ULONG)idLen  }
     };
     CK_ULONG        keyTmplCnt = sizeof(keyTemplate) / sizeof(*keyTemplate);
@@ -1720,42 +1629,6 @@ static int Pkcs11GetRsaPublicKey(RsaKey* key, Pkcs11Session* session,
         XFREE(exp, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
     if (mod != NULL)
         XFREE(mod, key->heap, DYNAMIC_TYPE_TMP_BUFFER);
-
-    return ret;
-}
-
-/**
- * Get the RSA modulus size in bytes from the PKCS#11 object.
- *
- * @param  [in]   session  Session object.
- * @param  [in]   pubkey   Public key object.
- * @param  [out]  modSize  Size of the modulus in bytes.
- * @return  WC_HW_E when a PKCS#11 library call fails.
- * @return  MEMORY_E when a memory allocation fails.
- * @return  0 on success.
- */
-static int Pkcs11GetRsaModulusSize(Pkcs11Session* session,
-                                   CK_OBJECT_HANDLE pubKey, int* modSize)
-{
-    int            ret = 0;
-    CK_ATTRIBUTE   tmpl[] = {
-        { CKA_MODULUS,         NULL_PTR, 0 }
-    };
-    CK_ULONG       tmplCnt = sizeof(tmpl) / sizeof(*tmpl);
-    CK_RV rv;
-
-    PKCS11_DUMP_TEMPLATE("Get RSA Modulus Length", tmpl, tmplCnt);
-    rv = session->func->C_GetAttributeValue(session->handle, pubKey, tmpl,
-                                                                       tmplCnt);
-    PKCS11_RV("C_GetAttributeValue", rv);
-    if (rv != CKR_OK) {
-        ret = WC_HW_E;
-    }
-    PKCS11_DUMP_TEMPLATE("RSA Modulus Length", tmpl, tmplCnt);
-
-    if (ret == 0) {
-        *modSize = (int)tmpl[0].ulValueLen;
-    }
 
     return ret;
 }
@@ -2490,8 +2363,7 @@ static int Pkcs11ECDH(Pkcs11Session* session, wc_CryptoInfo* info)
     if (ret == 0) {
         WOLFSSL_MSG("PKCS#11: EC Key Derivation Operation");
 
-        if ((sessionKey = !mp_iszero(
-                wc_ecc_key_get_priv(info->pk.ecdh.private_key))))
+        if ((sessionKey = !mp_iszero(&info->pk.ecdh.private_key->k)))
             ret = Pkcs11CreateEccPrivateKey(&privateKey, session,
                                          info->pk.ecdh.private_key, CKA_DERIVE);
         else if (info->pk.ecdh.private_key->labelLen > 0) {
@@ -2785,8 +2657,7 @@ static int Pkcs11ECDSA_Sign(Pkcs11Session* session, wc_CryptoInfo* info)
     if (ret == 0) {
         WOLFSSL_MSG("PKCS#11: EC Signing Operation");
 
-        if ((sessionKey = !mp_iszero(
-                wc_ecc_key_get_priv(info->pk.eccsign.key))))
+        if ((sessionKey = !mp_iszero(&info->pk.eccsign.key->k)))
             ret = Pkcs11CreateEccPrivateKey(&privateKey, session,
                                                 info->pk.eccsign.key, CKA_SIGN);
         else if (info->pk.eccsign.key->labelLen > 0) {
@@ -3001,6 +2872,7 @@ static int wc_Pkcs11CheckPrivKey_Rsa(RsaKey* priv,
  * @param  [in]  info     Cryptographic operation data.
  * @return  WC_HW_E when a PKCS#11 library call fails.
  * @return  MEMORY_E when a memory allocation fails.
+ * @return  MEMORY_E when a memory allocation fails.
  * @return  MP_CMP_E when the public parts are different.
  * @return  0 on success.
  */
@@ -3017,7 +2889,7 @@ static int Pkcs11RsaCheckPrivKey(Pkcs11Session* session, wc_CryptoInfo* info)
                                                   CKK_RSA, session, priv->label,
                                                   priv->labelLen);
         }
-        else if (priv->idLen > 0) {
+        else if (info->pk.rsa.key->idLen > 0) {
             ret = Pkcs11FindKeyById(&privateKey, CKO_PRIVATE_KEY, CKK_RSA,
                                     session, priv->id, priv->idLen);
         }
@@ -3034,52 +2906,6 @@ static int Pkcs11RsaCheckPrivKey(Pkcs11Session* session, wc_CryptoInfo* info)
         /* Compare the extracted public parts with the public key. */
         ret = wc_Pkcs11CheckPrivKey_Rsa(priv, info->pk.rsa_check.pubKey,
                                                    info->pk.rsa_check.pubKeySz);
-    }
-
-    return ret;
-}
-
-/**
- * Get the size of the RSA key in bytes.
- *
- * @param  [in]  session  Session object.
- * @param  [in]  info     Cryptographic operation data.
- * @return  WC_HW_E when a PKCS#11 library call fails.
- * @return  NOT_COMPILED_IN when no modulus, label or id.
- * @return  0 on success.
- */
-static int Pkcs11RsaGetSize(Pkcs11Session* session, wc_CryptoInfo* info)
-{
-    int ret = 0;
-    CK_OBJECT_HANDLE privateKey;
-    const RsaKey* priv = info->pk.rsa_get_size.key;
-
-    if (!mp_iszero(&priv->n)) {
-        /* Use the key's modulus MP integer to determine size. */
-        *info->pk.rsa_get_size.keySize = mp_unsigned_bin_size(&priv->n);
-    }
-    else {
-        /* Get the RSA private key object. */
-        if (priv->labelLen > 0) {
-            ret = Pkcs11FindKeyByLabel(&privateKey, CKO_PRIVATE_KEY,
-                                           CKK_RSA, session, (char*)priv->label,
-                                           priv->labelLen);
-        }
-        else if (priv->idLen > 0) {
-            ret = Pkcs11FindKeyById(&privateKey, CKO_PRIVATE_KEY, CKK_RSA,
-                                              session, (unsigned char*)priv->id,
-                                              priv->idLen);
-        }
-        else {
-            /* Lookup is by modulus which is not present. */
-            ret = NOT_COMPILED_IN;
-        }
-
-        if (ret == 0) {
-            /* Lookup the modulus size in bytes. */
-            ret = Pkcs11GetRsaModulusSize(session, privateKey,
-                                                 info->pk.rsa_get_size.keySize);
-        }
     }
 
     return ret;
@@ -3755,12 +3581,7 @@ int wc_Pkcs11_CryptoDevCb(int devId, wc_CryptoInfo* info, void* ctx)
     int ret = 0;
     Pkcs11Token* token = (Pkcs11Token*)ctx;
     Pkcs11Session session;
-
-#ifdef WOLFSSL_PKCS11_RW_TOKENS
-    int readWrite = 1;
-#else
     int readWrite = 0;
-#endif
 
     if (devId <= INVALID_DEVID || info == NULL || ctx == NULL)
         ret = BAD_FUNC_ARG;
@@ -3793,13 +3614,6 @@ int wc_Pkcs11_CryptoDevCb(int devId, wc_CryptoInfo* info, void* ctx)
                     ret = Pkcs11OpenSession(token, &session, readWrite);
                     if (ret == 0) {
                         ret = Pkcs11RsaCheckPrivKey(&session, info);
-                        Pkcs11CloseSession(token, &session);
-                    }
-                    break;
-                case WC_PK_TYPE_RSA_GET_SIZE:
-                    ret = Pkcs11OpenSession(token, &session, readWrite);
-                    if (ret == 0) {
-                        ret = Pkcs11RsaGetSize(&session, info);
                         Pkcs11CloseSession(token, &session);
                     }
                     break;

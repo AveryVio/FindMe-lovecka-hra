@@ -148,8 +148,8 @@ build/default/debug/_ext/172253694/crypt_ecc_pukcl.o: \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/CryptoLib_Headers_pb.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/random.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/integer.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/wolfmath.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/tfm.h \
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/wolfmath.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/asn.h
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/port/pic32/crypt_ecc_pukcl.h:
@@ -452,8 +452,8 @@ build/default/debug/_ext/172253694/crypt_ecc_pukcl.o: \
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/integer.h:
 
-../src/third_party/wolfssl/wolfssl/wolfcrypt/wolfmath.h:
-
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/tfm.h:
+
+../src/third_party/wolfssl/wolfssl/wolfcrypt/wolfmath.h:
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/asn.h:

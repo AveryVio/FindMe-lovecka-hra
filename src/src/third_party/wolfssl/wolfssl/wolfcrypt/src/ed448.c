@@ -1,6 +1,6 @@
 /* ed448.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -23,11 +23,6 @@
 
 /* Based On Daniel J Bernstein's ed25519 Public Domain ref10 work.
  * Reworked for curve448 by Sean Parkinson.
- */
-
-/* Possible Ed448 enable options:
- *   WOLFSSL_EDDSA_CHECK_PRIV_ON_SIGN                               Default: OFF
- *     Check that the private key didn't change during the signing operations.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -173,7 +168,7 @@ static int ed448_hash(ed448_key* key, const byte* in, word32 inLen,
 /* Derive the public key for the private key.
  *
  * key       [in]  Ed448 key object.
- * pubKey    [in]  Byte array to hold the public key.
+ * pubKey    [in]  Byte array to hold te public key.
  * pubKeySz  [in]  Size of the array in bytes.
  * returns BAD_FUNC_ARG when key is NULL or pubKeySz is not equal to
  *         ED448_PUB_KEY_SIZE,
@@ -190,10 +185,6 @@ int wc_ed448_make_public(ed448_key* key, unsigned char* pubKey, word32 pubKeySz)
         ret = BAD_FUNC_ARG;
     }
 
-    if ((ret == 0) && (!key->privKeySet)) {
-        ret = ECC_PRIV_KEY_E;
-    }
-
     if (ret == 0)
         ret = ed448_hash(key, key->k, ED448_KEY_SIZE, az, sizeof(az));
 
@@ -203,13 +194,8 @@ int wc_ed448_make_public(ed448_key* key, unsigned char* pubKey, word32 pubKeySz)
         az[55] |= 0x80;
         az[56]  = 0x00;
 
-        ret = ge448_scalarmult_base(&A, az);
-    }
-
-    if (ret == 0) {
+        ge448_scalarmult_base(&A, az);
         ge448_to_bytes(pubKey, &A);
-
-        key->pubKeySet = 1;
     }
 
     return ret;
@@ -239,22 +225,20 @@ int wc_ed448_make_key(WC_RNG* rng, int keySz, ed448_key* key)
     }
 
     if (ret == 0) {
-        key->pubKeySet = 0;
-        key->privKeySet = 0;
-
         ret = wc_RNG_GenerateBlock(rng, key->k, ED448_KEY_SIZE);
     }
     if (ret == 0) {
         key->privKeySet = 1;
         ret = wc_ed448_make_public(key, key->p, ED448_PUB_KEY_SIZE);
         if (ret != 0) {
-            key->privKeySet = 0;
             ForceZero(key->k, ED448_KEY_SIZE);
         }
     }
     if (ret == 0) {
         /* put public key after private key, on the same buffer */
         XMEMMOVE(key->k + ED448_KEY_SIZE, key->p, ED448_PUB_KEY_SIZE);
+
+        key->pubKeySet = 1;
     }
 
     return ret;
@@ -287,9 +271,6 @@ int wc_ed448_sign_msg_ex(const byte* in, word32 inLen, byte* out,
     byte     hram[ED448_SIG_SIZE];
     byte     az[ED448_PRV_KEY_SIZE];
     int      ret = 0;
-#ifdef WOLFSSL_EDDSA_CHECK_PRIV_ON_SIGN
-    byte     orig_k[ED448_KEY_SIZE];
-#endif
 
     /* sanity check on arguments */
     if ((in == NULL) || (out == NULL) || (outLen == NULL) || (key == NULL) ||
@@ -308,10 +289,6 @@ int wc_ed448_sign_msg_ex(const byte* in, word32 inLen, byte* out,
 
     if (ret == 0) {
         *outLen = ED448_SIG_SIZE;
-
-#ifdef WOLFSSL_EDDSA_CHECK_PRIV_ON_SIGN
-        XMEMCPY(orig_k, key->k, ED448_KEY_SIZE);
-#endif
 
         /* step 1: create nonce to use where nonce is r in
            r = H(h_b, ... ,h_2b-1,M) */
@@ -368,15 +345,13 @@ int wc_ed448_sign_msg_ex(const byte* in, word32 inLen, byte* out,
 
         /* step 2: computing R = rB where rB is the scalar multiplication of
            r and B */
-        ret = ge448_scalarmult_base(&R,nonce);
+        ge448_scalarmult_base(&R,nonce);
+        ge448_to_bytes(out,&R);
 
         /* step 3: hash R + public key + message getting H(R,A,M) then
            creating S = (r + H(R,A,M)a) mod l */
-        if (ret == 0) {
-            ge448_to_bytes(out,&R);
 
-            ret = ed448_hash_update(key, sha, ed448Ctx, ED448CTX_SIZE);
-        }
+        ret = ed448_hash_update(key, sha, ed448Ctx, ED448CTX_SIZE);
         if (ret == 0) {
             ret = ed448_hash_update(key, sha, &type, sizeof(type));
         }
@@ -407,17 +382,6 @@ int wc_ed448_sign_msg_ex(const byte* in, word32 inLen, byte* out,
         sc448_reduce(hram);
         sc448_muladd(out + (ED448_SIG_SIZE/2), hram, az, nonce);
     }
-
-#ifdef WOLFSSL_EDDSA_CHECK_PRIV_ON_SIGN
-    if (ret == 0) {
-        int  i;
-        byte c = 0;
-        for (i = 0; i < ED448_KEY_SIZE; i++) {
-            c |= key->k[i] ^ orig_k[i];
-        }
-        ret = ctMaskGT(c, 0) & SIG_VERIFY_E;
-    }
-#endif
 
     return ret;
 }

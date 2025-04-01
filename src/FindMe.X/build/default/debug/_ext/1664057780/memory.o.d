@@ -96,10 +96,8 @@ build/default/debug/_ext/1664057780/memory.o: \
  ../src/config/default/device_cache.h \
  ../src/config/default/toolchain_specifics.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h
 
 ../src/config/default/config.h:
 
@@ -297,10 +295,6 @@ build/default/debug/_ext/1664057780/memory.o: \
 
 ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h:
 
-../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h:
-
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h:
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h:

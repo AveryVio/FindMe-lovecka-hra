@@ -113,10 +113,10 @@ build/default/debug/_ext/1360937237/app.o: ../src/app.c ../src/app.h \
  ../src/config/default/crypto/crypto.h \
  ../src/config/default/ble/lib/include/bt_sys.h \
  ../src/config/default/peripheral/evsys/plib_evsys.h \
- ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h \
- ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h \
  ../src/config/default/driver/pds/include/pds.h \
  ../src/config/default/driver/pds/include/pds_config.h \
+ ../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h \
+ ../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h \
  ../src/config/default/peripheral/clk/plib_clk.h \
  ../src/config/default/peripheral/gpio/plib_gpio.h \
  ../src/config/default/peripheral/nvic/plib_nvic.h \
@@ -390,13 +390,13 @@ build/default/debug/_ext/1360937237/app.o: ../src/app.c ../src/app.h \
 
 ../src/config/default/peripheral/evsys/plib_evsys.h:
 
-../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h:
-
-../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h:
-
 ../src/config/default/driver/pds/include/pds.h:
 
 ../src/config/default/driver/pds/include/pds_config.h:
+
+../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h:
+
+../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h:
 
 ../src/config/default/peripheral/clk/plib_clk.h:
 

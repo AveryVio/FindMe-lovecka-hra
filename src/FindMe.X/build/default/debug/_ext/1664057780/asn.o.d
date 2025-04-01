@@ -97,10 +97,7 @@ build/default/debug/_ext/1664057780/asn.o: \
  ../src/config/default/toolchain_specifics.h \
  ../src/packs/CMSIS/CMSIS/Core/Include/cmsis_compiler.h \
  ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h \
- ../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h
+ ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h
 
 ../src/config/default/config.h:
 
@@ -301,9 +298,3 @@ build/default/debug/_ext/1664057780/asn.o: \
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/settings.h:
 
 ../src/third_party/wolfssl/wolfssl/wolfcrypt/visibility.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/error-crypt.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/types.h:
-
-../src/third_party/wolfssl/wolfssl/wolfcrypt/wc_port.h:

@@ -1,6 +1,6 @@
 /* tfm.c
  *
- * Copyright (C) 2006-2023 wolfSSL Inc.
+ * Copyright (C) 2006-2021 wolfSSL Inc.
  *
  * This file is part of wolfSSL.
  *
@@ -51,39 +51,6 @@
 #include <wolfssl/wolfcrypt/tfm.h>
 #include <wolfcrypt/src/asm.c>  /* will define asm MACROS or C ones */
 #include <wolfssl/wolfcrypt/wolfmath.h> /* common functions */
-
-#ifdef WOLFSSL_ESPIDF
-    #include <esp_log.h>
-    #include <wolfssl/wolfcrypt/port/Espressif/esp32-crypt.h>
-#endif
-
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI)
-    static const char* TAG = "TFM"; /* esp log breadcrumb */
-    #if !defined(NO_WOLFSSL_ESP32_CRYPT_RSA_PRI)
-        /* Each individual math HW can be turned on or off.
-         * Listed in order of complexity and historical difficulty. */
-        #define WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL
-        #define WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD
-        #define WOLFSSL_ESP32_CRYPT_RSA_PRI_MULMOD
-    #endif
-
-    #if defined(NO_WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL)
-        #undef WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL
-    #endif
-
-    #if defined(NO_WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-        #undef WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD
-    #endif
-
-    #if defined(NO_WOLFSSL_ESP32_CRYPT_RSA_PRI_MULMOD)
-        #undef WOLFSSL_ESP32_CRYPT_RSA_PRI_MULMOD
-    #endif
-
-    /* Note with HW there's a ESP_RSA_EXPT_XBITS setting
-     * as for some small numbers, SW may be faster.
-     * See ESP_LOGV messages for ESP_RSA_EXPT_XBITS values. */
-
-#endif /* WOLFSSL_ESP32_CRYPT_RSA_PRI */
 
 #if defined(FREESCALE_LTC_TFM)
     #include <wolfssl/wolfcrypt/port/nxp/ksdk_port.h>
@@ -172,44 +139,11 @@ int s_fp_add(fp_int *a, fp_int *b, fp_int *c)
   c->used = y;
 
   t = 0;
-#ifdef HONOR_MATH_USED_LENGTH
-  for (x = 0; x < y; x++) {
-      if ( (x < a->used) && (x < b->used) ) {
-          /* x is less than both [a].used and [b].used, so we add both */
-                  t += ((fp_word)a->dp[x])    +    ((fp_word)b->dp[x]);
-      }
-      else {
-          /* Here we honor the actual [a].used and [b].used values
-           * and NOT assume that values beyond [used] are zero. */
-          if ((x >= a->used) && (x < b->used)) {
-                  /* x more than [a].used, [b] ok, so just add [b] */
-                  t += /* ((fp_word)(0))      + */ ((fp_word)b->dp[x]);
-          }
-          else {
-              if ((x < a->used) && (x >= b->used)) {
-                  /* x more than [b].used, [a] ok, so just add [a] */
-                  t += ((fp_word)a->dp[x]) /* +     (fp_word)(0) */;
-              }
-              else {
-                  /* we should never get here, as a.used cannot be greater
-                   * than b.used, while b.used is greater than a.used! */
-               /* t += 0 + 0 */
-              }
-          }
-      }
-      c->dp[x]   = (fp_digit)t;
-      t        >>= DIGIT_BIT;
-  }
-
-#else
-  /* the original code */
   for (x = 0; x < y; x++) {
       t         += ((fp_word)a->dp[x]) + ((fp_word)b->dp[x]);
       c->dp[x]   = (fp_digit)t;
       t        >>= DIGIT_BIT;
   }
-#endif /* HONOR_MATH_USED_LENGTH */
-
   if (t != 0) {
      if (x == FP_SIZE)
          return FP_VAL;
@@ -295,8 +229,14 @@ void s_fp_sub(fp_int *a, fp_int *b, fp_int *c)
 /* c = a * b */
 int fp_mul(fp_int *A, fp_int *B, fp_int *C)
 {
-    int   ret = FP_OKAY;
+    int   ret = 0;
     int   y, yy, oldused;
+
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+  ret = esp_mp_mul(A, B, C);
+  if(ret != -2) return ret;
+#endif
 
     oldused = C->used;
 
@@ -308,36 +248,6 @@ int fp_mul(fp_int *A, fp_int *B, fp_int *C)
        ret = FP_VAL;
        goto clean;
     }
-
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL)
-    if (esp_hw_validation_active()) {
-        ESP_LOGV(TAG, "Skipping call to esp_mp_mul "
-                      "during active validation.");
-    }
-    else {
-        ret = esp_mp_mul(A, B, C); /* HW accelerated multiply  */
-        switch (ret) {
-            case MP_OKAY:
-                goto clean; /* success */
-                break;
-
-            case WC_HW_WAIT_E: /* MP_HW_BUSY math HW busy, fall back */
-            case MP_HW_FALLBACK:    /* forced fallback from HW to SW */
-            case MP_HW_VALIDATION_ACTIVE: /* use SW to compare to HW */
-                /* fall back to software, below */
-                break;
-
-            default:
-                /* Once we've failed, exit without trying to continue.
-                 * We may have mangled operands: (e.g. Z = X * Z)
-                 * Future implementation may consider saving operands,
-                 * but errors should never occur. */
-                goto clean;  /* error */
-                break;
-        }
-    }
-    /* fall through to software calcs */
-#endif /* WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL */
 
     /* pick a comba (unrolled 4/8/16/32 x or rolled) based on the size
        of the largest input.  We also want to avoid doing excess mults if the
@@ -626,7 +536,6 @@ WC_INLINE static int fp_mul_comba_mulx(fp_int *A, fp_int *B, fp_int *C)
 }
 #endif
 
-/*  C = (A * B)   */
 int fp_mul_comba(fp_int *A, fp_int *B, fp_int *C)
 {
    int       ret = 0;
@@ -693,8 +602,6 @@ int fp_mul_comba(fp_int *A, fp_int *B, fp_int *C)
   COMBA_FINI;
 
   dst->used = pa;
-
-  /* warning: WOLFSSL_SP_INT_NEGATIVE may disable negative numbers */
   dst->sign = A->sign ^ B->sign;
   fp_clamp(dst);
   fp_copy(dst, C);
@@ -736,8 +643,7 @@ int fp_div(fp_int *a, fp_int *b, fp_int *c, fp_int *d)
     return FP_OKAY;
   }
 
-#ifdef WOLFSSL_SMALL_STACK          /* 0  1  2  3   4  */
-  /* allocate 5 elements of fp_int for q, x, y, t1, t2 */
+#ifdef WOLFSSL_SMALL_STACK
   q = (fp_int*)XMALLOC(sizeof(fp_int) * 5, NULL, DYNAMIC_TYPE_BIGINT);
   if (q == NULL) {
       return FP_MEM;
@@ -751,18 +657,8 @@ int fp_div(fp_int *a, fp_int *b, fp_int *c, fp_int *d)
 
   fp_init(t1);
   fp_init(t2);
-
-  /* Init a copy (y) of the input (b) and
-  ** Init a copy (x) of the input (a)
-  **
-  ** ALERT: Not calling fp_init_copy() as some compiler optimization settings
-  ** such as -O2 will complain that (x) or (y) "may be used uninitialized".
-  ** The fp_init() is here only to appease the compiler.  */
-  fp_init(x);
-  fp_copy(a, x); /* copy (src = a) to (dst = x) */
-
-  fp_init(y);
-  fp_copy(b, y); /* copy (src = b) to (dst = y) */
+  fp_init_copy(x, a);
+  fp_init_copy(y, b);
 
   /* fix the sign */
   neg = (a->sign == b->sign) ? FP_ZPOS : FP_NEG;
@@ -1103,13 +999,6 @@ void fp_mod_2d(fp_int *a, int b, fp_int *c)
    }
 
    bmax = ((unsigned int)b + DIGIT_BIT - 1) / DIGIT_BIT;
-
-   /* If a is negative and bmax is greater than or equal to FP_SIZE, then the
-    * result can't fit within c. Just return. */
-   if (c->sign == FP_NEG && bmax >= FP_SIZE) {
-      return;
-   }
-
   /* zero digits above the last digit of the modulus */
    for (x = bmax; x < (unsigned int)c->used; x++) {
     c->dp[x] = 0;
@@ -1178,14 +1067,6 @@ static int fp_invmod_slow (fp_int * a, fp_int * b, fp_int * c)
     return err;
   }
   fp_copy(b, y);
-
-  if (fp_iszero(x) == FP_YES) {
-    /* invmod doesn't exist for this a and b */
-  #ifdef WOLFSSL_SMALL_STACK
-    XFREE(x, NULL, DYNAMIC_TYPE_BIGINT);
-  #endif
-    return FP_VAL;
-  }
 
   /* 2. [modified] if x,y are both even then return an error! */
   if (fp_iseven(x) == FP_YES && fp_iseven(y) == FP_YES) {
@@ -1359,6 +1240,7 @@ int fp_invmod(fp_int *a, fp_int *b, fp_int *c)
 #else
   fp_int  *x, *y, *u, *v, *B, *D;
 #endif
+  int     neg;
   int     err;
 
   if (b->sign == FP_NEG || fp_iszero(b) == FP_YES) {
@@ -1388,6 +1270,17 @@ int fp_invmod(fp_int *a, fp_int *b, fp_int *c)
   fp_init(u);  fp_init(v);
   fp_init(B);  fp_init(D);
 
+  if (fp_cmp(a, b) != MP_LT) {
+    err = mp_mod(a, b, y);
+    if (err != FP_OKAY) {
+    #ifdef WOLFSSL_SMALL_STACK
+      XFREE(x, NULL, DYNAMIC_TYPE_BIGINT);
+    #endif
+      return err;
+    }
+    a = y;
+  }
+
   if (fp_iszero(a) == FP_YES) {
   #ifdef WOLFSSL_SMALL_STACK
     XFREE(x, NULL, DYNAMIC_TYPE_BIGINT);
@@ -1399,20 +1292,7 @@ int fp_invmod(fp_int *a, fp_int *b, fp_int *c)
   fp_copy(b, x);
 
   /* we need y = |a| */
-  if ((err = mp_mod(a, b, y)) != FP_OKAY) {
-  #ifdef WOLFSSL_SMALL_STACK
-    XFREE(x, NULL, DYNAMIC_TYPE_BIGINT);
-  #endif
-    return err;
-  }
-
-  if (fp_iszero(y) == FP_YES) {
-    /* invmod doesn't exist for this a and b */
-  #ifdef WOLFSSL_SMALL_STACK
-    XFREE(x, NULL, DYNAMIC_TYPE_BIGINT);
-  #endif
-    return FP_VAL;
-  }
+  fp_abs(a, y);
 
   /* 3. u=x, v=y, A=1, B=0, C=0,D=1 */
   fp_copy(x, u);
@@ -1510,6 +1390,7 @@ top:
   }
 
   /* b is now the inverse */
+  neg = a->sign;
   while (D->sign == FP_NEG) {
     err = fp_add (D, b, D);
     if (err != FP_OKAY) {
@@ -1530,6 +1411,7 @@ top:
     }
   }
   fp_copy (D, c);
+  c->sign = neg;
 #ifdef WOLFSSL_SMALL_STACK
   XFREE(x, NULL, DYNAMIC_TYPE_BIGINT);
 #endif
@@ -1895,7 +1777,7 @@ int fp_exptmod_nb(exptModNb_t* nb, fp_int* G, fp_int* X, fp_int* P, fp_int* Y)
 
   switch (nb->state) {
   case TFM_EXPTMOD_NB_INIT:
-    /* now setup montgomery  */
+    /* now setup montgomery */
     if ((err = fp_montgomery_setup(P, &nb->mp)) != FP_OKAY) {
       nb->state = TFM_EXPTMOD_NB_INIT;
       return err;
@@ -2069,8 +1951,6 @@ int fp_exptmod_nb(exptModNb_t* nb, fp_int* G, fp_int* X, fp_int* P, fp_int* Y)
 
 #endif /* WC_RSA_NONBLOCK */
 
-
-#ifndef WC_PROTECT_ENCRYPTED_MEM
 
 /* timing resistant montgomery ladder based exptmod
    Based on work by Marc Joye, Sung-Ming Yen, "The Montgomery Powering Ladder",
@@ -2251,174 +2131,8 @@ static int _fp_exptmod_ct(fp_int * G, fp_int * X, int digits, fp_int * P,
 #ifdef WOLFSSL_SMALL_STACK
    XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
 #endif
-
    return err;
 }
-
-#else
-
-/* Copy from a1 and a2 into r1 and r2 based on y in constant time.
- * When y is 1, r1 = a1 and r2 = a2.
- * When y is 0, r1 = a2 and r2 = a1.
- * Always copy size digits as that is the maximum size for a1 and a2.
- */
-static void fp_copy_2_ct(fp_int* a1, fp_int* a2, fp_int* r1, fp_int* r2, int y,
-    int size)
-{
-    int i;
-
-    /* Copy data - constant time. */
-    for (i = 0; i < size; i++) {
-        r1->dp[i] = (a1->dp[i] & ((fp_digit)wc_off_on_addr[y  ])) +
-                    (a2->dp[i] & ((fp_digit)wc_off_on_addr[y^1]));
-        r2->dp[i] = (a1->dp[i] & ((fp_digit)wc_off_on_addr[y^1])) +
-                    (a2->dp[i] & ((fp_digit)wc_off_on_addr[y  ]));
-    }
-    /* Copy used. */
-    r1->used = (a1->used & ((int)wc_off_on_addr[y  ])) +
-               (a2->used & ((int)wc_off_on_addr[y^1]));
-    r2->used = (a1->used & ((int)wc_off_on_addr[y^1])) +
-               (a2->used & ((int)wc_off_on_addr[y  ]));
-    /* Copy sign. */
-    r1->sign = (a1->sign & ((int)wc_off_on_addr[y  ])) +
-               (a2->sign & ((int)wc_off_on_addr[y^1]));
-    r2->sign = (a1->sign & ((int)wc_off_on_addr[y^1])) +
-               (a2->sign & ((int)wc_off_on_addr[y  ]));
-}
-
-/* timing resistant montgomery ladder based exptmod
-   Based on work by Marc Joye, Sung-Ming Yen, "The Montgomery Powering Ladder",
-   Cryptographic Hardware and Embedded Systems, CHES 2002
-*/
-static int _fp_exptmod_ct(fp_int * G, fp_int * X, int digits, fp_int * P,
-                          fp_int * Y)
-{
-#ifndef WOLFSSL_SMALL_STACK
-  fp_int   R[4];   /* need a temp for cache resistance */
-#else
-  fp_int  *R;
-#endif
-  fp_digit buf, mp;
-  int      err, bitcnt, digidx, y;
-
-  /* now setup montgomery  */
-  if ((err = fp_montgomery_setup (P, &mp)) != FP_OKAY) {
-     return err;
-  }
-
-#ifdef WOLFSSL_SMALL_STACK
-   R = (fp_int*)XMALLOC(sizeof(fp_int) * 4, NULL, DYNAMIC_TYPE_BIGINT);
-   if (R == NULL)
-       return FP_MEM;
-#endif
-  fp_init(&R[0]);
-  fp_init(&R[1]);
-  fp_init(&R[2]);
-  fp_init(&R[3]);
-
-  /* now we need R mod m */
-  err = fp_montgomery_calc_normalization (&R[0], P);
-  if (err != FP_OKAY) {
-  #ifdef WOLFSSL_SMALL_STACK
-    XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-  #endif
-    return err;
-  }
-
-  /* now set R[0][1] to G * R mod m */
-  if (fp_cmp_mag(P, G) != FP_GT) {
-     /* G > P so we reduce it first */
-     err = fp_mod(G, P, &R[1]);
-     if (err != FP_OKAY) {
-#ifdef WOLFSSL_SMALL_STACK
-         XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-#endif
-         return err;
-     }
-  } else {
-     fp_copy(G, &R[1]);
-  }
-  err = fp_mulmod (&R[1], &R[0], P, &R[1]);
-  if (err != FP_OKAY) {
-#ifdef WOLFSSL_SMALL_STACK
-      XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-#endif
-      return err;
-  }
-
-  /* for j = t-1 downto 0 do
-        r_!k = R0*R1; r_k = r_k^2
-  */
-
-  /* set initial mode and bit cnt */
-  bitcnt = 1;
-  buf    = 0;
-  digidx = digits - 1;
-
-  for (;;) {
-    /* grab next digit as required */
-    if (--bitcnt == 0) {
-      /* if digidx == -1 we are out of digits so break */
-      if (digidx == -1) {
-        break;
-      }
-      /* read next digit and reset bitcnt */
-      buf    = X->dp[digidx--];
-      bitcnt = (int)DIGIT_BIT;
-    }
-
-    /* grab the next msb from the exponent */
-    y     = (int)(buf >> (DIGIT_BIT - 1)) & 1;
-    buf <<= (fp_digit)1;
-
-    /* do ops */
-    err = fp_mul(&R[0], &R[1], &R[2]);
-    if (err != FP_OKAY) {
-    #ifdef WOLFSSL_SMALL_STACK
-      XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-    #endif
-      return err;
-    }
-    err = fp_montgomery_reduce(&R[2], P, mp);
-    if (err != FP_OKAY) {
-    #ifdef WOLFSSL_SMALL_STACK
-      XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-    #endif
-      return err;
-    }
-
-    /* instead of using R[y] for sqr, which leaks key bit to cache monitor,
-     * use R[3] as temp, make sure address calc is constant, keep
-     * &R[0] and &R[1] in cache */
-    fp_copy((fp_int*) ( ((wc_ptr_t)&R[0] & wc_off_on_addr[y^1]) +
-                        ((wc_ptr_t)&R[1] & wc_off_on_addr[y]) ),
-            &R[3]);
-    err = fp_sqr(&R[3], &R[3]);
-    if (err != FP_OKAY) {
-    #ifdef WOLFSSL_SMALL_STACK
-      XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-    #endif
-      return err;
-    }
-    err = fp_montgomery_reduce(&R[3], P, mp);
-    if (err != FP_OKAY) {
-    #ifdef WOLFSSL_SMALL_STACK
-      XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-    #endif
-      return err;
-    }
-    fp_copy_2_ct(&R[2], &R[3], &R[0], &R[1], y, P->used);
-  }
-
-  err = fp_montgomery_reduce(&R[0], P, mp);
-  fp_copy(&R[0], Y);
-#ifdef WOLFSSL_SMALL_STACK
-  XFREE(R, NULL, DYNAMIC_TYPE_BIGINT);
-#endif
-  return err;
-}
-
-#endif /* WC_PROTECT_ENCRYPTED_MEM */
 
 #endif /* TFM_TIMING_RESISTANT */
 
@@ -3087,11 +2801,13 @@ static int _fp_exptmod_base_2(fp_int * X, int digits, fp_int * P,
 #undef WINSIZE
 #endif
 
-/* Y = (G * X) mod P */
+
 int fp_exptmod(fp_int * G, fp_int * X, fp_int * P, fp_int * Y)
 {
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-    int retHW = FP_OKAY;
+
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+   int x = fp_count_bits (X);
 #endif
 
    /* handle modulus of zero and prevent overflows */
@@ -3111,37 +2827,12 @@ int fp_exptmod(fp_int * G, fp_int * X, fp_int * P, fp_int * Y)
       return FP_OKAY;
    }
 
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-   if (esp_hw_validation_active()) {
-      ESP_LOGV(TAG, "Skipping call to esp_mp_exptmod "
-                    "during active validation.");
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+   if(x > EPS_RSA_EXPT_XBTIS) {
+      return esp_mp_exptmod(G, X, x, P, Y);
    }
-   else {
-      /* HW accelerated exptmod  */
-      retHW = esp_mp_exptmod(G, X, P, Y);
-      switch (retHW) {
-         case MP_OKAY:
-            /* successfully computed in HW */
-            return retHW;
-            break;
-
-         case WC_HW_WAIT_E: /* MP_HW_BUSY math HW busy, fall back */
-         case MP_HW_FALLBACK:    /* forced fallback from HW to SW */
-         case MP_HW_VALIDATION_ACTIVE: /* use SW to compare to HW */
-            /* use software calc */
-            break;
-
-         default:
-            /* Once we've failed, exit without trying to continue.
-             * We may have mangled operands: (e.g. Z = X * Z)
-             * Future implementation may consider saving operands,
-             * but hard errors should never actually occur. */
-            return retHW; /* error */
-            break;
-      } /* switch */
-   } /* if validation check */
-   /* fall through to software calcs */
-#endif /* WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD */
+#endif
 
    if (X->sign == FP_NEG) {
 #ifndef POSITIVE_EXP_ONLY  /* reduce stack if assume no negatives */
@@ -3166,11 +2857,11 @@ int fp_exptmod(fp_int * G, fp_int * X, fp_int * P, fp_int * Y)
       if (err == FP_OKAY) {
          fp_copy(X, &tmp[1]);
          tmp[1].sign = FP_ZPOS;
-   #ifdef TFM_TIMING_RESISTANT
+#ifdef TFM_TIMING_RESISTANT
          err =  _fp_exptmod_ct(&tmp[0], &tmp[1], tmp[1].used, P, Y);
-   #else
+#else
          err =  _fp_exptmod_nct(&tmp[0], &tmp[1], P, Y);
-   #endif
+#endif
          if ((err == 0) && (P->sign == FP_NEG)) {
             err = fp_add(Y, P, Y);
          }
@@ -3181,7 +2872,7 @@ int fp_exptmod(fp_int * G, fp_int * X, fp_int * P, fp_int * Y)
       return err;
 #else
       return FP_VAL;
-#endif /* POSITIVE_EXP_ONLY check */
+#endif
    }
    else if (G->used == 1 && G->dp[0] == 2) {
       return _fp_exptmod_base_2(X, X->used, P, Y);
@@ -3198,8 +2889,10 @@ int fp_exptmod(fp_int * G, fp_int * X, fp_int * P, fp_int * Y)
 
 int fp_exptmod_ex(fp_int * G, fp_int * X, int digits, fp_int * P, fp_int * Y)
 {
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-   int retHW = FP_OKAY;
+
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+   int x = fp_count_bits (X);
 #endif
 
    /* handle modulus of zero and prevent overflows */
@@ -3219,30 +2912,12 @@ int fp_exptmod_ex(fp_int * G, fp_int * X, int digits, fp_int * P, fp_int * Y)
       return FP_OKAY;
    }
 
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-   retHW = esp_mp_exptmod(G, X, P, Y);
-   switch (retHW) {
-      case MP_OKAY:
-         /* successfully computed in HW */
-         return retHW;
-         break;
-
-      case WC_HW_WAIT_E: /* MP_HW_BUSY math HW busy, fall back */
-      case MP_HW_FALLBACK:    /* forced fallback from HW to SW */
-      case MP_HW_VALIDATION_ACTIVE: /* use SW to compare to HW */
-         /* use software calc */
-         break;
-
-      default:
-         /* Once we've failed, exit without trying to continue.
-          * We may have mangled operands: (e.g. Z = X * Z)
-          * Future implementation may consider saving operands,
-          * but hard errors should never actually occur. */
-         return retHW;
-         break;
-   } /* HW result switch */
-   /* falling through to SW: */
-#endif /* WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD */
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+   if(x > EPS_RSA_EXPT_XBTIS) {
+      return esp_mp_exptmod(G, X, x, P, Y);
+   }
+#endif
 
    if (X->sign == FP_NEG) {
 #ifndef POSITIVE_EXP_ONLY  /* reduce stack if assume no negatives */
@@ -3299,50 +2974,26 @@ int fp_exptmod_ex(fp_int * G, fp_int * X, int digits, fp_int * P, fp_int * Y)
 
 int fp_exptmod_nct(fp_int * G, fp_int * X, fp_int * P, fp_int * Y)
 {
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-   int retHW = FP_OKAY;
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+   int x = fp_count_bits (X);
 #endif
 
-   /* handle modulus of zero and prevent overflows */
-   if (fp_iszero(P) || (P->used > (FP_SIZE/2))) {
+   if (fp_iszero(G)) {
+      fp_set(G, 0);
+      return FP_OKAY;
+   }
+
+   /* prevent overflows */
+   if (P->used > (FP_SIZE/2)) {
       return FP_VAL;
    }
-   if (fp_isone(P)) {
-      fp_set(Y, 0);
-      return FP_OKAY;
-   }
-   if (fp_iszero(X)) {
-      fp_set(Y, 1);
-      return FP_OKAY;
-   }
-   if (fp_iszero(G)) {
-      fp_set(Y, 0);
-      return FP_OKAY;
-   }
 
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_EXPTMOD)
-   retHW = esp_mp_exptmod(G, X, P, Y);
-   switch (retHW) {
-      case MP_OKAY:
-         /* successfully computed in HW */
-         return retHW;
-         break;
-
-      case WC_HW_WAIT_E: /* MP_HW_BUSY math HW busy, fall back */
-      case MP_HW_FALLBACK:    /* forced fallback from HW to SW */
-      case MP_HW_VALIDATION_ACTIVE: /* use SW to compare to HW */
-         /* use software calc */
-         break;
-
-      default:
-         /* Once we've failed, exit without trying to continue.
-          * We may have mangled operands: (e.g. Z = X * Z)
-          * Future implementation may consider saving operands,
-          * but hard errors should never actually occur. */
-         return retHW;
-         break;
+#if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+   !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+   if(x > EPS_RSA_EXPT_XBTIS) {
+      return esp_mp_exptmod(G, X, x, P, Y);
    }
-   /* falling through to SW: */
 #endif
 
    if (X->sign == FP_NEG) {
@@ -3427,36 +3078,6 @@ int fp_sqr(fp_int *A, fp_int *B)
        err = FP_VAL;
        goto clean;
     }
-
-#if defined(WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL)
-    if (esp_hw_validation_active()) {
-        ESP_LOGV(TAG, "Skipping call to esp_mp_mul "
-                      "during active validation.");
-    }
-    else {
-        err = esp_mp_mul(A, A, B); /* HW accelerated multiply  */
-        switch (err) {
-            case MP_OKAY:
-                goto clean; /* success */
-                break;
-
-            case WC_HW_WAIT_E: /* MP_HW_BUSY math HW busy, fall back */
-            case MP_HW_FALLBACK:    /* forced fallback from HW to SW */
-            case MP_HW_VALIDATION_ACTIVE: /* use SW to compare to HW */
-                /* fall back to software, below */
-                break;
-
-            default:
-                /* Once we've failed, exit without trying to continue.
-                 * We may have mangled operands: (e.g. Z = X * Z)
-                 * Future implementation may consider saving operands,
-                 * but errors should never occur. */
-                goto clean;  /* error */
-                break;
-        }
-    }
-    /* fall through to software calcs */
-#endif /* WOLFSSL_ESP32_CRYPT_RSA_PRI_MP_MUL */
 
 #if defined(TFM_SQR3) && FP_SIZE >= 6
         if (y <= 3) {
@@ -4051,16 +3672,8 @@ int fp_read_unsigned_bin(fp_int *a, const unsigned char *b, int c)
   /* zero the int */
   fp_zero (a);
 
-  if (c < 0) {
-      return FP_VAL;
-  }
-
-  if (c == 0) {
-      return FP_OKAY;
-  }
-
   /* if input b excess max, then truncate */
-  if ((word32)c > maxC) {
+  if (c > 0 && (word32)c > maxC) {
      int excess = (c - maxC);
      c -= excess;
      b += excess;
@@ -4197,7 +3810,7 @@ int fp_to_unsigned_bin(fp_int *a, unsigned char *b)
   fp_init_copy(t, a);
 
   x = fp_to_unsigned_bin_at_pos(0, t, b);
-  mp_reverse (b, x);
+  fp_reverse (b, x);
 
 #ifdef WOLFSSL_SMALL_STACK
   XFREE(t, NULL, DYNAMIC_TYPE_BIGINT);
@@ -4207,7 +3820,7 @@ int fp_to_unsigned_bin(fp_int *a, unsigned char *b)
 
 int fp_to_unsigned_bin_len(fp_int *a, unsigned char *b, int c)
 {
-#if DIGIT_BIT == 64 || DIGIT_BIT == 32 || DIGIT_BIT == 16
+#if DIGIT_BIT == 64 || DIGIT_BIT == 32
   int i = 0;
   int j = 0;
   int x;
@@ -4220,12 +3833,6 @@ int fp_to_unsigned_bin_len(fp_int *a, unsigned char *b, int c)
   }
   for (; x >= 0; x--) {
      b[x] = 0;
-  }
-  if (i < a->used - 1) {
-      return FP_VAL;
-  }
-  if ((i == a->used - 1) && ((a->dp[i] >> j) != 0)) {
-      return FP_VAL;
   }
 
   return FP_OKAY;
@@ -4249,14 +3856,11 @@ int fp_to_unsigned_bin_len(fp_int *a, unsigned char *b, int c)
       b[x] = (unsigned char) (t->dp[0] & 255);
       fp_div_2d (t, 8, t, NULL);
   }
-  mp_reverse (b, x);
+  fp_reverse (b, x);
 
 #ifdef WOLFSSL_SMALL_STACK
   XFREE(t, NULL, DYNAMIC_TYPE_BIGINT);
 #endif
-  if (!fp_iszero(t)) {
-      return FP_VAL;
-  }
   return FP_OKAY;
 #endif
 }
@@ -4280,12 +3884,14 @@ void fp_set(fp_int *a, fp_digit b)
 #endif
 int fp_set_int(fp_int *a, unsigned long b)
 {
+  int x;
+
   /* use direct fp_set if b is less than fp_digit max
    * If input max value of b down shift by 1 less than full range
    * fp_digit, then condition is always true. */
 #if ((ULONG_MAX >> (DIGIT_BIT-1)) > 0)
-  int x;
   if (b < FP_DIGIT_MAX)
+#endif
   {
     fp_set (a, (fp_digit)b);
     return FP_OKAY;
@@ -4312,9 +3918,6 @@ int fp_set_int(fp_int *a, unsigned long b)
 
   /* clamp digits */
   fp_clamp(a);
-#else
-  fp_set (a, (fp_digit)b);
-#endif
 
   return FP_OKAY;
 }
@@ -4502,6 +4105,23 @@ void fp_rshd(fp_int *a, int x)
    fp_clamp(a);
 }
 
+/* reverse an array, used for radix code */
+void fp_reverse (unsigned char *s, int len)
+{
+  int     ix, iy;
+  unsigned char t;
+
+  ix = 0;
+  iy = len - 1;
+  while (ix < iy) {
+    t     = s[ix];
+    s[ix] = s[iy];
+    s[iy] = t;
+    ++ix;
+    --iy;
+  }
+}
+
 
 /* c = a - b */
 int fp_sub_d(fp_int *a, fp_digit b, fp_int *c)
@@ -4590,10 +4210,6 @@ void fp_clear(fp_int *a)
 void fp_forcezero (mp_int * a)
 {
     int size;
-
-    if (a == NULL)
-      return;
-
     a->used = 0;
     a->sign = FP_ZPOS;
 #if defined(ALT_ECC_SIZE) || defined(HAVE_WOLF_BIGINT)
@@ -4690,32 +4306,16 @@ int wolfcrypt_mp_mulmod (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
 int mp_mulmod (mp_int * a, mp_int * b, mp_int * c, mp_int * d)
 #endif
 {
-   int ret = MP_OKAY;
-#ifdef WOLFSSL_ESP32_CRYPT_RSA_PRI_MULMOD
-   ret = esp_mp_mulmod(a, b, c, d);
-   switch (ret) {
-      case MP_OKAY:
-         /* successfully computed in HW */
-         break;
+ #if defined(WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI) && \
+    !defined(NO_WOLFSSL_ESP32WROOM32_CRYPT_RSA_PRI)
+    int A = fp_count_bits (a);
+    int B = fp_count_bits (b);
 
-      case WC_HW_WAIT_E: /* MP_HW_BUSY math HW busy, fall back */
-      case MP_HW_FALLBACK:    /* forced fallback from HW to SW */
-      case MP_HW_VALIDATION_ACTIVE: /* use SW to compare to HW */
-         /* use software calc */
-         ret = fp_mulmod(a, b, c, d);
-         break;
-
-      default:
-         /* Once we've failed, exit without trying to continue.
-          * We may have mangled operands: (e.g. Z = X * Z)
-          * Future implementation may consider saving operands,
-          * but hard errors should never actually occur. */
-         break;
-   }
-#else /* no HW */
-   ret = fp_mulmod(a, b, c, d);
-#endif /* WOLFSSL_ESP32_CRYPT_RSA_PRI_MULMOD */
-   return ret;
+    if( A >= ESP_RSA_MULM_BITS && B >= ESP_RSA_MULM_BITS)
+        return esp_mp_mulmod(a, b, c, d);
+    else
+ #endif
+   return fp_mulmod(a, b, c, d);
 }
 
 /* d = a - b (mod c) */
@@ -4864,13 +4464,6 @@ int mp_div_2d(fp_int* a, int b, fp_int* c, fp_int* d)
   return MP_OKAY;
 }
 
-int mp_mod_2d(fp_int* a, int b, fp_int* c)
-{
-  fp_mod_2d(a, b, c);
-  return MP_OKAY;
-}
-
-/* copy (src = a) to (dst = b) */
 void fp_copy(const fp_int *a, fp_int *b)
 {
     /* if source and destination are different */
@@ -4908,13 +4501,11 @@ int mp_init_copy(fp_int * a, fp_int * b)
     return MP_OKAY;
 }
 
-/* Copy (dst = a) from (src = b) */
 void fp_init_copy(fp_int *a, fp_int* b)
 {
     if (a != b) {
         fp_init(a);
-        /* Note reversed parameter order! */
-        fp_copy(b, a); /* copy (src = b) to (dst = a) */
+        fp_copy(b, a);
     }
 }
 
@@ -4925,12 +4516,12 @@ int mp_copy(const fp_int* a, fp_int* b)
     return MP_OKAY;
 }
 
-int mp_isodd(const mp_int* a)
+int mp_isodd(mp_int* a)
 {
     return fp_isodd(a);
 }
 
-int mp_iszero(const mp_int* a)
+int mp_iszero(mp_int* a)
 {
     return fp_iszero(a);
 }
@@ -5024,10 +4615,21 @@ int mp_montgomery_calc_normalization(mp_int *a, mp_int *b)
 
 #endif /* WOLFSSL_KEY_GEN || HAVE_ECC */
 
-static int fp_cond_swap_ct_ex(mp_int* a, mp_int* b, int c, int m, mp_int* t)
+static int fp_cond_swap_ct (mp_int * a, mp_int * b, int c, int m)
 {
     int i;
     mp_digit mask = (mp_digit)0 - m;
+#ifndef WOLFSSL_SMALL_STACK
+    fp_int  t[1];
+#else
+    fp_int* t;
+#endif
+
+#ifdef WOLFSSL_SMALL_STACK
+   t = (fp_int*)XMALLOC(sizeof(fp_int), NULL, DYNAMIC_TYPE_BIGINT);
+   if (t == NULL)
+       return FP_MEM;
+#endif
 
     t->used = (a->used ^ b->used) & mask;
     for (i = 0; i < c; i++) {
@@ -5041,26 +4643,6 @@ static int fp_cond_swap_ct_ex(mp_int* a, mp_int* b, int c, int m, mp_int* t)
     for (i = 0; i < c; i++) {
         b->dp[i] ^= t->dp[i];
     }
-
-    return FP_OKAY;
-}
-
-
-static int fp_cond_swap_ct(mp_int* a, mp_int* b, int c, int m)
-{
-#ifndef WOLFSSL_SMALL_STACK
-    fp_int  t[1];
-#else
-    fp_int* t;
-#endif
-
-#ifdef WOLFSSL_SMALL_STACK
-   t = (fp_int*)XMALLOC(sizeof(fp_int), NULL, DYNAMIC_TYPE_BIGINT);
-   if (t == NULL)
-       return FP_MEM;
-#endif
-
-   fp_cond_swap_ct_ex(a, b, c, m, t);
 
 #ifdef WOLFSSL_SMALL_STACK
     XFREE(t, NULL, DYNAMIC_TYPE_BIGINT);
@@ -5515,8 +5097,6 @@ int mp_prime_is_prime_ex(mp_int* a, int t, int* result, WC_RNG* rng)
         return FP_VAL;
     if (a->sign == FP_NEG)
         return FP_VAL;
-    if (t <= 0 || t > FP_PRIME_SIZE)
-        return FP_VAL;
 
     if (fp_isone(a)) {
         *result = FP_NO;
@@ -5652,12 +5232,7 @@ int mp_prime_is_prime_ex(mp_int* a, int t, int* result, WC_RNG* rng)
 #endif /* !NO_RSA || !NO_DSA || !NO_DH || WOLFSSL_KEY_GEN */
 
 
-int mp_cond_swap_ct_ex(mp_int* a, mp_int* b, int c, int m, mp_int* t)
-{
-    return fp_cond_swap_ct_ex(a, b, c, m, t);
-}
-
-int mp_cond_swap_ct(mp_int* a, mp_int* b, int c, int m)
+int mp_cond_swap_ct(mp_int * a, mp_int * b, int c, int m)
 {
     return fp_cond_swap_ct(a, b, c, m);
 }
@@ -5940,14 +5515,12 @@ static wcchar fp_s_rmap = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                     "abcdefghijklmnopqrstuvwxyz+/";
 #endif
 
-#if defined(OPENSSL_EXTRA) || !defined(NO_DSA) || defined(HAVE_ECC)
+#if !defined(NO_DSA) || defined(HAVE_ECC)
 #if DIGIT_BIT == 64 || DIGIT_BIT == 32
 static int fp_read_radix_16(fp_int *a, const char *str)
 {
   int     i, j, k, neg;
   int     ch;
-  /* Skip whitespace at end of line */
-  int     eol_done = 0;
 
   /* if the leading digit is a
    * minus set the sign to negative.
@@ -5964,11 +5537,8 @@ static int fp_read_radix_16(fp_int *a, const char *str)
   for (i = (int)(XSTRLEN(str) - 1); i >= 0; i--) {
       ch = (int)HexCharToByte(str[i]);
       if (ch < 0) {
-        if (!eol_done && CharIsWhiteSpace(str[i]))
-          continue;
         return FP_VAL;
       }
-      eol_done = 1;
 
       k += j == DIGIT_BIT;
       j &= DIGIT_BIT - 1;
@@ -6030,13 +5600,7 @@ static int fp_read_radix(fp_int *a, const char *str, int radix)
       }
     }
     if (y >= radix) {
-      /* Check if whitespace at end of line */
-      while (CharIsWhiteSpace(*str))
-        ++str;
-      if (*str)
-        return FP_VAL;
-      else
-        break;
+      return FP_VAL;
     }
 
     /* if the char was found in the map
@@ -6071,8 +5635,15 @@ int mp_read_radix(mp_int *a, const char *str, int radix)
 
 #endif /* !defined(NO_DSA) || defined(HAVE_ECC) */
 
-#if defined(HAVE_ECC) || (!defined(NO_RSA) && defined(WC_RSA_BLINDING))
+#ifdef HAVE_ECC
 
+/* fast math conversion */
+int mp_sqr(fp_int *A, fp_int *B)
+{
+    return fp_sqr(A, B);
+}
+
+/* fast math conversion */
 int mp_montgomery_reduce(fp_int *a, fp_int *m, fp_digit mp)
 {
     return fp_montgomery_reduce(a, m, mp);
@@ -6090,17 +5661,6 @@ int mp_montgomery_setup(fp_int *a, fp_digit *rho)
     return fp_montgomery_setup(a, rho);
 }
 
-#endif /* HAVE_ECC || (!NO_RSA && WC_RSA_BLINDING) */
-
-/* fast math conversion */
-int mp_sqr(fp_int *A, fp_int *B)
-{
-    return fp_sqr(A, B);
-}
-
-#ifdef HAVE_ECC
-
-/* fast math conversion */
 int mp_div_2(fp_int * a, fp_int * b)
 {
     fp_div_2(a, b);
@@ -6182,13 +5742,8 @@ int mp_radix_size (mp_int *a, int radix, int *size)
         return FP_MEM;
 #endif
 
-    /* Init a copy (t) of the input (a)
-    **
-    ** ALERT: Not calling fp_init_copy() as some compiler optimization settings
-    ** such as -O2 will complain that (t) "may be used uninitialized"
-    ** The fp_init() is here only to appease the compiler.  */
-    fp_init(t);
-    fp_copy(a, t); /* copy (src = a) to (dst = t)*/
+    /* init a copy of the input */
+    fp_init_copy (t, a);
 
     /* force temp to positive */
     t->sign = FP_ZPOS;
@@ -6260,13 +5815,8 @@ int mp_toradix (mp_int *a, char *str, int radix)
         return FP_MEM;
 #endif
 
-    /* Init a copy (t) of the input (a)
-    **
-    ** ALERT: Not calling fp_init_copy() as some compiler optimization settings
-    ** such as -O2 will complain that (t) "may be used uninitialized"
-    ** The fp_init() is here only to appease the compiler.  */
-    fp_init(t);
-    fp_copy(a, t); /* copy (src = a) to (dst = t) */
+    /* init a copy of the input */
+    fp_init_copy (t, a);
 
     /* if it is negative output a - */
     if (t->sign == FP_NEG) {
@@ -6297,7 +5847,7 @@ int mp_toradix (mp_int *a, char *str, int radix)
     /* reverse the digits of the string.  In this case _s points
      * to the first digit [excluding the sign] of the number]
      */
-    mp_reverse ((unsigned char *)_s, digs);
+    fp_reverse ((unsigned char *)_s, digs);
 
     /* append a NULL so the string is properly terminated */
     *str = '\0';

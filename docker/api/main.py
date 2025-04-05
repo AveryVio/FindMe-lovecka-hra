@@ -96,6 +96,7 @@ def ExtractKeyValue(data, key):
 def SendJSONResponse(self, data):
     self.send_response(200)
     self.send_header("Content-Type", "application/json")
+    self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(json.dumps(data).encode('utf-8'))
 
@@ -103,18 +104,21 @@ def SendJSONQueryResponse(self, response):
     self.send_response(200) # if i need this could handle an error ==> if response.get('status') == True else 500
     self.send_header('Content-Type', 'application/json')
     self.send_header("Access-Control-Allow-Methods", "POST")
+    self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(json.dumps(response).encode())
 
 def SendJSONError(self, errorM):
     self.send_response(500)
     self.send_header("Content-Type", "application/json")
+    self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(json.dumps({"error": str(errorM)}).encode('utf-8'))
 
 def SendHTMLResponse(self, message):
     self.send_response(200)
     self.send_header("Content-type", "html")  # Adjust MIME type if necessary
+    self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(bytes(message,"utf-8"))
 

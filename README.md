@@ -6,7 +6,7 @@ A digital hunting  game for exploring fun sites and interesting places.
 > This project is a long term school project and has some additional information not relevant to the maintenance project itself, but for grading purposes.
 
 🌍docs: [English](docs/docs.md), [České](docs/translations/CZ/dokumentaceCZ.md)  
-🌏installation/config: [English](docs/instalation.md), [České](docs/translations/CZ/instalaceCZ.md)
+🌏installation: [English](docs/instalation.md), [České](docs/translations/CZ/instalaceCZ.md)
 
 -----
 

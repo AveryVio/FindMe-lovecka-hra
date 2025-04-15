@@ -162,6 +162,21 @@ class MyServer(BaseHTTPRequestHandler):
                         SendJSONResponse(self, data)
                     except Exception as errorM:
                         SendJSONError(self, errorM)
+                # handle the top completed hunts
+                elif query[0] == "t":
+                    try:
+                        # parse amount
+                        amount = ""
+                        for i in query:
+                            if (i == "t") or (i == "="):
+                                continue
+                            amount = amount + i
+                        # get data
+                        data = dbf.fetch_and_sort(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, ["huntid", "count"], "count", amount)
+                        SendJSONResponse(self, data)
+                    except Exception as errorM:
+                        print(errorM)
+                        SendJSONError(self, errorM)
                 # handle the catchall param
                 elif query[0] == "*":
                     try:

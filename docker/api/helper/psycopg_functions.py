@@ -166,6 +166,49 @@ def fetch_columns_with_filter(dbname, user, host, port, table_name, columns, fil
         print("Error fetching data:", error)
         return []
 
+def fetch_and_sort(dbname, user, host, port, table_name, columns, sort_column, limit=None):
+    """
+    Fetches specific columns from a PostgreSQL table,
+    sorts the results by a specified column in descending order, and limits the
+    number of returned rows.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+        columns (list): List of column names to fetch.
+        sort_column (str): Column to sort the results by (biggest to smallest).
+        limit (int, optional): Maximum number of rows to return. Defaults to None (no limit).
+
+    Returns:
+        list: List of dictionaries containing the fetched data, sorted by the
+              specified column and limited to the specified number of rows.
+              Returns an empty list on error.
+    """
+    try:
+        with psycopg.connect(
+            dbname=dbname, user=user, host=host, port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                column_list = ", ".join([f'"{col}"' for col in columns])
+                query = (
+                    f"SELECT {column_list} FROM {table_name} "
+                    f"ORDER BY \"{sort_column}\" DESC"
+                )
+                if limit is not None:
+                    query += f" LIMIT {limit}"
+                query += ";"
+
+                cursor.execute(query)
+                results = cursor.fetchall()
+                result = [dict(zip(columns, row)) for row in results]
+                return result
+
+    except (Exception, psycopg.Error) as error:
+        print("Error fetching data:", error)
+        return []
 
 
 def entry_exists(dbname, user, host, port, table_name, column, value):

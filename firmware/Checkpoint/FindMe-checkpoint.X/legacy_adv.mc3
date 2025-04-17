@@ -128,6 +128,61 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="BLE_STACK_LIB" name="GAP_DEV_NAME"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;BLE_STACK_LIB&gt;
+  &lt;BLE_STACK_LIB dnOrder=&quot;0&quot; id=&quot;GAP_DEV_NAME&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;Microchip&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/BLE_STACK_LIB&gt;
+&lt;/BLE_STACK_LIB&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="BLE_STACK_LIB" name="GAP_DEV_NAME_CHECK"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;BLE_STACK_LIB&gt;
+  &lt;BLE_STACK_LIB dnOrder=&quot;0&quot; id=&quot;GAP_DEV_NAME_CHECK&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;BLE_STACK_LIB&quot; value=&quot;true&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/BLE_STACK_LIB&gt;
+&lt;/BLE_STACK_LIB&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="BLE_STACK_LIB" name="GAP_SCAN_RSP_DATA"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;BLE_STACK_LIB&gt;
+  &lt;BLE_STACK_LIB dnOrder=&quot;0&quot; id=&quot;GAP_SCAN_RSP_DATA&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;BLE_STACK_LIB&quot; value=&quot;0x0B, 0x09, 0x70, 0x69, 0x63, 0x33, 0x32, 0x63, 0x78, 0x2D, 0x62, 0x7A&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/BLE_STACK_LIB&gt;
+&lt;/BLE_STACK_LIB&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="BLE_STACK_LIB" name="GAP_SCAN_RSP_DATA_LEN"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;BLE_STACK_LIB&gt;
+  &lt;BLE_STACK_LIB dnOrder=&quot;0&quot; id=&quot;GAP_SCAN_RSP_DATA_LEN&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;BLE_STACK_LIB&quot; value=&quot;12&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/BLE_STACK_LIB&gt;
+&lt;/BLE_STACK_LIB&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="BLE_STACK_LIB" name="GAP_SCAN_RSP_DATA_LOCAL_NAME"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;BLE_STACK_LIB&gt;
+  &lt;BLE_STACK_LIB dnOrder=&quot;0&quot; id=&quot;GAP_SCAN_RSP_DATA_LOCAL_NAME&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;pic32cx-bz&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/BLE_STACK_LIB&gt;
+&lt;/BLE_STACK_LIB&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="FreeRTOS" name="!@#harmonyAttachmentState"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;FreeRTOS&gt;
   &lt;FreeRTOS dnOrder=&quot;0&quot;/&gt;
@@ -157,7 +212,7 @@
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="!@#harmonyUserData"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;UserData&gt;
   &lt;UserData dnOrder=&quot;0&quot;&gt;
-    &lt;GraphSettings canvasHeight=&quot;200&quot; canvasWidth=&quot;1813&quot; dnOrder=&quot;0&quot;/&gt;
+    &lt;GraphSettings canvasHeight=&quot;525&quot; canvasWidth=&quot;909&quot; dnOrder=&quot;0&quot;/&gt;
     &lt;PowerProfiles dnOrder=&quot;1&quot;&gt;
       &lt;Profile dnOrder=&quot;0&quot; id=&quot;profile0&quot; name=&quot;Main&quot;/&gt;
     &lt;/PowerProfiles&gt;

@@ -54,7 +54,7 @@ RANLIB=ranlib
 build: .build-post
 
 .build-pre:
-	powershell ./checkpointset.ps1
+	python ./checkpointset.py
 # Add your pre 'build' code here...
 
 .build-post: .build-impl

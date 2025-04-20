@@ -6,6 +6,8 @@ from urllib.parse import urlparse, parse_qs
 from psycopg_functions import *
 from api_db_constants import *
 
+####################################################################################################################################################################################
+####################################################################################################################################################################################
 # formating jsons
 def ExtractKeyValue(data, key):
     # Extracts a specific key-value pair from a JSON data
@@ -40,7 +42,8 @@ def SendHTMLResponse(self, message):
     self.send_header('Access-Control-Allow-Origin', '*')
     self.end_headers()
     self.wfile.write(bytes(message,"utf-8"))
-
+####################################################################################################################################################################################
+####################################################################################################################################################################################
 # HTTP Server
 class FindMeServerClass(BaseHTTPRequestHandler):
 
@@ -117,7 +120,7 @@ class FindMeServerClass(BaseHTTPRequestHandler):
             self.send_header('Location','http://spseplzen.cz')
             self.end_headers()
 
-
+####################################################################################################################################################################################
     def do_POST(self):
         # Endpoint for adding hunts
         if self.path == '/add_hunt':

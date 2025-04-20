@@ -1,7 +1,5 @@
 import psycopg
 
-print("imported psycopg functions")
-
 # create functions
 # create table
 def create_table(dbname, user, host, port, table_name, columns):

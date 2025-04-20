@@ -18,7 +18,8 @@ COPY ../websites/conntest.html .
 
 # add python scripts
 COPY ../api/main.py .
-COPY ../api/helper/psycopg_functions.py ./helper/
+COPY ../api/helper/psycopg_functions.py ./
+COPY ../api/helper/http_functions.py ./
 
 RUN echo "Python files iported"
 

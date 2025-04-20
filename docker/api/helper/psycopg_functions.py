@@ -1,5 +1,7 @@
 import psycopg
-
+####################################################################################################################################################################################
+####################################################################################################################################################################################
+####################################################################################################################################################################################
 # create functions
 # create table
 def create_table(dbname, user, host, port, table_name, columns):
@@ -40,7 +42,9 @@ def create_table(dbname, user, host, port, table_name, columns):
         print("Error creating table:", error)
         return False
 
-
+####################################################################################################################################################################################
+####################################################################################################################################################################################
+####################################################################################################################################################################################
 # fetch functions
 # fetch whole table
 def fetch_all_from_table(dbname, user, host, port, table_name):
@@ -164,6 +168,7 @@ def fetch_columns_with_filter(dbname, user, host, port, table_name, columns, fil
         print("Error fetching data:", error)
         return []
 
+# fetch specific columns and sort bigges to smallest with an upper limit
 def fetch_and_sort(dbname, user, host, port, table_name, columns, sort_column, limit=None):
     """
     Fetches specific columns from a PostgreSQL table,
@@ -208,7 +213,7 @@ def fetch_and_sort(dbname, user, host, port, table_name, columns, sort_column, l
         print("Error fetching data:", error)
         return []
 
-
+# check if a hunt exitst
 def entry_exists(dbname, user, host, port, table_name, column, value):
     """
     Check if an entry exists in a PostgreSQL table.
@@ -244,6 +249,37 @@ def entry_exists(dbname, user, host, port, table_name, column, value):
         print("Error checking entry:", error)
         return False
 
+# check the amount of total rows
+def count_rows(dbname, user, host, port, table_name):
+    """
+    Counts the number of rows in a PostgreSQL table.
+
+    Parameters:
+        dbname (str): Database name.
+        user (str): Username.
+        host (str): Host address.
+        port (int): Port number.
+        table_name (str): Name of the table.
+
+    Returns:
+        int: The number of rows in the table.  Returns -1 on error.
+    """
+    try:
+        with psycopg.connect(
+            dbname=dbname, user=user, host=host, port=port
+        ) as conn:
+            with conn.cursor() as cursor:
+                query = f"SELECT COUNT(*) FROM {table_name};"
+                cursor.execute(query)
+                count = cursor.fetchone()[0]
+                return count
+
+    except (Exception, psycopg.Error) as error:
+        print("Error counting rows:", error)
+        return -1
+####################################################################################################################################################################################
+####################################################################################################################################################################################
+####################################################################################################################################################################################
 # insert functions
 # insert function
 def insert_into_table(dbname, user, host, port, table_name, data):

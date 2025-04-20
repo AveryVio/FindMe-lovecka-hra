@@ -3,7 +3,14 @@ import time
 import json
 from urllib.parse import urlparse, parse_qs
 
-import psycopg_functions
+from psycopg_functions import *
+from api_db_constants import *
+
+# formating jsons
+def ExtractKeyValue(data, key):
+    # Extracts a specific key-value pair from a JSON data
+    value = data.get(key)
+    return [ { key: value } ]
 
 def SendJSONResponse(self, data):
     self.send_response(200)
@@ -63,7 +70,7 @@ class FindMeServerClass(BaseHTTPRequestHandler):
                         for queryUnit in query.split("&"):
                             querySubunits = queryUnit.split("=")
                             filter_params.append({querySubunits[0]: querySubunits[1]})
-                        # use db to get data and put it into a list
+                        # get and send
                         data = []
                         dataUnit = ""
                         for filter_param in filter_params:
@@ -83,7 +90,11 @@ class FindMeServerClass(BaseHTTPRequestHandler):
                             if (i == "t") or (i == "="):
                                 continue
                             amount = amount + i
-                        # get data
+                        # cap amount by the amount of rows in the db
+                        max_amount = count_rows(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name)
+                        if int(max_amount) > int(amount):
+                            amount = max_amount
+                        # get and send data
                         data = fetch_and_sort(connection_data.name, connection_data.user, connection_data.host, connection_data.port, tableHunts.name, ["huntid", "count"], "count", amount)
                         SendJSONResponse(self, data)
                     except Exception as errorM:

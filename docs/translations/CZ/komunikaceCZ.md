@@ -15,6 +15,8 @@ Stránka spse přesměruje uživatele na stránku SPŠE Plzeň.
 Tato cesta je použitá pro získávání dat z databáze s filtrem na základě hashe lovu.
 Jako URI parametry klient použije páry klíče a hodnot, kde klíč je vždy "f" a hodnota je hashe lovu podle kterého se bude filtrovat. Klient může použít jakýkoli počet párů.
 Server odpoví  s hashí a a počtem kolikrát byl splněn.
+Doporučený parametr pro klienta na použití je "t", který vrátí nejvíce splněné lovy. Uživatel může specifikovat počet kolik jich chce, ale server maximálně vrátí počet lovů v databázi.
+Server odpoví seznamem hashí lovů a počtem jejich splnění.
 
 # POST
 

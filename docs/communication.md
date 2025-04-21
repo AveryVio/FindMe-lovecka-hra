@@ -13,8 +13,10 @@ The page spse redirects to the site of SPŠE Plzeň.
 ## i_venture_forth_to_hunt
 
 This path is used to fetch data from the database with filtering based on the hunt hash.
-As URI parameters the client uses key value pairs, where the key is always "f" while the value is the hunt hash to filter by. The client can use any mumber of pairs
+As URI parameters the client can use key value pairs, where the key is always "f" while the value is the hunt hash to filter by. The client can use any number of pairs.
 The server responds with the hunt hash, that the client can confirm and the number of times it was completed.
+The recommended parameter for the client is "t" which get's the top hunts, the user can specify the number of hunts, but the response is limited to the amount of hunts in the database.
+The server responds with the list of hunt hashes and the amounts they were completed.
 
 # POST
 

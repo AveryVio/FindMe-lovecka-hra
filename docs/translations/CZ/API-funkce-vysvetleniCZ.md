@@ -44,12 +44,26 @@ Pokud nastane chyba, vypíše chybovou zprávu a vrátí False.
 
 Funkce vytvoří cursor a udělá ze seznamu sloupců filtr sloupců a vytvoří dotaz, ten pak spustí. Dále vloží vrácené hodnoty do seznamu slovníků a to vrátí.
 Když nastane chyba, vypíše chybovou zprávu a vrátí False.
+#### fetch_and_sort
+>params: generic_params, columns(seznam), sort_column(text), limit=None(číslo)  
+>returns: seznam slovníků/prázdný seznam  
+
+Funkce vytvoří cursor a udělá ze seznam sloupců který dá do dotazu s řazením podle sloupce, pak ho spustí. Poté promění vrácené hodnoty do seznamu slovníků a to vrátí
+Když nastane chyba, vypíše chybovou zprávu a vrátí prázdný seznam.
+
 #### entry_exists
 >parametry: generic_params, column(text), value(text)  
 >vrací: True/False  
 
 Funkce vytvoří cursor a dotaz filtrující pro sloupec, ten pak spustí a vrátí True.
 Když nastane chyba, vypíše chybovou zprávu a vrátí False.
+
+#### count_rows
+>params: generic_params
+>returns: číslo  
+
+Funkce vytvoří cursor a dotaz počítající počet řad, pak ho spustí a vrátí výstup.
+Pokud nastane chyba, vypíše chybovou zprávu a vrátí -1.
 ## Vkládací funkce
 #### insert_into_table
 >parametry: generic_params, data(slovník)  
@@ -116,8 +130,9 @@ For GET dotazy, tato zpráva oznamuje ztraceným cestovatelům že tato cesta je
 #### /i_venture_forth_to_hunt
 
 Funkce oddělí parametry od cesty, pokud jsou špatné, odpoví s chybovou zprávou.
-Když jsou správně, oddělí klíče a hodnoty z slovníků, pak pomocí fetch_columns_with_filter() dostane data a ty pošle klientovi jako JSON soubor.
-Když nastane chyba, pošle klientu chybovou zprávu.
+Pokud parametry jsou filtr ("f"), oddělí klíče a hodnoty z slovníků, pak pomocí fetch_columns_with_filter() dostane data a ty pošle klientovi jako JSON soubor.
+Když parametry jsou pro získání nevíce splněné lovy ("t"), tak z parametrů získá počet. Poté pomocí count_rows() získá počet řádek, pokud je požadovaný počet přes tuto hodnotu, tak ji nastaví jako počet. Poté je zavolán fetch_and_sort() a dostane data a pošle je klientovi v JSON souboru.
+Když je použita hvězdička ("\*"), tak  pošle klientovi celou databázi pomocí fetch_all_from_table() v JSON souboru. (to bude změněno na poslání huntid a count v budoucnu)
 
 #### /spse
 

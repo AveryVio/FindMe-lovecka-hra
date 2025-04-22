@@ -50,6 +50,16 @@
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "definitions.h"                // SYS function prototypes
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Definitions
+// *****************************************************************************
+// *****************************************************************************
+
+// APP LED BLE
+#define APP_LED_BLE_NULL 0
+#define APP_LED_BLE_OFF 1
+#define APP_LED_BLE_ON 2
 
 // *****************************************************************************
 // *****************************************************************************
@@ -61,11 +71,31 @@ int main ( void )
 {
     /* Initialize all modules */
     SYS_Initialize ( NULL );
+    
+    uint8_t app_led_ble_state = APP_LED_BLE_NULL;
 
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
+        if(BUTTON_TEST_Get()){
+            app_led_ble_state = APP_LED_BLE_ON ? APP_LED_BLE_OFF : APP_LED_BLE_ON;
+        }
+        if(/*button on off*/0){}
+        switch (app_led_ble_state) {
+            case APP_LED_BLE_ON:{
+                // set led state to on
+                break;
+            }
+            case APP_LED_BLE_OFF:{
+                // set led state to off
+                break;
+            }
+            case APP_LED_BLE_NULL:{
+                app_led_ble_state = APP_LED_BLE_OFF;
+                break;
+            }
+        }
     }
 
     /* Execution should not come here during normal operation */

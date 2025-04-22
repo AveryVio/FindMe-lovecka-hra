@@ -1,3 +1,4 @@
+// DOM-IGNORE-BEGIN
 /*******************************************************************************
 * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
@@ -20,6 +21,7 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
+// DOM-IGNORE-END
 
 /*******************************************************************************
   MPLAB Harmony Application Source File
@@ -55,11 +57,17 @@
 #include "app_ble.h"
 
 
+
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
+
+
+
+
 
 // *****************************************************************************
 /* Application Data
@@ -112,27 +120,6 @@ APP_DATA appData;
     See prototype in app.h.
  */
 
-void RGB_LED_GPIO_Initialize ( void )
-{
-    CFG_REGS->CFG_CFGCON0CLR = CFG_CFGCON0_JTAGEN_Msk;
- 
-          /* PORTA Initialization */
-    /* PORTB Initialization */
-
-
-    /* PPS Input Remapping */
-
-    /* PPS Output Remapping */
-    
-    GPIOA_REGS->GPIO_TRISSET = 0xFFFF; //Set all pins as input
-
-    /*  PB  */
-    GPIOB_REGS->GPIO_ANSELSET = 0x0040; //PB6 ANSEL for Temp sensor
-    GPIOB_REGS->GPIO_TRISSET = 0xFFFF;  //Set all pins as input
-    GPIOB_REGS->GPIO_CNPUSET = 0xF886;  //Pull up: PRB 1, 2, 7, 11, 12 , 13 ,14 , 15
-    GPIOB_REGS->GPIO_CNPDSET = 0x0029;  //Pull down RB0,3,5 for LED
-}
-
 void APP_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
@@ -143,8 +130,8 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    RGB_LED_GPIO_Initialize();
 }
+
 
 /******************************************************************************
   Function:
@@ -168,15 +155,12 @@ void APP_Tasks ( void )
         {
             bool appInitialized = true;
             //appData.appQueue = xQueueCreate( 10, sizeof(APP_Msg_T) );
-            APP_BleStackInit();
-            if (!(RTC_REGS->MODE0.RTC_CTRLA & RTC_MODE0_CTRLA_ENABLE_Msk))
-            {
-            RTC_Timer32Start();
-            }
 
-            // Start Advertisement
-            BLE_GAP_SetAdvEnable(0x01, 0x00);
-            SERCOM0_USART_Write((uint8_t *)"Advertising\r\n",13);
+            APP_BleStackInit();
+
+
+
+
             if (appInitialized)
             {
 
@@ -189,6 +173,7 @@ void APP_Tasks ( void )
         {
             if (OSAL_QUEUE_Receive(&appData.appQueue, &appMsg, OSAL_WAIT_FOREVER))
             {
+
                 if(p_appMsg->msgId==APP_MSG_BLE_STACK_EVT)
                 {
                     // Pass BLE Stack Event Message to User Application for handling
@@ -198,7 +183,10 @@ void APP_Tasks ( void )
                 {
                     // Pass BLE LOG Event Message to User Application for handling
                     APP_BleStackLogHandler((BT_SYS_LogEvent_T *)p_appMsg->msgData);
-            }
+                }
+
+
+
             }
             break;
         }

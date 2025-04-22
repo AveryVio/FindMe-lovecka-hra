@@ -94,7 +94,7 @@
 #pragma config SMCLR =      NO_POR
 #pragma config QSCHE_EN =      OFF
 #pragma config QSPI_HSEN =      PPS
-#pragma config SCOM0_HSEN =      DIRECT
+#pragma config SCOM0_HSEN =      PPS
 #pragma config SCOM1_HSEN =      PPS
 #pragma config SCOM2_HSEN =      PPS
 #pragma config CCL_OE =      ON
@@ -129,9 +129,9 @@
 #pragma config RTCEVENT_SEL =      ONE_SEC
 #pragma config RTCEVENT_EN =      OFF
 #pragma config VBKP_1KCSEL =      _32K
-#pragma config VBKP_32KCSEL =      SOSC
+#pragma config VBKP_32KCSEL =      FRC
 #pragma config VBKP_DIVSEL =      DIV_31_25
-#pragma config LPCLK_MOD =      DIV_1_024
+#pragma config LPCLK_MOD =      DIV_1
 #pragma config RTCEVTYPE =      OUT
 #pragma config CPEN_DLY =      _8_LPRC
 #pragma config DSZPBOREN =      OFF
@@ -323,25 +323,6 @@ __attribute__((ramfunc, long_call, section(".ramfunc"),unique_section)) void PCH
     }
 
 }
-void _on_reset(void)
-{
-    //Need to clear register before configure any GPIO
-    DEVICE_ClearDeepSleepReg();
-
-    // Initialize the RF Clock Generator
-    SYS_ClkGen_Config();
-
-    /* Can't call a RAM function before __pic32c_data_initialization
-       Must call a flash function, but in A0 HW version, RAM function is required to avoid HW issue.
-       Thus, will not config PCHE before __pic32c_data_initialization in A0 version.
-    */
-    // Configure Prefetch, Wait States
-    if (DSU_REGS->DSU_DID & DSU_DID_REVISION_Msk)   //A1 and later version
-    {
-        PCHE_REGS->PCHE_CHECON = (PCHE_REGS->PCHE_CHECON & (~(PCHE_CHECON_PFMWS_Msk | PCHE_CHECON_ADRWS_Msk | PCHE_CHECON_PREFEN_Msk))) 
-                                        | (PCHE_CHECON_PFMWS(1) | PCHE_CHECON_PREFEN(1));
-    }
-}
 
 
 
@@ -395,6 +376,11 @@ void SYS_Initialize ( void* data )
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
+    // Initialize the RF Clock Generator
+    SYS_ClkGen_Config();
+
+    // Configure Cache and Wait States
+    PCHE_Setup();
 
   
     CLOCK_Initialize();

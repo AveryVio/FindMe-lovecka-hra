@@ -1,30 +1,22 @@
 /*******************************************************************************
- User Edits File
+ Debug Console Source file
+
+  Company:
+    Microchip Technology Inc.
 
   File Name:
-    app_user_edits.c
+    xc32_monitor.c
 
   Summary:
-    This file contains user instructions to edit Harmony 3 generated files
+    debug console Source File
 
   Description:
-    Some of the Harmony 3 generated files cannot be fully configured by the
-    MPLAB Harmony Configurator (MHC).  This file contains instructions for
-    the user to modify these files.
+    None
 
-    The '#error' compiler directive is used to direct the user's attention
-    to the instructions in the file.
+*******************************************************************************/
 
-    These edits should only need to be preformed once on the MHC generated
-    code.
-
-
-  Remarks:
- *******************************************************************************/
-
-// DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -45,30 +37,18 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
-// DOM-IGNORE-END
+#include <stddef.h>
+
+extern int read(int handle, void *buffer, unsigned int len);
+extern int write(int handle, void * buffer, size_t count);
 
 
-//#error User action required - manually edit files as described here
-// after completing the required edits, comment out or remove the #error line
+int read(int handle, void *buffer, unsigned int len)
+{
+   return -1;
+}
 
-/********************************************************************
- * TODO apply the edit steps described here:
-
- * Step 1
- * ------
- * Modify the source file:
- *      "config/default/freertos_hooks.c/"
- *
- * Add include directive
-#include "definitions.h"
-
- * Step 2
- * ------
- * Add code to the function:
- *      vApplicationIdleHook()
- * Add the following code:
-    app_idle_task();
-
-
- ********************************************************************/
-
+int write(int handle, void * buffer, size_t count)
+{
+   return -1;
+}

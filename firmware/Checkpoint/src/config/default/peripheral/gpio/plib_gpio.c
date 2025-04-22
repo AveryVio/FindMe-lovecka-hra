@@ -59,7 +59,11 @@
 void GPIO_Initialize ( void )
 {
  
-          /* PORTA Initialization */
+          /* SOSCSEL - Digital (SCLKI) mode is selected */
+    CFG_REGS->CFG_CFGCON2CLR = CFG_CFGCON2_SOSCSEL_Msk;
+
+    /* PORTA Initialization */
+    GPIOA_REGS->GPIO_CNPUSET = 0x800U; /* Pull-Up Enable */
     /* PORTB Initialization */
 
 

@@ -61,6 +61,14 @@
 // *****************************************************************************
 // *****************************************************************************
 
+/*** Macros for BUTTON_TEST pin ***/
+#define BUTTON_TEST_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<11U))
+#define BUTTON_TEST_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<11U))
+#define BUTTON_TEST_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<11U))
+#define BUTTON_TEST_Get()               ((GPIOA_REGS->GPIO_PORT >> 11U) & 0x1U)
+#define BUTTON_TEST_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<11U))
+#define BUTTON_TEST_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<11U))
+#define BUTTON_TEST_PIN                  GPIO_PIN_RA11
 
 
 // *****************************************************************************

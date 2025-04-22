@@ -149,7 +149,7 @@ void CLOCK_Initialize( void )
 
 
     /* OSWEN    = SWITCH_COMPLETE    */
-    /* SOSCEN   = ON   */
+    /* SOSCEN   = OFF   */
     /* CF       = NO_FAILDET       */
     /* SLPEN    = IDLE    */
     /* CLKLOCK  = UNLOCKED  */
@@ -157,7 +157,7 @@ void CLOCK_Initialize( void )
     /* WAKE2SPD = SELECTED_CLK */
     /* DRMEN    = NO_EFFECT    */
     /* FRCDIV   = DIV_1   */
-    CRU_REGS->CRU_OSCCON = 0x102U;
+    CRU_REGS->CRU_OSCCON = 0x100U;
 
     CRU_REGS->CRU_OSCCONSET = CRU_OSCCON_OSWEN_Msk;  /* request oscillator switch to occur */
 
@@ -194,7 +194,7 @@ void CLOCK_Initialize( void )
 
 
     CFG_REGS->CFG_PMD1 = 0x200001cdU;
-    CFG_REGS->CFG_PMD3 = 0x7ffeU;
+    CFG_REGS->CFG_PMD3 = 0x7f7eU;
 
 
     /* Lock system since done with clock configuration */

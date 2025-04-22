@@ -68,6 +68,7 @@ void DebugMonitor_Handler (void);
 void xPortPendSVHandler (void);
 void xPortSysTickHandler (void);
 void RTC_InterruptHandler (void);
+void EIC_InterruptHandler (void);
 void NVM_InterruptHandler (void);
 void SERCOM0_USART_InterruptHandler (void);
 

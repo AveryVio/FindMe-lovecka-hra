@@ -186,7 +186,7 @@ void CLOCK_Initialize( void )
 
 
     /* Peripheral Clock Generators */
-    CFG_REGS->CFG_CFGPCLKGEN1 = 0x9000U;
+    CFG_REGS->CFG_CFGPCLKGEN1 = 0x9009U;
     CFG_REGS->CFG_CFGPCLKGEN2 = 0x0U;
     CFG_REGS->CFG_CFGPCLKGEN3 = 0x0U;
 

@@ -63,6 +63,18 @@
 
 // *****************************************************************************
 // *****************************************************************************
+// Section: Functions and variables
+// *****************************************************************************
+// *****************************************************************************
+
+// global variable for "turning the device on and off" (not really)
+volatile uint8_t onoff_flag = 0;
+void onoff_callback(uintptr_t context){
+onoff_flag = (1) ? 0 : 1 ;
+}
+
+// *****************************************************************************
+// *****************************************************************************
 // Section: Main Entry Point
 // *****************************************************************************
 // *****************************************************************************
@@ -78,10 +90,10 @@ int main ( void )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
+        EIC_CallbackRegister(EIC_PIN_1, onoff_callback, (uintptr_t) NULL);
         if(BUTTON_TEST_Get()){
             app_led_ble_state = APP_LED_BLE_ON ? APP_LED_BLE_OFF : APP_LED_BLE_ON;
         }
-        if(/*button on off*/0){}
         switch (app_led_ble_state) {
             case APP_LED_BLE_ON:{
                 // set led state to on

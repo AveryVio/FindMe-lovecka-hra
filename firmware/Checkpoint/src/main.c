@@ -68,9 +68,15 @@
 // *****************************************************************************
 
 // global variable for "turning the device on and off" (not really)
+volatile uint8_t onoff_volatile_flag = 0;
 volatile uint8_t onoff_flag = 0;
 void onoff_callback(uintptr_t context){
-onoff_flag = (1) ? 0 : 1 ;
+onoff_volatile_flag = 1;
+}
+// global variable for timing
+volatile uint8_t timer_flag = 0; // globalni promenna jako vlajka preruseni pro timer
+void timer_callback(TC_TIMER_STATUS status, uintptr_t context){
+timer_flag = 1; // nastavime vlajku
 }
 
 // *****************************************************************************
@@ -86,26 +92,41 @@ int main ( void )
     
     uint8_t app_led_ble_state = APP_LED_BLE_NULL;
 
+    
+    // register callbacks
+    EIC_CallbackRegister(EIC_PIN_1, onoff_callback, (uintptr_t) NULL);
+    TC3_TimerCallbackRegister(timer_callback, (uintptr_t) NULL);
+    
+    // start timer
+    TC3_TimerStart();
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
-        EIC_CallbackRegister(EIC_PIN_1, onoff_callback, (uintptr_t) NULL);
-        if(BUTTON_TEST_Get()){
-            app_led_ble_state = APP_LED_BLE_ON ? APP_LED_BLE_OFF : APP_LED_BLE_ON;
+        // onoff handling
+        if (timer_flag == 1){
+            onoff_volatile_flag = 0;
+            onoff_flag = (onoff_flag) ? 0 : 1;
         }
-        switch (app_led_ble_state) {
-            case APP_LED_BLE_ON:{
-                // set led state to on
-                break;
+ 
+        // app tasks
+        if(onoff_flag){
+            if(BUTTON_TEST_Get()){
+                app_led_ble_state = APP_LED_BLE_ON ? APP_LED_BLE_OFF : APP_LED_BLE_ON;
             }
-            case APP_LED_BLE_OFF:{
-                // set led state to off
-                break;
-            }
-            case APP_LED_BLE_NULL:{
-                app_led_ble_state = APP_LED_BLE_OFF;
-                break;
+            switch (app_led_ble_state) {
+                case APP_LED_BLE_ON:{
+                    // set led state to on
+                    break;
+                }
+                case APP_LED_BLE_OFF:{
+                    // set led state to off
+                    break;
+                }
+                case APP_LED_BLE_NULL:{
+                    app_led_ble_state = APP_LED_BLE_OFF;
+                    break;
+                }
             }
         }
     }

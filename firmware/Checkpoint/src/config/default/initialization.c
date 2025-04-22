@@ -400,6 +400,8 @@ void SYS_Initialize ( void* data )
 
     RTC_Initialize();
 
+    TC3_TimerInitialize();
+
     NVM_Initialize();
 
 

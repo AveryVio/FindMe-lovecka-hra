@@ -523,6 +523,17 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_34_PU"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
+  &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_34_PU&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;True&quot;/&gt;
+    &lt;/Values&gt;
+  &lt;/core&gt;
+&lt;/core&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="core" name="BSP_PIN_35_MODE"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;BSP_PIN_35_MODE&quot;&gt;
@@ -1373,7 +1384,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;core&gt;
   &lt;core dnOrder=&quot;0&quot; id=&quot;SYS_PORT_A_CNPU&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;128&quot;/&gt;
+      &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;core&quot; value=&quot;16512&quot;/&gt;
     &lt;/Values&gt;
   &lt;/core&gt;
 &lt;/core&gt;
@@ -3859,6 +3870,10 @@
          <hash>97d048aca9fc536435fb697f0f2a72f52d90d14b9f2ac52dc55b627c4850848e</hash>
       </entry>
       <entry>
+         <file>..\src\config\default\configuration.h</file>
+         <hash>568fa04f9f20bd50f30bdace4bb3cf468f9ffb0ba065e813540a1b4dcb5d4073</hash>
+      </entry>
+      <entry>
          <file>..\src\config\default\crypto\crypto.h</file>
          <hash>89d2747602540d5216047edf6aaaa8e4bcf092c4a8b3ee2b700f1a7237514f57</hash>
       </entry>
@@ -3868,7 +3883,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\definitions.h</file>
-         <hash>bfb1a2e4690e1cd12342b176aecbaaebbffd4b83aec4f56158548375e533dcd5</hash>
+         <hash>93c7e330cef9616ecea3126917d2e2a21a7cd06c8f631a0aa714b64bab09581b</hash>
       </entry>
       <entry>
          <file>..\src\config\default\device.h</file>
@@ -3903,6 +3918,14 @@
          <hash>c67200e02b5265ab7c52cdc5b2cde7fa965789cd30969b5520e2e7eb26b445f0</hash>
       </entry>
       <entry>
+         <file>..\src\config\default\driver\driver.h</file>
+         <hash>042fdd289460dbddb8e805850af7e3ac9aea95468e37414959781ebc5b2f454d</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\driver\driver_common.h</file>
+         <hash>5217965f6720b4fdf717e99ce9df4f2c9fbd82bbbc9655847166d1eefa806fee</hash>
+      </entry>
+      <entry>
          <file>..\src\config\default\driver\pds\include\pds.h</file>
          <hash>99b2cbb998b879a49fca3198d33cd549f57a2ed59a17f1e5e524dfd6d2753cc1</hash>
       </entry>
@@ -3916,7 +3939,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\exceptions.c</file>
-         <hash>1fd383302c4cdf1cc6a804aa03b8abe8c1e5e5e9ea3450438c34dcea441e6b34</hash>
+         <hash>89852728a9a1cc4c9746839cc3caf5308b8698c0c30bf6bfbad0db9e552a387e</hash>
       </entry>
       <entry>
          <file>..\src\config\default\framework_defs.h</file>
@@ -3928,11 +3951,11 @@
       </entry>
       <entry>
          <file>..\src\config\default\initialization.c</file>
-         <hash>86f4f2aaac016ebca939bcb88db6f9b9d263b09c84f7d751089dc5533c3966ef</hash>
+         <hash>5405bbe9e35f424b18a112a3f5956d4c6c8c5d10aad4ad2b4b4a3f11ae8079c9</hash>
       </entry>
       <entry>
          <file>..\src\config\default\interrupts.c</file>
-         <hash>6383ab0c2897b56b96120ef9783b1aee35cfe76aa7423116d0459b8a36a82554</hash>
+         <hash>30f0f185f03b0e63cce1706b093ec02a815182b31cd7d769739cb5ed42ee5ba2</hash>
       </entry>
       <entry>
          <file>..\src\config\default\interrupts.h</file>
@@ -3945,6 +3968,10 @@
       <entry>
          <file>..\src\config\default\osal\osal.h</file>
          <hash>4e5d7ca0ea22a3304eee868454bca732052c88930eed7e54349bc08c7350d0fc</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\osal\osal_definitions.h</file>
+         <hash>af2f2336fac0fd5b49fb2d1c8f81baa4f554101b06f130aaa608cd9685c4ac35</hash>
       </entry>
       <entry>
          <file>..\src\config\default\osal\osal_freertos.c</file>
@@ -3996,7 +4023,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\gpio\plib_gpio.c</file>
-         <hash>1114ac4f71970a4c059ecad8b2b18628566e59acfa69c5a12bc0ebe04479c05f</hash>
+         <hash>16b4748874599ff8229425714f4f6748ad9e34309840dfbe7e5ee0c2048b820a</hash>
       </entry>
       <entry>
          <file>..\src\config\default\peripheral\gpio\plib_gpio.h</file>
@@ -4059,6 +4086,18 @@
          <hash>858f8710d4287200a5ee7f3b3ad7c24f505aed9c05c16956ab0ff9f7bb162a6a</hash>
       </entry>
       <entry>
+         <file>..\src\config\default\sys_tasks.h</file>
+         <hash>8e1a48dc226e9af26c57fc69ba76d2de0279f4bbc96e071a57fd0911a782545d</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\cache\sys_cache.c</file>
+         <hash>da28c09b0da0fdd6fb7064631c15c9197c78df33fcd17d742baef909830a320e</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\cache\sys_cache.h</file>
+         <hash>b4b3a4e7434759c9bbcd3c6a0ab97558eb2a007f083a4eb76dbedcb2e2c3d86b</hash>
+      </entry>
+      <entry>
          <file>..\src\config\default\system\console\src\sys_console.c</file>
          <hash>622a27844a650b4fa265c7a4739ba3768a76e4148600be42e44eec2e0673d7c6</hash>
       </entry>
@@ -4083,12 +4122,48 @@
          <hash>cc82ba93f8d69bf31a9dfcfe1e425de3924bcf9e4e4b31f7efad9c2d062dcbf6</hash>
       </entry>
       <entry>
+         <file>..\src\config\default\system\debug\sys_debug.h</file>
+         <hash>4162d9e1fab93b8b33f6c8a24726f5dc287ea05c31e3ab984c3c920c725d0882</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\int\src\sys_int.c</file>
+         <hash>4281667cc2b84c9e4be1f0dfb3f7d42b77d36c5dcf6513d29ff40262f746cfc6</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\int\sys_int.h</file>
+         <hash>dc104ae181fd5309e1bb42896246644fae95915a8e639b23ecfccc8840850274</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\int\sys_int_mapping.h</file>
+         <hash>5abf8528dabc1b17378f5d137870597037214fddf33880fa40e9263352da3008</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\system.h</file>
+         <hash>2b75f8e370e5cb2c54f70da7351ee149f0d5a7673e700f39b373099716b31b55</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\system_common.h</file>
+         <hash>c9f34bd226f8efab12f5766e77f8355996cd0430b50e0f6ee30258664c494984</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\system\system_module.h</file>
+         <hash>96c74368801b0a7aaa25aec3ec2cb0d483250385f103ffc1ff64089b4ca2c6d9</hash>
+      </entry>
+      <entry>
          <file>..\src\config\default\system\tmr\sys_tmr.h</file>
          <hash>0be8597a14f8a03a189ce9d4a5f9b641b395e3daf9f31732f075441f71617ac0</hash>
       </entry>
       <entry>
+         <file>..\src\config\default\tasks.c</file>
+         <hash>007975869615e2122628933f7ddd7aed2659d4ebe553971460bb5717d0e3fd40</hash>
+      </entry>
+      <entry>
          <file>..\src\config\default\toolchain_specifics.h</file>
          <hash>6fc0551b0fa3362678b3d7a227386fafa343140d31e4da3ad4af972e61cd0acb</hash>
+      </entry>
+      <entry>
+         <file>..\src\config\default\user.h</file>
+         <hash>451e0878e9fcf6cf9fab046c1452ea662757988346c7f39e6bc98478ca25f995</hash>
       </entry>
       <entry>
          <file>..\src\main.c</file>

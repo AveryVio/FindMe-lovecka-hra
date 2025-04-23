@@ -60,7 +60,7 @@ void GPIO_Initialize ( void )
 {
  
           /* PORTA Initialization */
-    GPIOA_REGS->GPIO_CNPUSET = 0x80U; /* Pull-Up Enable */
+    GPIOA_REGS->GPIO_CNPUSET = 0x4080U; /* Pull-Up Enable */
     /* PORTB Initialization */
 
 

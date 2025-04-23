@@ -1,22 +1,23 @@
 /*******************************************************************************
-  System Exceptions File
+  Cache System Service Library Implementation Source File
 
-  File Name:
-    exceptions.c
+  Company
+    Microchip Technology Inc.
 
-  Summary:
-    This file contains a function which overrides the default _weak_ exception
-    handlers provided by the interrupt.c file.
+  File Name
+    sys_cache.c
 
-  Description:
-    This file redefines the default _weak_  exception handler with a more debug
-    friendly one. If an unexpected exception occurs the code will stop in a
-    while(1) loop.
- *******************************************************************************/
+  Summary
+    Cache System Service Library interface implementation.
+
+  Description
+    This file implements the interface to the Cache System Service Library.
+
+*******************************************************************************/
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -44,79 +45,66 @@
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
-    #include "configuration.h"
-#include "interrupts.h"
-#include "definitions.h"
-
- 
+#include "device.h"
+#include "device_cache.h"
+#include "system/cache/sys_cache.h"
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Exception Handling Routine
+// Section: System Cache Interface Functions
 // *****************************************************************************
 // *****************************************************************************
-
-/* Brief default interrupt handlers for core IRQs.*/
-void __attribute__((noreturn, weak)) NonMaskableInt_Handler(void)
+void SYS_CACHE_EnableCaches (void)
 {
-#if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
-    __builtin_software_breakpoint();
-#endif
-    while (true)
-    {
-    }
-}
- 
-void __attribute__((noreturn, weak)) HardFault_Handler(void)
-{
-#if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
-   __builtin_software_breakpoint();
-#endif
-   while (true)
-   {
-   }
 }
 
-void __attribute__((noreturn, weak)) DebugMonitor_Handler(void)
+void SYS_CACHE_DisableCaches (void)
 {
-#if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
-   __builtin_software_breakpoint();
-#endif
-   while (true)
-   {
-   }
+}
+void SYS_CACHE_EnableICache (void)
+{
 }
 
-void __attribute__((noreturn, weak)) MemoryManagement_Handler(void)
+void SYS_CACHE_DisableICache (void)
 {
-#if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
-   __builtin_software_breakpoint();
-#endif
-   while (true)
-   {
-   }
 }
 
-void __attribute__((noreturn, weak)) BusFault_Handler(void)
+void SYS_CACHE_InvalidateICache (void)
 {
-#if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
-   __builtin_software_breakpoint();
-#endif
-   while (true)
-   {
-   }
 }
 
-void __attribute__((noreturn, weak)) UsageFault_Handler(void)
+void SYS_CACHE_EnableDCache (void)
 {
-#if defined(__DEBUG) || defined(__DEBUG_D) && defined(__XC32)
-   __builtin_software_breakpoint();
-#endif
-   while (true)
-   {
-   }
 }
- 
-/*******************************************************************************
- End of File
- */
+
+void SYS_CACHE_DisableDCache (void)
+{
+}
+
+void SYS_CACHE_InvalidateDCache (void)
+{
+}
+
+void SYS_CACHE_CleanDCache (void)
+{
+}
+
+void SYS_CACHE_InvalidateDCache_by_Addr (void *addr, int32_t size)
+{
+}
+
+void SYS_CACHE_CleanDCache_by_Addr (void *addr, int32_t size)
+{
+}
+
+/* MISRA C-2012 Rule 5.1 deviated:1 Deviation record ID -  H3_MISRAC_2012_R_5_1_DR_1 */
+
+void SYS_CACHE_CleanInvalidateDCache (void)
+{
+}
+
+void SYS_CACHE_CleanInvalidateDCache_by_Addr (void *addr, int32_t size)
+{
+}
+
+/* MISRAC 2012 deviation block end */

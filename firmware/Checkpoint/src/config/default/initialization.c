@@ -43,6 +43,7 @@
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
+#include "configuration.h"
 #include "definitions.h"
 #include "device.h"
 
@@ -169,6 +170,8 @@
 // Section: System Data
 // *****************************************************************************
 // *****************************************************************************
+/* Structure to hold the object handles for the modules in the system. */
+SYSTEM_OBJECTS sysObj;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -389,9 +392,9 @@ void SYS_Initialize ( void* data )
 
 	GPIO_Initialize();
 
-    EVSYS_Initialize();
-
     SERCOM0_USART_Initialize();
+
+    EVSYS_Initialize();
 
     EIC_Initialize();
 
@@ -492,6 +495,9 @@ void SYS_Initialize ( void* data )
     CRYPT_WCCB_Initialize();
 
     /* MISRAC 2012 deviation block end */
+    APP_Initialize();
+
+
     NVIC_Initialize();
 
 

@@ -178,7 +178,6 @@ SYSTEM_OBJECTS sysObj;
 // Section: Library/Stack Initialization Data
 // *****************************************************************************
 // *****************************************************************************
-//#define POWER_CTRL_ENABLE
 #define QUEUE_LENGTH_BLE        (32)
 #define QUEUE_ITEM_SIZE_BLE     (sizeof(void *))
 #define EXT_COMMON_MEMORY_SIZE  (28*1024)
@@ -366,6 +365,10 @@ void SYS_Initialize ( void* data )
 
     EVSYS_Initialize();
 
+    EIC_Initialize();
+
+    TC0_TimerInitialize();
+
     NVM_Initialize();
 
 	BSP_Initialize();
@@ -449,12 +452,7 @@ void SYS_Initialize ( void* data )
     btOption.hciMode = false;
     btOption.cmnMemSize = EXT_COMMON_MEMORY_SIZE;
     btOption.p_cmnMemAddr = s_btMem;
-#ifndef POWER_CTRL_ENABLE
-    btOption.deFeatMask = BT_SYS_FEAT_PWR_CTRL;
-#else
     btOption.deFeatMask = 0;
-#endif
-
 
     // Initialize BLE Stack
     BT_SYS_Init(&bleRequestQueueHandle, &osalAPIList, &btOption, &btSysCfg);

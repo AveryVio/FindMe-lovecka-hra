@@ -50,6 +50,38 @@
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "definitions.h"                // SYS function prototypes
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Definitions
+// *****************************************************************************
+// *****************************************************************************
+
+// APP LED BLE
+#define APP_LED_BLE_NULL 0
+#define APP_LED_BLE_OFF 1
+#define APP_LED_BLE_ON 2
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Functions and variables
+// *****************************************************************************
+// *****************************************************************************
+
+// global variable for "turning the device on and off" (not really)
+volatile uint8_t onoff_flag = 0;
+void onoff_button_callback(uintptr_t context){
+onoff_flag = (onoff_flag) ? 0 : 1;
+}
+// global variable for testting the time
+volatile uint8_t test_flag = 0;
+void test_button_callback(uintptr_t context){
+test_flag = 1;
+}
+// global variable for timing
+volatile uint8_t test_timer_flag = 0;
+void test_timer_callback(TC_TIMER_STATUS status, uintptr_t context){
+test_timer_flag = 1;
+}
 
 // *****************************************************************************
 // *****************************************************************************
@@ -61,11 +93,46 @@ int main ( void )
 {
     /* Initialize all modules */
     SYS_Initialize ( NULL );
+    
+    uint8_t app_led_ble_state = APP_LED_BLE_NULL;
 
+    
+    // register callbacks
+    EIC_CallbackRegister(EIC_PIN_0, onoff_button_callback, (uintpr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_3, test_button_callback, (uintptr_t) NULL);
+    TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
+    
+    // start timer
+    TC0_TimerStart();
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
+ 
+        // app tasks
+        if(onoff_flag){
+            if(test_flag){
+                app_led_ble_state = APP_LED_BLE_ON;
+            }
+            if(test_timer_flag){
+                app_led_ble_state = APP_LED_BLE_OFF;
+            }
+            switch (app_led_ble_state) {
+                case APP_LED_BLE_ON:{
+                    // set led state to on
+                    break;
+                }
+                case APP_LED_BLE_OFF:{
+                    // set led state to off
+                    break;
+                }
+                case APP_LED_BLE_NULL:{
+                    app_led_ble_state = APP_LED_BLE_OFF;
+                    break;
+                }
+            }
+            
+        }
     }
 
     /* Execution should not come here during normal operation */

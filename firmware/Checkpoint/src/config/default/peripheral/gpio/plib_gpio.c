@@ -59,20 +59,14 @@
 void GPIO_Initialize ( void )
 {
  
-    /* Disable JTAG since at least one of its pins is configured for Non-JTAG function */
-    CFG_REGS->CFG_CFGCON0CLR = CFG_CFGCON0_JTAGEN_Msk;
-
-          /* SOSCSEL - Digital (SCLKI) mode is selected */
-    CFG_REGS->CFG_CFGCON2CLR = CFG_CFGCON2_SOSCSEL_Msk;
-
-    /* PORTA Initialization */
-    GPIOA_REGS->GPIO_CNPUSET = 0x800U; /* Pull-Up Enable */
+          /* PORTA Initialization */
+    GPIOA_REGS->GPIO_CNPUSET = 0x80U; /* Pull-Up Enable */
     /* PORTB Initialization */
-    GPIOB_REGS->GPIO_ANSELCLR = 0x20U; /* Digital Mode Enable */
 
 
     /* PPS Input Remapping */
-    PPS_REGS->PPS_EXTINT1R = 5U;
+    PPS_REGS->PPS_EXTINT3R = 3U;
+    PPS_REGS->PPS_EXTINT0R = 2U;
 
     /* PPS Output Remapping */
 

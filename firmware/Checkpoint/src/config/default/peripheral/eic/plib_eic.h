@@ -97,8 +97,11 @@
 */
 
 
-    /* External Interrupt Controller Pin 1 */
-#define    EIC_PIN_1   (1U)
+    /* External Interrupt Controller Pin 0 */
+#define    EIC_PIN_0   (0U)
+
+    /* External Interrupt Controller Pin 3 */
+#define    EIC_PIN_3   (3U)
 
 #define    EIC_PIN_MAX  (16U)
 

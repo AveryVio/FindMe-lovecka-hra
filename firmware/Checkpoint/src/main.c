@@ -68,15 +68,19 @@
 // *****************************************************************************
 
 // global variable for "turning the device on and off" (not really)
-volatile uint8_t onoff_volatile_flag = 0;
 volatile uint8_t onoff_flag = 0;
-void onoff_callback(uintptr_t context){
-onoff_volatile_flag = 1;
+void onoff_button_callback(uintptr_t context){
+onoff_flag = (onoff_flag) ? 0 : 1;
+}
+// global variable for testting the time
+volatile uint8_t test_flag = 0;
+void test_button_callback(uintptr_t context){
+test_flag = 1;
 }
 // global variable for timing
-volatile uint8_t timer_flag = 0; // globalni promenna jako vlajka preruseni pro timer
-void timer_callback(TC_TIMER_STATUS status, uintptr_t context){
-timer_flag = 1; // nastavime vlajku
+volatile uint8_t test_timer_flag = 0;
+void test_timer_callback(TC_TIMER_STATUS status, uintptr_t context){
+test_timer_flag = 1;
 }
 
 // *****************************************************************************
@@ -94,25 +98,24 @@ int main ( void )
 
     
     // register callbacks
-    EIC_CallbackRegister(EIC_PIN_1, onoff_callback, (uintptr_t) NULL);
-    TC3_TimerCallbackRegister(timer_callback, (uintptr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_0, test_button_callback, (uintptr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_3, onoff_button_callback, (uintptr_t) NULL);
+    TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
     
     // start timer
-    TC3_TimerStart();
+    TC0_TimerStart();
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
-        // onoff handling
-        if (timer_flag == 1){
-            onoff_volatile_flag = 0;
-            onoff_flag = (onoff_flag) ? 0 : 1;
-        }
  
         // app tasks
         if(onoff_flag){
-            if(BUTTON_TEST_Get()){
-                app_led_ble_state = APP_LED_BLE_ON ? APP_LED_BLE_OFF : APP_LED_BLE_ON;
+            if(test_flag){
+                app_led_ble_state = APP_LED_BLE_ON;
+            }
+            if(test_timer_flag){
+                app_led_ble_state = APP_LED_BLE_OFF;
             }
             switch (app_led_ble_state) {
                 case APP_LED_BLE_ON:{
@@ -128,6 +131,7 @@ int main ( void )
                     break;
                 }
             }
+            
         }
     }
 

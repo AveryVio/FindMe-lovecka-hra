@@ -48,7 +48,6 @@
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
-#include "configuration.h"
 #include "device_vectors.h"
 #include "interrupts.h"
 #include "definitions.h"
@@ -96,9 +95,9 @@ extern void SERCOM3_Handler            ( void ) __attribute__((weak, alias("Dumm
 extern void TCC0_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void TCC1_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void TCC2_Handler               ( void ) __attribute__((weak, alias("Dummy_Handler")));
-extern void TC0_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void TC1_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void TC2_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler")));
+extern void TC3_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void ADCHS_Handler              ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void AC_Handler                 ( void ) __attribute__((weak, alias("Dummy_Handler")));
 extern void AES_Handler                ( void ) __attribute__((weak, alias("Dummy_Handler")));
@@ -159,10 +158,10 @@ const H3DeviceVectors exception_table=
     .pfnTCC0_Handler               = TCC0_Handler,
     .pfnTCC1_Handler               = TCC1_Handler,
     .pfnTCC2_Handler               = TCC2_Handler,
-    .pfnTC0_Handler                = TC0_Handler,
+    .pfnTC0_Handler                = TC0_TimerInterruptHandler,
     .pfnTC1_Handler                = TC1_Handler,
     .pfnTC2_Handler                = TC2_Handler,
-    .pfnTC3_Handler                = TC3_TimerInterruptHandler,
+    .pfnTC3_Handler                = TC3_Handler,
     .pfnADCHS_Handler              = ADCHS_Handler,
     .pfnAC_Handler                 = AC_Handler,
     .pfnAES_Handler                = AES_Handler,

@@ -71,7 +71,7 @@ void RTC_InterruptHandler (void);
 void EIC_InterruptHandler (void);
 void NVM_InterruptHandler (void);
 void SERCOM0_USART_InterruptHandler (void);
-void TC3_TimerInterruptHandler (void);
+void TC0_TimerInterruptHandler (void);
 
 
 

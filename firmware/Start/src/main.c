@@ -98,8 +98,8 @@ int main ( void )
 
     
     // register callbacks
-    EIC_CallbackRegister(EIC_PIN_0, onoff_button_callback, (uintpr_t) NULL);
-    EIC_CallbackRegister(EIC_PIN_3, test_button_callback, (uintptr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_3, onoff_button_callback, (uintpr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_1, test_button_callback, (uintptr_t) NULL);
     TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
     
     // start timer

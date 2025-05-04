@@ -82,7 +82,7 @@ void EIC_Initialize (void)
     /* NMI Control register */
 
     /* Interrupt sense type and filter control for EXTINT channels 0 to 7*/
-    EIC_REGS->EIC_CONFIG=  EIC_CONFIG_SENSE0_NONE 
+    EIC_REGS->EIC_CONFIG=  EIC_CONFIG_SENSE0_FALL | EIC_CONFIG_FILTEN0_Msk
              |  EIC_CONFIG_SENSE1_FALL | EIC_CONFIG_FILTEN1_Msk 
              |  EIC_CONFIG_SENSE2_NONE  
              |  EIC_CONFIG_SENSE3_FALL | EIC_CONFIG_FILTEN3_Msk 
@@ -95,14 +95,14 @@ void EIC_Initialize (void)
 
 
     /* Event Control Output enable */
-    EIC_REGS->EIC_EVCTRL = 0xaU;
+    EIC_REGS->EIC_EVCTRL = 0xbU;
 
 
     /* External Interrupt enable*/
-    EIC_REGS->EIC_INTENSET = 0xaU;
+    EIC_REGS->EIC_INTENSET = 0xbU;
 
     /* Callbacks for enabled interrupts */
-    eicCallbackObject[0].eicPinNo = EIC_PIN_MAX;
+    eicCallbackObject[0].eicPinNo = EIC_PIN_0;
     eicCallbackObject[1].eicPinNo = EIC_PIN_1;
     eicCallbackObject[2].eicPinNo = EIC_PIN_MAX;
     eicCallbackObject[3].eicPinNo = EIC_PIN_3;

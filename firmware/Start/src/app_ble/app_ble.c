@@ -64,7 +64,7 @@
 // *****************************************************************************
 // *****************************************************************************
 
-#define GAP_DEV_NAME_VALUE          "PXPR"
+#define GAP_DEV_NAME_VALUE          "Microchip"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -192,8 +192,10 @@ static void APP_BleConfigBasic(void)
     int8_t                          connTxPower;
     int8_t                          advTxPower;
     BLE_GAP_AdvParams_T             advParam;
-    uint8_t advData[]={0x02, 0x01, 0x05, 0x05, 0x09, 0x50, 0x58, 0x50, 0x52, 0x03, 0x03, 0x03, 0x18};
+    uint8_t advData[]={0x02, 0x01, 0x05, 0x0B, 0x09, 0x70, 0x69, 0x63, 0x33, 0x32, 0x63, 0x78, 0x2D, 0x62, 0x7A};
     BLE_GAP_AdvDataParams_T         appAdvData;
+    uint8_t scanRspData[]={0x0B, 0x09, 0x70, 0x69, 0x63, 0x33, 0x32, 0x63, 0x78, 0x2D, 0x62, 0x7A};
+    BLE_GAP_AdvDataParams_T         appScanRspData;
     
 
     // Configure advertising parameters
@@ -212,6 +214,10 @@ static void APP_BleConfigBasic(void)
     (void)memcpy(appAdvData.advData, advData, appAdvData.advLen);     /* Advertising Data */
     BLE_GAP_SetAdvData(&appAdvData);
 
+    //Configure advertising scan response data
+    appScanRspData.advLen=sizeof(scanRspData);
+    (void)memcpy(appScanRspData.advData, scanRspData, appScanRspData.advLen);     /* Scan Response Data */
+    BLE_GAP_SetScanRspData(&appScanRspData);
 
     BLE_GAP_SetConnTxPowerLevel(15, &connTxPower);      /* Connection TX Power */
 }

@@ -61,6 +61,14 @@
 // *****************************************************************************
 // *****************************************************************************
 
+/*** Macros for BUTTON_ADD pin ***/
+#define BUTTON_ADD_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<3U))
+#define BUTTON_ADD_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<3U))
+#define BUTTON_ADD_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<3U))
+#define BUTTON_ADD_Get()               ((GPIOA_REGS->GPIO_PORT >> 3U) & 0x1U)
+#define BUTTON_ADD_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<3U))
+#define BUTTON_ADD_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<3U))
+#define BUTTON_ADD_PIN                  GPIO_PIN_RA3
 
 
 // *****************************************************************************

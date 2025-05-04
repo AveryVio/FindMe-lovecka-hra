@@ -63,7 +63,7 @@ void GPIO_Initialize ( void )
     CFG_REGS->CFG_CFGCON0CLR = CFG_CFGCON0_JTAGEN_Msk;
 
           /* PORTA Initialization */
-    GPIOA_REGS->GPIO_CNPUSET = 0x4080U; /* Pull-Up Enable */
+    GPIOA_REGS->GPIO_CNPUSET = 0x408cU; /* Pull-Up Enable */
     /* PORTB Initialization */
     GPIOB_REGS->GPIO_LAT = 0x0U; /* Initial Latch Value */
     GPIOB_REGS->GPIO_TRISCLR = 0xa9U; /* Direction Control */
@@ -74,6 +74,7 @@ void GPIO_Initialize ( void )
     /* PPS Input Remapping */
     PPS_REGS->PPS_EXTINT3R = 3U;
     PPS_REGS->PPS_EXTINT1R = 9U;
+    PPS_REGS->PPS_EXTINT0R = 8U;
 
     /* PPS Output Remapping */
 

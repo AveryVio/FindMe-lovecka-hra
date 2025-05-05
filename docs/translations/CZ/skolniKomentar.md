@@ -11,7 +11,7 @@ Pro vytváření API pro aplikaci jsem použil python a vytvořil skript pro pra
 Pro vývoj firmwaru jsem vypral MPLAB X IDE na doporučení učitelů.
 Pro měnění Bluetooth ID zařízení potřebuji externí program, protože používání shellových příkazů z Makefily projektu způsobovalo nepředvídatelné chování. (někdy nahrazení textu selhalo) Pro to jsem vybral Python, protože už je využívaný v projektu a je na všech populárních platformách. V samotném skriptu požívám nástroj sed, který je v základu na Linuxu a Macu. Ne na Windows, ale je jednoduché ho stáhnou přes Winget.
 
-# Project structure comments
+# Struktura projektu
 
 ## Server
 

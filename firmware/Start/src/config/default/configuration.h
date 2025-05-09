@@ -124,8 +124,7 @@ extern "C" {
 #define NO_MD4
 #define NO_MD5
 #define NO_SHA // specifically, no SHA1 (legacy name)
-#define NO_SHA256
-#define NO_SHA224
+#define WOLFSSL_SHA224
 #define NO_HMAC
 #define NO_DES3
 #define WOLFSSL_AES_128

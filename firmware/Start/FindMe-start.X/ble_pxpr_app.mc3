@@ -9523,6 +9523,7 @@
   &lt;lib_wolfcrypt dnOrder=&quot;0&quot; id=&quot;wolfcrypt_sha256&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;Dynamic dnOrder=&quot;0&quot; id=&quot;BLE_STACK_LIB&quot; value=&quot;false&quot;/&gt;
+      &lt;User dnOrder=&quot;1&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/lib_wolfcrypt&gt;
 &lt;/lib_wolfcrypt&gt;
@@ -11040,7 +11041,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\configuration.h</file>
-         <hash>a58c108c987c8fc58f6bed51dd9e68f90884d56d052ea391eb472ee19e644a9c</hash>
+         <hash>509a828db41afe32da3935c5bea290f54e0eb1b69a24532cb9265ed1f35f8b89</hash>
       </entry>
       <entry>
          <file>..\src\config\default\crypto\crypto.h</file>

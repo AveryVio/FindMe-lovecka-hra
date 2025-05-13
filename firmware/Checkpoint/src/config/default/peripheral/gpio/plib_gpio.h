@@ -61,6 +61,22 @@
 // *****************************************************************************
 // *****************************************************************************
 
+/*** Macros for LED_POWER pin ***/
+#define LED_POWER_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<10U))
+#define LED_POWER_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<10U))
+#define LED_POWER_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<10U))
+#define LED_POWER_Get()               ((GPIOB_REGS->GPIO_PORT >> 10U) & 0x1U)
+#define LED_POWER_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<10U))
+#define LED_POWER_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<10U))
+#define LED_POWER_PIN                  GPIO_PIN_RB10
+/*** Macros for LED_BLE pin ***/
+#define LED_BLE_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<11U))
+#define LED_BLE_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<11U))
+#define LED_BLE_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<11U))
+#define LED_BLE_Get()               ((GPIOB_REGS->GPIO_PORT >> 11U) & 0x1U)
+#define LED_BLE_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<11U))
+#define LED_BLE_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<11U))
+#define LED_BLE_PIN                  GPIO_PIN_RB11
 
 
 // *****************************************************************************

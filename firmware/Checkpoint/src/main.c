@@ -111,6 +111,7 @@ int main ( void )
  
         // app tasks
         if(onoff_flag){
+            LED_BLE_Set();
             if(test_flag){
                 app_led_ble_state = APP_LED_BLE_ON;
             }
@@ -119,11 +120,11 @@ int main ( void )
             }
             switch (app_led_ble_state) {
                 case APP_LED_BLE_ON:{
-                    // set led state to on
+                    LED_BLE_Set();
                     break;
                 }
                 case APP_LED_BLE_OFF:{
-                    // set led state to off
+                    LED_BLE_Clear();
                     break;
                 }
                 case APP_LED_BLE_NULL:{
@@ -132,6 +133,9 @@ int main ( void )
                 }
             }
             
+        }
+        else {
+            LED_POWER_Clear();
         }
     }
 

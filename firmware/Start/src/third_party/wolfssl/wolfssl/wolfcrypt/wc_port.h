@@ -1,4 +1,4 @@
-*/* wc_port.h
+/* wc_port.h
  *
  * Copyright (C) 2006-2020 wolfSSL Inc.
  *
@@ -201,10 +201,10 @@
 #else /* ! WOLFSSL_LINUXKM */
 
     #ifndef SAVE_VECTOR_REGISTERS
-        #define SAVE_VECTOR_REGISTERS(...) do{}while(0)
+        #define SAVE_VECTOR_REGISTERS(...) do{}while(0);
     #endif
     #ifndef RESTORE_VECTOR_REGISTERS
-        #define RESTORE_VECTOR_REGISTERS() do{}while(0)
+        #define RESTORE_VECTOR_REGISTERS() do{}while(0);
     #endif
 
 #endif /* WOLFSSL_LINUXKM */

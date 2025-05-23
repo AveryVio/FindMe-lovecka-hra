@@ -7,8 +7,8 @@ Server běží na kontejnerech pomocí Docker Compose, aktuálně používáme d
 
 Tento projekt používá Postgres jako databázi, která jak bylo dříve zmíněno existuje na odděleném kontejneru od API. Jeho proměnné prostředí jsou stanoveny v souboru Docker Compose, kde je  jméno databáze a uživatel. Prozatím není implementovaná zabezpečení, ale v budoucnu budou přidaná.
 
-Rozložení tabulek v databázi není finální, ale prozatím je takovéto:
-//todo
+Rozložení tabulek v databázi  je takovéto:
+
 TableWhale - testovací tabulka (pro startovací testy sama sebe)
 
 | sloupec | id                    | number  | name |
@@ -26,7 +26,7 @@ TableUsers - musí být vyvinut (bude pro ukládání uživatelů a možná i sy
 | soupec | id                    | userid |
 | ------ | --------------------- | ------ |
 | typ    | BIGSERIAL PRIMARY KEY | TEXT   |
->huntid ukládá identifikační hashi pro každého uživatele, ale id je jedinečný identifikátor v databázi (to je opatření pro zastavení chyb v budoucu)
+>userid ukládá identifikační hashi pro každého uživatele, ale id je jedinečný identifikátor v databázi (to je opatření pro zastavení chyb v budoucnu)
 
 
 ## API

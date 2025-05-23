@@ -2,17 +2,17 @@ Tady jsou všechny funkce a jejich vstupní parametry a vysvětlení jejich prá
 
 termíny:
 cursor: spojení s databází (termín z psycopg)
-slovník: struktura klíčů a hodnot (funkce pythonu)
+slovník: struktura s páry klíčů a hodnot (funkce pythonu)
 
 # Databázové funkce
 
 Tyto funkce používají knihovnu psycopg pro operace s postgresovou databází, všechny mají specifické obecné parametry:
 
-> dbname (str): Jméno databáze  
-> user (str): Uživatelské jméno  
-> host (str): Hostující adresa  
+> dbname (text): Jméno databáze  
+> user (text): Uživatelské jméno  
+> host (text): Hostující adresa  
 > port (int): Číslo portu  
-> table_name (str): Jméno tabullky  
+> table_name (text): Jméno tabullky  
 
 Poté jsou specifické parametry, pro jendoduchost budou zkráceny na "generic_params".
 
@@ -46,7 +46,7 @@ Funkce vytvoří cursor a udělá ze seznamu sloupců filtr sloupců a vytvoří
 Když nastane chyba, vypíše chybovou zprávu a vrátí False.
 #### fetch_and_sort
 >params: generic_params, columns(seznam), sort_column(text), limit=None(číslo)  
->returns: seznam slovníků/prázdný seznam  
+>vrací: seznam slovníků/prázdný seznam  
 
 Funkce vytvoří cursor a udělá ze seznam sloupců který dá do dotazu s řazením podle sloupce, pak ho spustí. Poté promění vrácené hodnoty do seznamu slovníků a to vrátí
 Když nastane chyba, vypíše chybovou zprávu a vrátí prázdný seznam.
@@ -59,8 +59,8 @@ Funkce vytvoří cursor a dotaz filtrující pro sloupec, ten pak spustí a vrá
 Když nastane chyba, vypíše chybovou zprávu a vrátí False.
 
 #### count_rows
->params: generic_params
->returns: číslo  
+>parametry: generic_params
+>vrací: číslo  
 
 Funkce vytvoří cursor a dotaz počítající počet řad, pak ho spustí a vrátí výstup.
 Pokud nastane chyba, vypíše chybovou zprávu a vrátí -1.

@@ -104,6 +104,7 @@ int main ( void )
     
     // start timer
     TC0_TimerStart();
+    TC0_Timer16bitPeriodSet(1024);
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
@@ -113,6 +114,7 @@ int main ( void )
         if(onoff_flag){
             if(test_flag){
                 app_led_ble_state = APP_LED_BLE_ON;
+                TC0_Timer16bitCounterSet(1);
             }
             if(test_timer_flag){
                 app_led_ble_state = APP_LED_BLE_OFF;

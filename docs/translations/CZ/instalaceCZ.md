@@ -29,8 +29,6 @@ Což spustí kontejnery a postaví je jestli je potřeba.
 
 U tohoto platí stejné chyby.
 
-Základní nastavení funguje od začátku, ale pokud chcete, můžete ho nastavit podle [následujícího dokumentu](konfiguraceCZ.md)
-
 # Firmware
 
 ## Potřebný software

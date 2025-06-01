@@ -124,9 +124,6 @@ int main ( void )
         // app tasks
         if(onoff_flag){
             //handle button flags
-            if((removing_flag) && (BUTTON_ADD_Get())){
-                app_tracing_state = (app_tracing_state == APP_TRACING_ON) ? APP_TRACING_OFF : APP_TRACING_ON;
-            }
             if(test_flag){
                 app_led_ble_state = APP_LED_BLE_ON;
                 TC0_Timer16bitCounterSet(1);
@@ -155,6 +152,9 @@ int main ( void )
                     break;
                 }
                 case APP_TRACING_OFF:{
+                    if((removing_flag) && (BUTTON_ADD_Get())){
+                        app_tracing_state = (app_tracing_state == APP_TRACING_ON) ? APP_TRACING_OFF : APP_TRACING_ON;
+                    }
                     // set led state to off
                     break;
                 }

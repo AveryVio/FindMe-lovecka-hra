@@ -79,6 +79,16 @@ extern "C" {
 // Section: System Service Configuration
 // *****************************************************************************
 // *****************************************************************************
+
+#define SYS_CMD_ENABLE
+#define SYS_CMD_DEVICE_MAX_INSTANCES       SYS_CONSOLE_DEVICE_MAX_INSTANCES
+#define SYS_CMD_PRINT_BUFFER_SIZE          1024U
+#define SYS_CMD_BUFFER_DMA_READY
+
+/* Command System Service RTOS Configurations*/
+#define SYS_CMD_RTOS_STACK_SIZE                256
+#define SYS_CMD_RTOS_TASK_PRIORITY             1
+
 #define SYS_CONSOLE_DEVICE_MAX_INSTANCES   			(1U)
 #define SYS_CONSOLE_UART_MAX_INSTANCES 	   			(1U)
 #define SYS_CONSOLE_USB_CDC_MAX_INSTANCES 	   		(0U)
@@ -135,8 +145,7 @@ extern "C" {
 #define NO_MD4
 #define NO_MD5
 #define NO_SHA // specifically, no SHA1 (legacy name)
-#define NO_SHA256
-#define NO_SHA224
+#define WOLFSSL_SHA224
 #define NO_HMAC
 #define NO_DES3
 #define WOLFSSL_AES_128

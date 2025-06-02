@@ -48,7 +48,7 @@
 // DOM-IGNORE-END
 
 
-//#error User action required - manually edit files as described here
+//error User action required - manually edit files as described here
 // after completing the required edits, comment out or remove the #error line
 
 /********************************************************************
@@ -69,6 +69,12 @@
  * Add the following code:
     app_idle_task();
 
+ * Step 3
+ * ------
+ * Add code to the function:
+ *      vApplicationTickHook()
+ * Add the following code:
+    app_idle_updateRtcCnt(RTC_Timer32CounterGet());
 
  ********************************************************************/
 

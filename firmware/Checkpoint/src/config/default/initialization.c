@@ -240,6 +240,14 @@ OSAL_API_LIST_TYPE     osalAPIList;
 // Section: System Initialization
 // *****************************************************************************
 // *****************************************************************************
+
+const SYS_CMD_INIT sysCmdInit =
+{
+    .moduleInit = {0},
+    .consoleCmdIOParam = SYS_CMD_SINGLE_CHARACTER_READ_CONSOLE_IO_PARAM,
+	.consoleIndex = 0,
+};
+
 // <editor-fold defaultstate="collapsed" desc="SYS_CONSOLE Instance 0 Initialization Data">
 
 
@@ -392,15 +400,15 @@ void SYS_Initialize ( void* data )
 
 	GPIO_Initialize();
 
-    EVSYS_Initialize();
-
     SERCOM0_USART_Initialize();
+
+    EVSYS_Initialize();
 
     EIC_Initialize();
 
-    TC0_TimerInitialize();
-
     RTC_Initialize();
+
+    TC0_TimerInitialize();
 
     NVM_Initialize();
 
@@ -463,6 +471,8 @@ void SYS_Initialize ( void* data )
     osalAPIList.OSAL_MemFree = OSAL_Free;
 
 
+
+    SYS_CMD_Initialize((SYS_MODULE_INIT*)&sysCmdInit);
 
     /* MISRA C-2012 Rule 11.3, 11.8 deviated below. Deviation record ID -  
      H3_MISRAC_2012_R_11_3_DR_1 & H3_MISRAC_2012_R_11_8_DR_1*/

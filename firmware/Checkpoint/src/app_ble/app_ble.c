@@ -189,7 +189,7 @@ static void APP_BleConfigBasic(void)
     int8_t                          connTxPower;
     int8_t                          advTxPower;
     BLE_GAP_AdvParams_T             advParam;
-    uint8_t advData[]={0x02, 0x01, 0x05, 0x10, 0x09, 0x51, 0x49, 0x5A, 0x49, 0x52, 0x4C, 0x55, 0x42, 0x55, 0x51, 0x4C, 0x5A, 0x49, 0x47, 0x4A, 0x46};
+    uint8_t advData[]={0x02, 0x01, 0x05, 0x10, 0x09, 0x54, 0x53, 0x54, 0x56, 0x42, 0x55, 0x59, 0x5A, 0x47, 0x46, 0x56, 0x4A, 0x4F, 0x42, 0x55, 0x48};
     BLE_GAP_AdvDataParams_T         appAdvData;
     uint8_t scanRspData[]={0x0B, 0x09, 0x70, 0x69, 0x63, 0x33, 0x32, 0x63, 0x78, 0x2D, 0x62, 0x7A};
     BLE_GAP_AdvDataParams_T         appScanRspData;
@@ -199,9 +199,9 @@ static void APP_BleConfigBasic(void)
     BLE_GAP_SetAdvTxPowerLevel(9,&advTxPower);      /* Advertising TX Power */
     
     (void)memset(&advParam, 0, sizeof(BLE_GAP_AdvParams_T));
-    advParam.intervalMin = 32;     /* Advertising Interval Min */
-    advParam.intervalMax = 32;     /* Advertising Interval Max */
-    advParam.type = BLE_GAP_ADV_TYPE_ADV_IND;        /* Advertising Type */
+    advParam.intervalMin = 1600;     /* Advertising Interval Min */
+    advParam.intervalMax = 1600;     /* Advertising Interval Max */
+    advParam.type = BLE_GAP_ADV_TYPE_ADV_NONCONN_IND;        /* Advertising Type */
     advParam.advChannelMap = BLE_GAP_ADV_CHANNEL_ALL;        /* Advertising Channel Map */
     advParam.filterPolicy = BLE_GAP_ADV_FILTER_DEFAULT;     /* Advertising Filter Policy */
     BLE_GAP_SetAdvParams(&advParam);

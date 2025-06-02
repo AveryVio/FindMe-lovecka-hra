@@ -1,23 +1,22 @@
 /*******************************************************************************
- System Tasks Header File
+  System Sleep Header File
+
+  Company:
+    Microchip Technology Inc.
 
   File Name:
-    sys_tasks.h
+    device_sleep.h
 
   Summary:
-    This file contains declarations for task handles.
+    This file contains the Device Sleep functions for the project.
 
   Description:
-    Task handles declared in this header file can be used by the application
-    to control the behavior of the tasks.
-
-  Remarks:
-    None
+    This file contains the Device Sleep functions for the project.
  *******************************************************************************/
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2023 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -37,33 +36,58 @@
 * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *******************************************************************************/
+*******************************************************************************/
 // DOM-IGNORE-END
 
-#ifndef SYS_TASKS_H
-#define SYS_TASKS_H
+#ifndef DEVICE_SLEEP_H
+#define DEVICE_SLEEP_H
+
+#include <stdbool.h>
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Included Files
+// Section: Macros
 // *****************************************************************************
 // *****************************************************************************
 
-#include "configuration.h"
-#include "definitions.h"
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: RTOS "Tasks" Handles
+// Section: Data Types
+// *****************************************************************************
+
+
 // *****************************************************************************
 // *****************************************************************************
-/* Declaration of SYS_COMMAND task handle */
-extern TaskHandle_t xSYS_CMD_Tasks;
+// Section: Function Prototypes
+// *****************************************************************************
+// *****************************************************************************
 
-/* Declaration of  APP_Tasks task handle */
-extern TaskHandle_t xAPP_Tasks;
+/**@brief The API is used to enter system sleep mode
+ *
+ * @param[in] None
+ * @param[out] None
+ *
+ * @retval None
+*/
+void DEVICE_EnterSleepMode(void);
 
+/**@brief The API is used to exit system sleep mode
+ *
+ * @param[in] None
+ * @param[out] None
+ *
+ * @retval None
+*/
+void DEVICE_ExitSleepMode(void);
 
+#ifdef __cplusplus
+}
+#endif
 
-
-#endif //SYS_TASKS_H
+#endif//DEVICE_SLEEP_H

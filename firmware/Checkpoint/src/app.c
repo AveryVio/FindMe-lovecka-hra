@@ -157,6 +157,10 @@ void APP_Tasks ( void )
             //appData.appQueue = xQueueCreate( 10, sizeof(APP_Msg_T) );
 
             APP_BleStackInit();
+            if (!(RTC_REGS->MODE0.RTC_CTRLA & RTC_MODE0_CTRLA_ENABLE_Msk))
+            {
+                RTC_Timer32Start();
+            }
 
 
 

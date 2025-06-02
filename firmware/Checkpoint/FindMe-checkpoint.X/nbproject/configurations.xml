@@ -116,6 +116,9 @@
             <logicalFolder name="cache" displayName="cache" projectFiles="true">
               <itemPath>../src/config/default/system/cache/sys_cache.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="command" displayName="command" projectFiles="true">
+              <itemPath>../src/config/default/system/command/sys_command.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="console" displayName="console" projectFiles="true">
               <itemPath>../src/config/default/system/console/src/sys_console_uart.h</itemPath>
               <itemPath>../src/config/default/system/console/src/sys_console_local.h</itemPath>
@@ -128,6 +131,9 @@
             <logicalFolder name="int" displayName="int" projectFiles="true">
               <itemPath>../src/config/default/system/int/sys_int_mapping.h</itemPath>
               <itemPath>../src/config/default/system/int/sys_int.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="reset" displayName="reset" projectFiles="true">
+              <itemPath>../src/config/default/system/reset/sys_reset.h</itemPath>
             </logicalFolder>
             <itemPath>../src/config/default/system/system.h</itemPath>
             <itemPath>../src/config/default/system/system_module.h</itemPath>
@@ -142,6 +148,7 @@
           <itemPath>../src/config/default/device_cache.h</itemPath>
           <itemPath>../src/config/default/device_vectors.h</itemPath>
           <itemPath>../src/config/default/config.h</itemPath>
+          <itemPath>../src/config/default/device_sleep.h</itemPath>
           <itemPath>../src/config/default/user.h</itemPath>
           <itemPath>../src/config/default/configuration.h</itemPath>
           <itemPath>../src/config/default/sys_tasks.h</itemPath>
@@ -525,12 +532,18 @@
             <logicalFolder name="cache" displayName="cache" projectFiles="true">
               <itemPath>../src/config/default/system/cache/sys_cache.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="command" displayName="command" projectFiles="true">
+              <itemPath>../src/config/default/system/command/src/sys_command.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="console" displayName="console" projectFiles="true">
               <itemPath>../src/config/default/system/console/src/sys_console_uart.c</itemPath>
               <itemPath>../src/config/default/system/console/src/sys_console.c</itemPath>
             </logicalFolder>
             <logicalFolder name="int" displayName="int" projectFiles="true">
               <itemPath>../src/config/default/system/int/src/sys_int.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="reset" displayName="reset" projectFiles="true">
+              <itemPath>../src/config/default/system/reset/sys_reset.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <itemPath>../src/config/default/freertos_hooks.c</itemPath>
@@ -539,6 +552,7 @@
           <itemPath>../src/config/default/exceptions.c</itemPath>
           <itemPath>../src/config/default/interrupts.c</itemPath>
           <itemPath>../src/config/default/libc_syscalls.c</itemPath>
+          <itemPath>../src/config/default/device_sleep.c</itemPath>
           <itemPath>../src/config/default/tasks.c</itemPath>
         </logicalFolder>
       </logicalFolder>
@@ -553,7 +567,7 @@
               </logicalFolder>
             </logicalFolder>
             <logicalFolder name="MemMang" displayName="MemMang" projectFiles="true">
-              <itemPath>../src/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c</itemPath>
+              <itemPath>../src/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_1.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <itemPath>../src/third_party/rtos/FreeRTOS/Source/stream_buffer.c</itemPath>
@@ -822,7 +836,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
-        <property key="heap-size" value="512"/>
+        <property key="heap-size" value="1024"/>
         <property key="input-libraries" value=""/>
         <property key="kseg-length" value=""/>
         <property key="kseg-origin" value=""/>

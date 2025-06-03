@@ -364,12 +364,30 @@
 </value>
       </entry>
       <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="FreeRTOS" name="FREERTOS_INCLUDE_XQUEUEGETMUTEXHOLDER"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;FreeRTOS&gt;
+  &lt;FreeRTOS dnOrder=&quot;0&quot; id=&quot;FREERTOS_INCLUDE_XQUEUEGETMUTEXHOLDER&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
+  &lt;/FreeRTOS&gt;
+&lt;/FreeRTOS&gt;
+</value>
+      </entry>
+      <entry>
          <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="FreeRTOS" name="FREERTOS_INCLUDE_XTASKABORTDELAY"/>
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;FreeRTOS&gt;
   &lt;FreeRTOS dnOrder=&quot;0&quot; id=&quot;FREERTOS_INCLUDE_XTASKABORTDELAY&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
       &lt;User dnOrder=&quot;0&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
+  &lt;/FreeRTOS&gt;
+&lt;/FreeRTOS&gt;
+</value>
+      </entry>
+      <entry>
+         <key class="com.microchip.mcc.core.tokenManager.CustomKey" moduleName="FreeRTOS" name="FREERTOS_QUEUE_REGISTRY_SIZE"/>
+         <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;FreeRTOS&gt;
+  &lt;FreeRTOS dnOrder=&quot;0&quot; id=&quot;FREERTOS_QUEUE_REGISTRY_SIZE&quot;&gt;
+    &lt;Values dnOrder=&quot;0&quot;/&gt;
   &lt;/FreeRTOS&gt;
 &lt;/FreeRTOS&gt;
 </value>
@@ -436,7 +454,7 @@
          <value>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;FreeRTOS&gt;
   &lt;FreeRTOS dnOrder=&quot;0&quot; id=&quot;FREERTOS_USE_QUEUE_SETS&quot;&gt;
     &lt;Values dnOrder=&quot;0&quot;&gt;
-      &lt;User dnOrder=&quot;0&quot; value=&quot;false&quot;/&gt;
+      &lt;User dnOrder=&quot;0&quot; value=&quot;true&quot;/&gt;
     &lt;/Values&gt;
   &lt;/FreeRTOS&gt;
 &lt;/FreeRTOS&gt;
@@ -4881,7 +4899,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\FreeRTOSConfig.h</file>
-         <hash>b173a861231f804dda0b776cc1e222826dcb9d314a2cf9f773ff78313d0fa6a1</hash>
+         <hash>34169e25b3291ba24f0276472d855eca4c220f0c17a28390caf181fc1b252e7c</hash>
       </entry>
       <entry>
          <file>..\src\config\default\WBZ451.ld</file>
@@ -5017,7 +5035,7 @@
       </entry>
       <entry>
          <file>..\src\config\default\definitions.h</file>
-         <hash>20afecc6af31112cd09e18d430c7e6bd91f3df24fb4e3b3c40a8e72a179a062f</hash>
+         <hash>7ef483953f9a637cbeb238d826f05b2296724c65da84c5cb2074833752fc2ba2</hash>
       </entry>
       <entry>
          <file>..\src\config\default\device.h</file>

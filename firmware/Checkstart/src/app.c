@@ -55,6 +55,7 @@
 #include "app.h"
 #include "definitions.h"
 #include "app_ble.h"
+#include "init.h"
 
 
 
@@ -105,6 +106,58 @@ APP_DATA appData;
 /* TODO:  Add any necessary local functions.
 */
 
+/*
+ * NOTES AND TODO &V!
+ * THIS IS THE ORIGINAL CODE, IT DOESNT DETECT THE ONOFF BUTTON, BUT DOES DETECT THE TEST BUTTON, THE TIMER DOESNT WORK I THINK, IF I CAN GUESS IT'S SOMETHING WITH THE CALLBACK REGISTERS
+ * 
+ * MAKE
+ * IT
+ * WORK
+ */
+void USER_tasks(void* parameter){
+    uint8_t app_led_ble_state = APP_LED_BLE_NULL;
+    EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
+    TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
+    while (1){/*
+        //LED_POWER_Toggle();
+        if(test_timer_flag){
+            tim++;
+            test_timer_flag = 0;
+        }
+        if (tim > 150) {
+            TC0_Timer16bitCounterSet(1);
+            LED_BLE_Toggle();
+            tim = 0;
+        }*/
+        // app tasks
+        if(onoff_flag){
+            if(BUTTON_TEST_Get() == 0){test_flag = 1;}
+            if(test_flag){
+                app_led_ble_state = APP_LED_BLE_ON;
+                TC0_Timer16bitCounterSet(1);
+            }
+            if(test_timer_flag){
+                app_led_ble_state = APP_LED_BLE_OFF;
+                TC0_Timer16bitCounterSet(1);
+                test_flag = 0;
+            }
+            switch (app_led_ble_state) {
+                case APP_LED_BLE_ON:{
+                    LED_BLE_Toggle();
+                    break;
+                }
+                case APP_LED_BLE_OFF:{
+                    LED_BLE_Toggle();
+                    break;
+                }
+                case APP_LED_BLE_NULL:{
+                    app_led_ble_state = APP_LED_BLE_OFF;
+                    break;
+                }
+            }
+        }
+    }
+}
 
 // *****************************************************************************
 // *****************************************************************************
@@ -130,6 +183,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 1, NULL);
 }
 
 
@@ -146,7 +200,7 @@ void APP_Tasks ( void )
     APP_Msg_T    appMsg[1];
     APP_Msg_T   *p_appMsg;
     p_appMsg=appMsg;
-
+    
     /* Check the application's current state. */
     switch ( appData.state )
     {

@@ -2,7 +2,7 @@
 
 manifest_file_version: 1.0.0
 project: FindMe-checkstart
-creation_date: 2025-06-03T17:47:06.095+02:00[Europe/Prague]
+creation_date: 2025-06-03T22:23:54.217+02:00[Europe/Prague]
 operating_system: Windows 10
 mcc_mode: IDE
 mcc_mode_version: v6.20
@@ -18,8 +18,8 @@ device_library: {library_class: com.microchip.mcc.harmony.Harmony3Library, name:
     V3, version: 1.5.5}
 packs: {name: PIC32CX-BZ_DFP, version: 1.4.243}
 modules:
-- {name: csp, type: HARMONY, version: v3.19.1}
 - {name: wireless_pic32cxbz_wbz, type: HARMONY, version: v1.4.0}
+- {name: csp, type: HARMONY, version: v3.19.1}
 - {name: core, type: HARMONY, version: v3.13.4}
 - {name: wireless_ble, type: HARMONY, version: v1.3.0}
 - {name: CMSIS_5, type: HARMONY, version: 5.9.0}

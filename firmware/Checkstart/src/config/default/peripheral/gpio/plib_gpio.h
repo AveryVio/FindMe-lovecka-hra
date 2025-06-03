@@ -77,22 +77,22 @@
 #define LED_POWER_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<6U))
 #define LED_POWER_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<6U))
 #define LED_POWER_PIN                  GPIO_PIN_RB6
-/*** Macros for LED_GPS pin ***/
-#define LED_GPS_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<12U))
-#define LED_GPS_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<12U))
-#define LED_GPS_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<12U))
-#define LED_GPS_Get()               ((GPIOB_REGS->GPIO_PORT >> 12U) & 0x1U)
-#define LED_GPS_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<12U))
-#define LED_GPS_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<12U))
-#define LED_GPS_PIN                  GPIO_PIN_RB12
 /*** Macros for LED_BLE pin ***/
-#define LED_BLE_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<13U))
-#define LED_BLE_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<13U))
-#define LED_BLE_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<13U))
-#define LED_BLE_Get()               ((GPIOB_REGS->GPIO_PORT >> 13U) & 0x1U)
-#define LED_BLE_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<13U))
-#define LED_BLE_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<13U))
-#define LED_BLE_PIN                  GPIO_PIN_RB13
+#define LED_BLE_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<12U))
+#define LED_BLE_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<12U))
+#define LED_BLE_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<12U))
+#define LED_BLE_Get()               ((GPIOB_REGS->GPIO_PORT >> 12U) & 0x1U)
+#define LED_BLE_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<12U))
+#define LED_BLE_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<12U))
+#define LED_BLE_PIN                  GPIO_PIN_RB12
+/*** Macros for LED_GPS pin ***/
+#define LED_GPS_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<13U))
+#define LED_GPS_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<13U))
+#define LED_GPS_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<13U))
+#define LED_GPS_Get()               ((GPIOB_REGS->GPIO_PORT >> 13U) & 0x1U)
+#define LED_GPS_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<13U))
+#define LED_GPS_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<13U))
+#define LED_GPS_PIN                  GPIO_PIN_RB13
 
 
 // *****************************************************************************

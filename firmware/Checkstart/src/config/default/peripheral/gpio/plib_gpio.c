@@ -66,12 +66,10 @@ void GPIO_Initialize ( void )
     CFG_REGS->CFG_CFGCON2CLR = CFG_CFGCON2_SOSCSEL_Msk;
 
     /* PORTA Initialization */
-    GPIOA_REGS->GPIO_CNPUSET = 0x800U; /* Pull-Up Enable */
     /* PORTB Initialization */
     GPIOB_REGS->GPIO_LAT = 0x0U; /* Initial Latch Value */
     GPIOB_REGS->GPIO_TRISCLR = 0x3040U; /* Direction Control */
     GPIOB_REGS->GPIO_ANSELCLR = 0x60U; /* Digital Mode Enable */
-    GPIOB_REGS->GPIO_CNPUSET = 0x2060U; /* Pull-Up Enable */
 
 
     /* PPS Input Remapping */

@@ -152,6 +152,7 @@
           <itemPath>../src/config/default/sys_tasks.h</itemPath>
           <itemPath>../src/config/default/configuration.h</itemPath>
           <itemPath>../src/config/default/user.h</itemPath>
+          <itemPath>../src/init.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="FreeRTOS" displayName="FreeRTOS" projectFiles="true">
@@ -554,6 +555,7 @@
           <itemPath>../src/config/default/libc_syscalls.c</itemPath>
           <itemPath>../src/config/default/device_sleep.c</itemPath>
           <itemPath>../src/config/default/tasks.c</itemPath>
+          <itemPath>../src/init.c</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="FreeRTOS" displayName="FreeRTOS" projectFiles="true">
@@ -567,7 +569,7 @@
               </logicalFolder>
             </logicalFolder>
             <logicalFolder name="MemMang" displayName="MemMang" projectFiles="true">
-              <itemPath>../src/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_1.c</itemPath>
+              <itemPath>../src/third_party/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c</itemPath>
             </logicalFolder>
           </logicalFolder>
           <itemPath>../src/third_party/rtos/FreeRTOS/Source/stream_buffer.c</itemPath>
@@ -1486,7 +1488,7 @@
       <snap>
         <property key="memories.programmemory.ranges" value="1000000-2001ffff"/>
         <property key="programmerToGoFilePath"
-                  value="C:/Users/ondrejstepan/Documents/school/3.O/IoT/roncnikovka/FindMe-lovecka-hra/firmware/Checkstart/FindMe-checkstart.X/debug/default/FindMe-checkstart_ptg"/>
+                  value="C:/godbless/legacy_adv/firmware/legacy_adv_wbz451_curiosity.X/debug/default/legacy_adv_wbz451_curiosity_ptg"/>
       </snap>
     </conf>
   </confs>

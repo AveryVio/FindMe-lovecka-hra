@@ -112,7 +112,6 @@ int main ( void )
  
         // app tasks
         if(onoff_flag){
-            LED_BLE_Set();
             if(test_flag){
                 app_led_ble_state = APP_LED_BLE_ON;
                 TC0_Timer16bitCounterSet(1);

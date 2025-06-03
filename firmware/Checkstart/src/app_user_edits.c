@@ -69,6 +69,12 @@
  * Add the following code:
     app_idle_task();
 
+ * Step 3
+ * ------
+ * Add code to the function:
+ *      vApplicationTickHook()
+ * Add the following code:
+    app_idle_updateRtcCnt(RTC_Timer32CounterGet());
 
  ********************************************************************/
 

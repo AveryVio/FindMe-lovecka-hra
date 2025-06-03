@@ -74,9 +74,9 @@ onoff_flag = (onoff_flag) ? 0 : 1;
 }
 // global variable for testting the time
 volatile uint8_t test_flag = 0;
-void test_button_callback(uintptr_t context){
+/*void test_button_callback(uintptr_t context){
 test_flag = 1;
-}
+}*/
 // global variable for timing
 volatile uint8_t test_timer_flag = 0;
 void test_timer_callback(TC_TIMER_STATUS status, uintptr_t context){
@@ -98,8 +98,8 @@ int main ( void )
 
     
     // register callbacks
-    EIC_CallbackRegister(EIC_PIN_1, test_button_callback, (uintptr_t) NULL);
-    EIC_CallbackRegister(EIC_PIN_3, onoff_button_callback, (uintptr_t) NULL);
+    //EIC_CallbackRegister(EIC_PIN_1, test_button_callback, (uintptr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
     TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
     
     // start timer
@@ -109,9 +109,12 @@ int main ( void )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
+        LED_BLE_Set();
+        LED_GPS_Set();
  
         // app tasks
-        if(onoff_flag){
+        /*if(onoff_flag){
+            if(BUTTON_TEST_Get()){test_flag = 1;}
             if(test_flag){
                 app_led_ble_state = APP_LED_BLE_ON;
                 TC0_Timer16bitCounterSet(1);
@@ -121,20 +124,20 @@ int main ( void )
             }
             switch (app_led_ble_state) {
                 case APP_LED_BLE_ON:{
-                    // set led state to on
+                    LED_BLE_Set();
                     break;
                 }
                 case APP_LED_BLE_OFF:{
-                    // set led state to off
+                    LED_BLE_Clear();
                     break;
                 }
                 case APP_LED_BLE_NULL:{
                     app_led_ble_state = APP_LED_BLE_OFF;
                     break;
                 }
-            }
+            }*
             
-        }
+        }*/
     }
 
     /* Execution should not come here during normal operation */

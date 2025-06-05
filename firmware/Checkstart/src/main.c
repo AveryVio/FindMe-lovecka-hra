@@ -61,18 +61,6 @@ int main ( void )
 {
     /* Initialize all modules */
     SYS_Initialize ( NULL );
-    
-
-    
-    // register callbacks
-    //EIC_CallbackRegister(EIC_PIN_1, test_button_callback, (uintptr_t) NULL);
-    
-    // start timer
-    TC0_TimerStart();
-    TC0_Timer16bitPeriodSet(1024);
-    LED_BLE_Toggle();
-    LED_GPS_Toggle();
-    TC0_Timer16bitPeriodSet(1500);
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */

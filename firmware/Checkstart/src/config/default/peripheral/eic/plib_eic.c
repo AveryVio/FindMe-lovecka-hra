@@ -84,7 +84,7 @@ void EIC_Initialize (void)
     /* Interrupt sense type and filter control for EXTINT channels 0 to 7*/
     EIC_REGS->EIC_CONFIG=  EIC_CONFIG_SENSE0_FALL | EIC_CONFIG_FILTEN0_Msk
              |  EIC_CONFIG_SENSE1_FALL | EIC_CONFIG_FILTEN1_Msk 
-             |  EIC_CONFIG_SENSE2_RISE | EIC_CONFIG_FILTEN2_Msk 
+             |  EIC_CONFIG_SENSE2_FALL  
              |  EIC_CONFIG_SENSE3_FALL | EIC_CONFIG_FILTEN3_Msk 
             
             

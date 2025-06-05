@@ -115,10 +115,20 @@ APP_DATA appData;
  * WORK
  */
 void USER_tasks(void* parameter){
+    // register callbacks
     uint8_t app_led_ble_state = APP_LED_BLE_NULL;
     EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
     TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
-    while (1){/*
+    
+    // start timer
+    TC0_TimerStart();
+    TC0_Timer16bitPeriodSet(1024);
+    
+    LED_POWER_Set();
+#define CURRENT_TIME_MS xTaskGetTickCount()
+    TickType_t test_btt_time = CURRENT_TIME_MS;
+    TickType_t onoff_btt_time = CURRENT_TIME_MS;
+    while (1){/* BLINKY
         //LED_POWER_Toggle();
         if(test_timer_flag){
             tim++;
@@ -129,32 +139,40 @@ void USER_tasks(void* parameter){
             LED_BLE_Toggle();
             tim = 0;
         }*/
+        //if((BUTTON_ONOFF_Get() == 1) && (CURRENT_TIME_MS > (onoff_btt_time + 1))){onoff_flag = (onoff_flag)? 0 : 1; onoff_btt_time = CURRENT_TIME_MS;}
         // app tasks
         if(onoff_flag){
-            if(BUTTON_TEST_Get() == 0){test_flag = 1;}
-            if(test_flag){
-                app_led_ble_state = APP_LED_BLE_ON;
-                TC0_Timer16bitCounterSet(1);
-            }
-            if(test_timer_flag){
-                app_led_ble_state = APP_LED_BLE_OFF;
-                TC0_Timer16bitCounterSet(1);
-                test_flag = 0;
-            }
-            switch (app_led_ble_state) {
-                case APP_LED_BLE_ON:{
-                    LED_BLE_Toggle();
-                    break;
-                }
-                case APP_LED_BLE_OFF:{
-                    LED_BLE_Toggle();
-                    break;
-                }
-                case APP_LED_BLE_NULL:{
-                    app_led_ble_state = APP_LED_BLE_OFF;
-                    break;
-                }
-            }
+            //LED_POWER_Set();
+            //if((BUTTON_TEST_Get() == 1)/* && (CURRENT_TIME_MS > (test_btt_time + 1))*/){test_flag = (test_flag)? 0 : 1; test_btt_time = CURRENT_TIME_MS;}
+            //if(test_flag){
+                /*if(appData.state == APP_STATE_SERVICE_TASKS){*/
+            //        app_led_ble_state = APP_LED_BLE_ON;
+            //        TC0_Timer16bitCounterSet(1);
+                /*}*/
+            //}else{app_led_ble_state = APP_LED_BLE_OFF;}/*
+            //else if(test_timer_flag){
+            //    app_led_ble_state = APP_LED_BLE_OFF;
+            //    TC0_Timer16bitCounterSet(1);
+            //    test_flag = 0;
+            //}/**/
+            //switch (app_led_ble_state) {
+            //    case APP_LED_BLE_ON:{
+            //        LED_BLE_Set();
+            //        break;
+            //    }
+            //    case APP_LED_BLE_OFF:{
+            //        LED_BLE_Clear();
+            //        break;
+            //    }
+            //    case APP_LED_BLE_NULL:{
+            //        app_led_ble_state = APP_LED_BLE_OFF;
+            //        break;
+            //    }
+            //}
+        }
+        else {
+            LED_BLE_Clear();
+            LED_POWER_Clear();
         }
     }
 }
@@ -183,7 +201,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 1, NULL);
+    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 2, NULL);
 }
 
 

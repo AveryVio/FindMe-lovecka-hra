@@ -51,6 +51,8 @@
 #include "crypto/crypto.h"
 #include "ble/lib/include/bt_sys.h"
 #include <string.h>
+#include "peripheral/sercom/usart/plib_sercom0_usart.h"
+#include "peripheral/evsys/plib_evsys.h"
 /*******************************************************************************
 * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
@@ -75,8 +77,6 @@
 *******************************************************************************/
 #include "driver/pds/include/pds.h"
 #include "driver/pds/include/pds_config.h"
-#include "peripheral/sercom/usart/plib_sercom0_usart.h"
-#include "peripheral/evsys/plib_evsys.h"
 #include "system/command/sys_command.h"
 #include "peripheral/clk/plib_clk.h"
 #include "peripheral/gpio/plib_gpio.h"
@@ -281,3 +281,4 @@ extern SYSTEM_OBJECTS sysObj;
 /*******************************************************************************
  End of File
 */
+

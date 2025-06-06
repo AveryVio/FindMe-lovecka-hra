@@ -13,9 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN echo "Python and psycopg installed"
 
-# add html docs
-COPY ../websites/conntest.html .
-
 # add python scripts
 COPY ../api/main.py .
 COPY ../api/helper/psycopg_functions.py .

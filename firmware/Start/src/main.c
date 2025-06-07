@@ -77,14 +77,14 @@ volatile uint8_t onoff_flag = 0;
 void onoff_button_callback(uintptr_t context){
 onoff_flag = (onoff_flag) ? 0 : 1;
 }
-// global variable for testting the time
-volatile uint8_t test_flag = 0;
-void test_button_callback(uintptr_t context){
-test_flag = 1;
-}
+//global variables for adding and removing
 volatile uint8_t removing_flag = 0;
 void removing_button_callback(uintptr_t context){
 removing_flag = (removing_flag) ? 0 : 1;
+}
+volatile uint8_t adding_flag = 0;
+void add_button_callback(uintptr_t context){
+adding_flag = 1;
 }
 // global variable for timing
 volatile uint8_t test_timer_flag = 0;
@@ -108,8 +108,8 @@ int main ( void )
 
     
     // register callbacks
-    EIC_CallbackRegister(EIC_PIN_1, test_button_callback, (uintptr_t) NULL);
-    EIC_CallbackRegister(EIC_PIN_3, onoff_button_callback, (uintptr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_1, add_button_callback, (uintptr_t) NULL);
+    EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
     EIC_CallbackRegister(EIC_PIN_0, removing_button_callback, (uintptr_t) NULL);
     TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
     
@@ -124,7 +124,7 @@ int main ( void )
         // app tasks
         if(onoff_flag){
             //handle button flags
-            if(test_flag){
+            if(BUTTON_TEST_Get()){
                 app_led_ble_state = APP_LED_BLE_ON;
                 TC0_Timer16bitCounterSet(1);
             }
@@ -152,7 +152,7 @@ int main ( void )
                     break;
                 }
                 case APP_TRACING_OFF:{
-                    if((removing_flag) && (BUTTON_ADD_Get())){
+                    if((removing_flag) && (adding_flag)){
                         app_tracing_state = (app_tracing_state == APP_TRACING_ON) ? APP_TRACING_OFF : APP_TRACING_ON;
                     }
                     // set led state to off

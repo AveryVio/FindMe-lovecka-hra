@@ -62,19 +62,21 @@ void GPIO_Initialize ( void )
     /* Disable JTAG since at least one of its pins is configured for Non-JTAG function */
     CFG_REGS->CFG_CFGCON0CLR = CFG_CFGCON0_JTAGEN_Msk;
 
-          /* PORTA Initialization */
-    GPIOA_REGS->GPIO_CNPUSET = 0x408cU; /* Pull-Up Enable */
+          /* SOSCSEL - Digital (SCLKI) mode is selected */
+    CFG_REGS->CFG_CFGCON2CLR = CFG_CFGCON2_SOSCSEL_Msk;
+
+    /* PORTA Initialization */
     /* PORTB Initialization */
     GPIOB_REGS->GPIO_LAT = 0x0U; /* Initial Latch Value */
-    GPIOB_REGS->GPIO_TRISCLR = 0xa9U; /* Direction Control */
+    GPIOB_REGS->GPIO_TRISCLR = 0x80U; /* Direction Control */
     GPIOB_REGS->GPIO_ANSELCLR = 0xb9U; /* Digital Mode Enable */
     GPIOB_REGS->GPIO_CNPUSET = 0x10U; /* Pull-Up Enable */
 
 
     /* PPS Input Remapping */
-    PPS_REGS->PPS_EXTINT3R = 3U;
-    PPS_REGS->PPS_EXTINT1R = 9U;
-    PPS_REGS->PPS_EXTINT0R = 8U;
+    PPS_REGS->PPS_EXTINT0R = 12U;
+    PPS_REGS->PPS_EXTINT2R = 12U;
+    PPS_REGS->PPS_EXTINT1R = 11U;
 
     /* PPS Output Remapping */
 

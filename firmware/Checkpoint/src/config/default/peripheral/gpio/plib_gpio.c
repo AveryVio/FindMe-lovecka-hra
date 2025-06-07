@@ -67,6 +67,8 @@ void GPIO_Initialize ( void )
 
     /* PORTA Initialization */
     /* PORTB Initialization */
+    GPIOB_REGS->GPIO_LAT = 0x0U; /* Initial Latch Value */
+    GPIOB_REGS->GPIO_TRISCLR = 0x3000U; /* Direction Control */
     GPIOB_REGS->GPIO_ANSELCLR = 0x20U; /* Digital Mode Enable */
 
 

@@ -445,6 +445,7 @@
       </logicalFolder>
       <itemPath>../src/app.h</itemPath>
       <itemPath>../src/app_idle_task.h</itemPath>
+      <itemPath>../src/init.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -682,6 +683,7 @@
       <itemPath>../src/app.c</itemPath>
       <itemPath>../src/app_idle_task.c</itemPath>
       <itemPath>../src/app_user_edits.c</itemPath>
+      <itemPath>../src/init.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>

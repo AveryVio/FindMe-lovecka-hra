@@ -54,7 +54,7 @@ RANLIB=ranlib
 build: .build-post
 
 .build-pre:
-	python ./checkpointset.py
+#python ./checkpointset.py
 # Add your pre 'build' code here...
 
 .build-post: .build-impl

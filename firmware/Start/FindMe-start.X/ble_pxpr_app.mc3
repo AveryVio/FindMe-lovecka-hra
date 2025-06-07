@@ -6087,7 +6087,7 @@
         &lt;ElementPosition dnOrder=&quot;8&quot; id=&quot;cmsis&quot; x=&quot;500&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;9&quot; id=&quot;core&quot; x=&quot;400&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;10&quot; id=&quot;dfp&quot; x=&quot;180&quot; y=&quot;20&quot;/&gt;
-        &lt;ElementPosition dnOrder=&quot;11&quot; id=&quot;eic&quot; x=&quot;403&quot; y=&quot;284&quot;/&gt;
+        &lt;ElementPosition dnOrder=&quot;11&quot; id=&quot;eic&quot; x=&quot;403&quot; y=&quot;283&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;12&quot; id=&quot;evsys&quot; x=&quot;20&quot; y=&quot;20&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;13&quot; id=&quot;lib_crypto&quot; x=&quot;186&quot; y=&quot;429&quot;/&gt;
         &lt;ElementPosition dnOrder=&quot;14&quot; id=&quot;lib_wolfcrypt&quot; x=&quot;15&quot; y=&quot;299&quot;/&gt;

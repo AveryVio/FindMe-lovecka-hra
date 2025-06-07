@@ -1,4 +1,3 @@
-// DOM-IGNORE-BEGIN
 /*******************************************************************************
 * Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
@@ -21,7 +20,6 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
-// DOM-IGNORE-END
 
 /*******************************************************************************
   MPLAB Harmony Application Source File
@@ -58,17 +56,11 @@
 #include "init.h"
 
 
-
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
-
-
-
-
 
 // *****************************************************************************
 /* Application Data
@@ -123,52 +115,41 @@ void USER_tasks(void* parameter){
     // start timer
     TC0_TimerStart();
     TC0_Timer16bitPeriodSet(1024);
-    
+   
     LED_POWER_Set();
 #define CURRENT_TIME_MS xTaskGetTickCount()
     TickType_t test_btt_time = CURRENT_TIME_MS;
     TickType_t onoff_btt_time = CURRENT_TIME_MS;
-    while (1){/* BLINKY
-        //LED_POWER_Toggle();
-        if(test_timer_flag){
-            tim++;
-            test_timer_flag = 0;
-        }
-        if (tim > 150) {
-            TC0_Timer16bitCounterSet(1);
-            LED_BLE_Toggle();
-            tim = 0;
-        }*/
-        //if((BUTTON_ONOFF_Get() == 1) && (CURRENT_TIME_MS > (onoff_btt_time + 1))){onoff_flag = (onoff_flag)? 0 : 1; onoff_btt_time = CURRENT_TIME_MS;}
+    while (1){
         // app tasks
         if(onoff_flag){
-            //LED_POWER_Set();
-            //if((BUTTON_TEST_Get() == 1)/* && (CURRENT_TIME_MS > (test_btt_time + 1))*/){test_flag = (test_flag)? 0 : 1; test_btt_time = CURRENT_TIME_MS;}
-            //if(test_flag){
-                /*if(appData.state == APP_STATE_SERVICE_TASKS){*/
-            //        app_led_ble_state = APP_LED_BLE_ON;
-            //        TC0_Timer16bitCounterSet(1);
-                /*}*/
-            //}else{app_led_ble_state = APP_LED_BLE_OFF;}/*
-            //else if(test_timer_flag){
-            //    app_led_ble_state = APP_LED_BLE_OFF;
-            //    TC0_Timer16bitCounterSet(1);
-            //    test_flag = 0;
-            //}/**/
-            //switch (app_led_ble_state) {
-            //    case APP_LED_BLE_ON:{
-            //        LED_BLE_Set();
-            //        break;
-            //    }
-            //    case APP_LED_BLE_OFF:{
-            //        LED_BLE_Clear();
-            //        break;
-            //    }
-            //    case APP_LED_BLE_NULL:{
-            //        app_led_ble_state = APP_LED_BLE_OFF;
-            //        break;
-            //    }
-            //}
+            LED_POWER_Set();
+            if((BUTTON_TEST_Get() == 1)){test_flag = (test_flag)? 0 : 1; test_btt_time = CURRENT_TIME_MS;}
+            if(test_flag){
+                if(appData.state == APP_STATE_SERVICE_TASKS){
+                    app_led_ble_state = APP_LED_BLE_ON;
+                    TC0_Timer16bitCounterSet(1);
+                }
+            }
+            else if(test_timer_flag){
+                app_led_ble_state = APP_LED_BLE_OFF;
+                TC0_Timer16bitCounterSet(1);
+                test_flag = 0;
+            }
+            switch (app_led_ble_state) {
+                case APP_LED_BLE_ON:{
+                    LED_BLE_Set();
+                    break;
+                }
+                case APP_LED_BLE_OFF:{
+                    LED_BLE_Clear();
+                    break;
+                }
+                case APP_LED_BLE_NULL:{
+                    app_led_ble_state = APP_LED_BLE_OFF;
+                    break;
+                }
+            }
         }
         else {
             LED_BLE_Clear();
@@ -176,6 +157,7 @@ void USER_tasks(void* parameter){
         }
     }
 }
+
 
 // *****************************************************************************
 // *****************************************************************************
@@ -204,7 +186,6 @@ void APP_Initialize ( void )
     xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 2, NULL);
 }
 
-
 /******************************************************************************
   Function:
     void APP_Tasks ( void )
@@ -218,7 +199,7 @@ void APP_Tasks ( void )
     APP_Msg_T    appMsg[1];
     APP_Msg_T   *p_appMsg;
     p_appMsg=appMsg;
-    
+
     /* Check the application's current state. */
     switch ( appData.state )
     {
@@ -227,16 +208,15 @@ void APP_Tasks ( void )
         {
             bool appInitialized = true;
             //appData.appQueue = xQueueCreate( 10, sizeof(APP_Msg_T) );
-
             APP_BleStackInit();
             if (!(RTC_REGS->MODE0.RTC_CTRLA & RTC_MODE0_CTRLA_ENABLE_Msk))
             {
-                RTC_Timer32Start();
+            RTC_Timer32Start();
             }
 
-
-
-
+            // Start Advertisement
+            BLE_GAP_SetAdvEnable(0x01, 0x00);
+            SERCOM0_USART_Write((uint8_t *)"Advertising\r\n",13);
             if (appInitialized)
             {
 
@@ -249,7 +229,6 @@ void APP_Tasks ( void )
         {
             if (OSAL_QUEUE_Receive(&appData.appQueue, &appMsg, OSAL_WAIT_FOREVER))
             {
-
                 if(p_appMsg->msgId==APP_MSG_BLE_STACK_EVT)
                 {
                     // Pass BLE Stack Event Message to User Application for handling
@@ -259,10 +238,7 @@ void APP_Tasks ( void )
                 {
                     // Pass BLE LOG Event Message to User Application for handling
                     APP_BleStackLogHandler((BT_SYS_LogEvent_T *)p_appMsg->msgData);
-                }
-
-
-
+            }
             }
             break;
         }

@@ -63,17 +63,6 @@
 #define TASK_BLE_STACK_SIZE (2 *1024 / sizeof(portSTACK_TYPE))
 #define TASK_BLE_PRIORITY (tskIDLE_PRIORITY + 3)
 
-TaskHandle_t xSYS_CMD_Tasks;
-void lSYS_CMD_Tasks(  void *pvParameters  )
-{
-    while(1)
-    {
-        SYS_CMD_Tasks();
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-    }
-}
-
-
 /* Handle for the APP_Tasks. */
 TaskHandle_t xAPP_Tasks;
 
@@ -105,16 +94,6 @@ void SYS_Tasks ( void )
 {
     /* Maintain system services */
     
-    (void) xTaskCreate( lSYS_CMD_Tasks,
-        "SYS_CMD_TASKS",
-        SYS_CMD_RTOS_STACK_SIZE,
-        (void*)NULL,
-        SYS_CMD_RTOS_TASK_PRIORITY,
-        &xSYS_CMD_Tasks
-    );
-
-
-
 
 
     /* Maintain Device Drivers */

@@ -94,7 +94,7 @@
 #pragma config SMCLR =      NO_POR
 #pragma config QSCHE_EN =      OFF
 #pragma config QSPI_HSEN =      PPS
-#pragma config SCOM0_HSEN =      PPS
+#pragma config SCOM0_HSEN =      DIRECT
 #pragma config SCOM1_HSEN =      PPS
 #pragma config SCOM2_HSEN =      PPS
 #pragma config CCL_OE =      ON
@@ -129,9 +129,9 @@
 #pragma config RTCEVENT_SEL =      ONE_SEC
 #pragma config RTCEVENT_EN =      OFF
 #pragma config VBKP_1KCSEL =      _32K
-#pragma config VBKP_32KCSEL =      FRC
+#pragma config VBKP_32KCSEL =      SOSC
 #pragma config VBKP_DIVSEL =      DIV_31_25
-#pragma config LPCLK_MOD =      DIV_1
+#pragma config LPCLK_MOD =      DIV_1_024
 #pragma config RTCEVTYPE =      OUT
 #pragma config CPEN_DLY =      _8_LPRC
 #pragma config DSZPBOREN =      OFF
@@ -240,14 +240,6 @@ OSAL_API_LIST_TYPE     osalAPIList;
 // Section: System Initialization
 // *****************************************************************************
 // *****************************************************************************
-
-const SYS_CMD_INIT sysCmdInit =
-{
-    .moduleInit = {0},
-    .consoleCmdIOParam = SYS_CMD_SINGLE_CHARACTER_READ_CONSOLE_IO_PARAM,
-	.consoleIndex = 0,
-};
-
 // <editor-fold defaultstate="collapsed" desc="SYS_CONSOLE Instance 0 Initialization Data">
 
 
@@ -331,6 +323,25 @@ __attribute__((ramfunc, long_call, section(".ramfunc"),unique_section)) void PCH
     }
 
 }
+void _on_reset(void)
+{
+    //Need to clear register before configure any GPIO
+    DEVICE_ClearDeepSleepReg();
+
+    // Initialize the RF Clock Generator
+    SYS_ClkGen_Config();
+
+    /* Can't call a RAM function before __pic32c_data_initialization
+       Must call a flash function, but in A0 HW version, RAM function is required to avoid HW issue.
+       Thus, will not config PCHE before __pic32c_data_initialization in A0 version.
+    */
+    // Configure Prefetch, Wait States
+    if (DSU_REGS->DSU_DID & DSU_DID_REVISION_Msk)   //A1 and later version
+    {
+        PCHE_REGS->PCHE_CHECON = (PCHE_REGS->PCHE_CHECON & (~(PCHE_CHECON_PFMWS_Msk | PCHE_CHECON_ADRWS_Msk | PCHE_CHECON_PREFEN_Msk))) 
+                                        | (PCHE_CHECON_PFMWS(1) | PCHE_CHECON_PREFEN(1));
+    }
+}
 
 
 
@@ -384,11 +395,6 @@ void SYS_Initialize ( void* data )
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-    // Initialize the RF Clock Generator
-    SYS_ClkGen_Config();
-
-    // Configure Cache and Wait States
-    PCHE_Setup();
 
   
     CLOCK_Initialize();
@@ -400,15 +406,15 @@ void SYS_Initialize ( void* data )
 
 	GPIO_Initialize();
 
-    SERCOM0_USART_Initialize();
-
     EVSYS_Initialize();
+
+    SERCOM0_USART_Initialize();
 
     EIC_Initialize();
 
-    TC0_TimerInitialize();
-
     RTC_Initialize();
+
+    TC0_TimerInitialize();
 
     NVM_Initialize();
 
@@ -471,8 +477,6 @@ void SYS_Initialize ( void* data )
     osalAPIList.OSAL_MemFree = OSAL_Free;
 
 
-
-    SYS_CMD_Initialize((SYS_MODULE_INIT*)&sysCmdInit);
 
     /* MISRA C-2012 Rule 11.3, 11.8 deviated below. Deviation record ID -  
      H3_MISRAC_2012_R_11_3_DR_1 & H3_MISRAC_2012_R_11_8_DR_1*/

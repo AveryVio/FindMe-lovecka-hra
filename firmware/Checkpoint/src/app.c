@@ -118,33 +118,22 @@ void USER_tasks(void* parameter){
 #define CURRENT_TIME_MS xTaskGetTickCount()
     TickType_t test_btt_time = CURRENT_TIME_MS;
     TickType_t onoff_btt_time = CURRENT_TIME_MS;
-    while (1){/* BLINKY
-        //LED_POWER_Toggle();
-        if(test_timer_flag){
-            tim++;
-            test_timer_flag = 0;
-        }
-        if (tim > 150) {
-            TC0_Timer16bitCounterSet(1);
-            LED_BLE_Toggle();
-            tim = 0;
-        }*/
-        //if((BUTTON_ONOFF_Get() == 1) && (CURRENT_TIME_MS > (onoff_btt_time + 1))){onoff_flag = (onoff_flag)? 0 : 1; onoff_btt_time = CURRENT_TIME_MS;}
+    while (1){
         // app tasks
         if(onoff_flag){
             LED_POWER_Set();
-            if((BUTTON_TEST_Get() == 1)/* && (CURRENT_TIME_MS > (test_btt_time + 1))*/){test_flag = (test_flag)? 0 : 1; test_btt_time = CURRENT_TIME_MS;}
+            if((BUTTON_TEST_Get() == 1)){test_flag = (test_flag)? 0 : 1; test_btt_time = CURRENT_TIME_MS;}
             if(test_flag){
-                /*if(appData.state == APP_STATE_SERVICE_TASKS){*/
+                if(appData.state == APP_STATE_SERVICE_TASKS){
                     app_led_ble_state = APP_LED_BLE_ON;
                     TC0_Timer16bitCounterSet(1);
-                /*}*/
-            }else{app_led_ble_state = APP_LED_BLE_OFF;}/*
+                }
+            }
             else if(test_timer_flag){
                 app_led_ble_state = APP_LED_BLE_OFF;
                 TC0_Timer16bitCounterSet(1);
                 test_flag = 0;
-            }/**/
+            }
             switch (app_led_ble_state) {
                 case APP_LED_BLE_ON:{
                     LED_BLE_Set();
@@ -202,6 +191,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 2, NULL);
 }
 
 

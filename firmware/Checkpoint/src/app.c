@@ -115,14 +115,10 @@ void USER_tasks(void* parameter){
     TC0_Timer16bitPeriodSet(1024);
     
     LED_POWER_Set();
-#define CURRENT_TIME_MS xTaskGetTickCount()
-    TickType_t test_btt_time = CURRENT_TIME_MS;
-    TickType_t onoff_btt_time = CURRENT_TIME_MS;
     while (1){
         // app tasks
         if(onoff_flag){
-            LED_POWER_Set();
-            if((BUTTON_TEST_Get() == 1)){test_flag = (test_flag)? 0 : 1; test_btt_time = CURRENT_TIME_MS;}
+            if((BUTTON_TEST_Get() == 1)){test_flag = (test_flag)? 0 : 1;}
             if(test_flag){
                 if(appData.state == APP_STATE_SERVICE_TASKS){
                     app_led_ble_state = APP_LED_BLE_ON;
@@ -133,6 +129,7 @@ void USER_tasks(void* parameter){
                 app_led_ble_state = APP_LED_BLE_OFF;
                 TC0_Timer16bitCounterSet(1);
                 test_flag = 0;
+                test_timer_flag = 0;
             }
             switch (app_led_ble_state) {
                 case APP_LED_BLE_ON:{
@@ -151,7 +148,6 @@ void USER_tasks(void* parameter){
         }
         else {
             LED_BLE_Clear();
-            LED_POWER_Clear();
         }
     }
 }
@@ -191,7 +187,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 2, NULL);
+    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 1, NULL);
 }
 
 

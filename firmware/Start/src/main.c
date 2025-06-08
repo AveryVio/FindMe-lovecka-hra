@@ -52,48 +52,6 @@
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Definitions
-// *****************************************************************************
-// *****************************************************************************
-
-// APP LED BLE
-#define APP_LED_BLE_NULL 0
-#define APP_LED_BLE_OFF 1
-#define APP_LED_BLE_ON 2
-
-// APP TRACING STATES
-#define APP_TRACING_NULL 0
-#define APP_TRACING_OFF 1
-#define APP_TRACING_ON 2
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Functions and variables
-// *****************************************************************************
-// *****************************************************************************
-
-// global variable for "turning the device on and off" (not really)
-volatile uint8_t onoff_flag = 0;
-void onoff_button_callback(uintptr_t context){
-onoff_flag = (onoff_flag) ? 0 : 1;
-}
-//global variables for adding and removing
-volatile uint8_t removing_flag = 0;
-void removing_button_callback(uintptr_t context){
-removing_flag = (removing_flag) ? 0 : 1;
-}
-volatile uint8_t adding_flag = 0;
-void add_button_callback(uintptr_t context){
-adding_flag = 1;
-}
-// global variable for timing
-volatile uint8_t test_timer_flag = 0;
-void test_timer_callback(TC_TIMER_STATUS status, uintptr_t context){
-test_timer_flag = 1;
-}
-
-// *****************************************************************************
-// *****************************************************************************
 // Section: Main Entry Point
 // *****************************************************************************
 // *****************************************************************************
@@ -103,68 +61,11 @@ int main ( void )
     /* Initialize all modules */
     SYS_Initialize ( NULL );
     
-    uint8_t app_led_ble_state = APP_LED_BLE_NULL;
-    uint8_t app_tracing_state = APP_TRACING_NULL;
-
-    
-    // register callbacks
-    EIC_CallbackRegister(EIC_PIN_1, add_button_callback, (uintptr_t) NULL);
-    EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
-    EIC_CallbackRegister(EIC_PIN_0, removing_button_callback, (uintptr_t) NULL);
-    TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
-    
-    // start timer
-    TC0_TimerStart();
-    TC0_Timer16bitPeriodSet(1024);
     while ( true )
     {
         /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
- 
-        // app tasks
-        if(onoff_flag){
-            //handle button flags
-            if(BUTTON_TEST_Get()){
-                app_led_ble_state = APP_LED_BLE_ON;
-                TC0_Timer16bitCounterSet(1);
-            }
-            if(test_timer_flag){
-                app_led_ble_state = APP_LED_BLE_OFF;
-            }
-            //handle states
-            switch (app_led_ble_state) {
-                case APP_LED_BLE_ON:{
-                    // set led state to on
-                    break;
-                }
-                case APP_LED_BLE_OFF:{
-                    // set led state to off
-                    break;
-                }
-                case APP_LED_BLE_NULL:{
-                    app_led_ble_state = APP_LED_BLE_OFF;
-                    break;
-                }
-            }
-            switch (app_tracing_state) {
-                case APP_TRACING_ON:{
-                    // set led state to on
-                    break;
-                }
-                case APP_TRACING_OFF:{
-                    if((removing_flag) && (adding_flag)){
-                        app_tracing_state = (app_tracing_state == APP_TRACING_ON) ? APP_TRACING_OFF : APP_TRACING_ON;
-                    }
-                    // set led state to off
-                    break;
-                }
-                case APP_TRACING_NULL:{
-                    app_tracing_state = APP_TRACING_OFF;
-                    break;
-                }
-            }
-            
-        }
+
     }
 
     /* Execution should not come here during normal operation */

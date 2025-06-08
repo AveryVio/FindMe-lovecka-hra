@@ -151,29 +151,29 @@ int USER_InitializeGPS(){
     printf("$PMTK104*37\r\n");//cold start
     vTaskDelay(300);
     printf("$PMTK220,1000*1F\r\n");
-    if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;//set interval to 1000
+    if (USER_CheckValidity_of_PMTKMSG(USER_GetMSG()) != 3) return 0;//set interval to 1000
     vTaskDelay(300);
     printf("$PMTK353,$PMTK353,1,1,1,0,0*2A\r\n");//start gps, glonass, galileo
-    if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+    if (USER_CheckValidity_of_PMTKMSG(USER_GetMSG()) != 3) return 0;
     printf("$PQECEF,W,1,1*7F");//enable output
-    if (USER_CheckValidity_of_MSG(USER_GetPQMSG()) != 1) return 0;
+    if (USER_CheckValidity_of_PQMSG(USER_GetMSG()) != 1) return 0;
     return 1;
 }
 
 int USER_SuspendGPS(){
     printf("$PMTK161,0*28\r\n");
-    if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+    if (USER_CheckValidity_of_PMTKMSG(USER_GetMSG()) != 3) return 0;
     return 1;
 }
 
 int USER_StartStopGPSLogger(char start_or_stop){ //start = 0, stop = 1
     if(start_or_stop == 0) {
         printf("$PMTK185,0*23");
-        if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+        if (USER_CheckValidity_of_PMTKMSG(USER_GetMSG()) != 3) return 0;
     }
     else {
         printf("$PMTK185,1*23");
-        if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+        if (USER_CheckValidity_of_PMTKMSG(USER_GetMSG()) != 3) return 0;
     }
     return 1;
 }
@@ -200,9 +200,12 @@ void USER_Tasks(void* parameter){
             if(BUTTON_TEST_Get()){
                 app_led_ble_state = APP_LED_BLE_ON;
                 TC0_Timer16bitCounterSet(1);
+                test_flag = 0;
             }
             else if(test_timer_flag){
                 app_led_ble_state = APP_LED_BLE_OFF;
+                TC0_Timer16bitCounterSet(1);
+                test_timer_flag = 0;
             }
             //handle states
             switch (app_led_ble_state) {
@@ -219,16 +222,16 @@ void USER_Tasks(void* parameter){
                     break;
                 }
             }
+            if((removing_flag) && (adding_flag)){
+                app_tracing_state = (app_tracing_state == APP_TRACING_ON) ? APP_TRACING_OFF : APP_TRACING_ON;
+                removing_flag = 0;
+                adding_flag = 0;
+            }
             switch (app_tracing_state) {
                 case APP_TRACING_ON:{
-                    // set led state to on
                     break;
                 }
                 case APP_TRACING_OFF:{
-                    if((removing_flag) && (adding_flag)){
-                        app_tracing_state = (app_tracing_state == APP_TRACING_ON) ? APP_TRACING_OFF : APP_TRACING_ON;
-                    }
-                    // set led state to off
                     break;
                 }
                 case APP_TRACING_NULL:{

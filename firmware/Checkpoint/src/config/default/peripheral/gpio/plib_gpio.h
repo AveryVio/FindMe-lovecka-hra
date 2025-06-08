@@ -61,14 +61,14 @@
 // *****************************************************************************
 // *****************************************************************************
 
-/*** Macros for GPIO_RA11 pin ***/
-#define GPIO_RA11_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<11U))
-#define GPIO_RA11_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<11U))
-#define GPIO_RA11_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<11U))
-#define GPIO_RA11_Get()               ((GPIOA_REGS->GPIO_PORT >> 11U) & 0x1U)
-#define GPIO_RA11_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<11U))
-#define GPIO_RA11_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<11U))
-#define GPIO_RA11_PIN                  GPIO_PIN_RA11
+/*** Macros for BUTTON_TEST pin ***/
+#define BUTTON_TEST_Set()               (GPIOA_REGS->GPIO_LATSET = (1U<<11U))
+#define BUTTON_TEST_Clear()             (GPIOA_REGS->GPIO_LATCLR = (1U<<11U))
+#define BUTTON_TEST_Toggle()            (GPIOA_REGS->GPIO_LATINV= (1U<<11U))
+#define BUTTON_TEST_Get()               ((GPIOA_REGS->GPIO_PORT >> 11U) & 0x1U)
+#define BUTTON_TEST_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<11U))
+#define BUTTON_TEST_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<11U))
+#define BUTTON_TEST_PIN                  GPIO_PIN_RA11
 /*** Macros for LED_BLE pin ***/
 #define LED_BLE_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<12U))
 #define LED_BLE_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<12U))

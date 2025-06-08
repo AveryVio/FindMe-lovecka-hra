@@ -10,7 +10,7 @@ onoff_flag = (onoff_flag) ? 0 : 1;
 //global variables for adding and removing
 volatile uint8_t removing_flag = 0;
 void removing_button_callback(uintptr_t context){
-removing_flag = (removing_flag) ? 0 : 1;
+removing_flag = 1;
 }
 volatile uint8_t adding_flag = 0;
 void add_button_callback(uintptr_t context){

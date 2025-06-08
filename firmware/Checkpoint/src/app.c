@@ -123,12 +123,12 @@ void USER_Tasks(void* parameter){
                 if(appData.state == APP_STATE_SERVICE_TASKS){
                     app_led_ble_state = APP_LED_BLE_ON;
                     TC0_Timer16bitCounterSet(1);
+                    test_flag = 0;
                 }
             }
             else if(test_timer_flag){
                 app_led_ble_state = APP_LED_BLE_OFF;
                 TC0_Timer16bitCounterSet(1);
-                test_flag = 0;
                 test_timer_flag = 0;
             }
             switch (app_led_ble_state) {
@@ -145,9 +145,6 @@ void USER_Tasks(void* parameter){
                     break;
                 }
             }
-        }
-        else {
-            LED_BLE_Clear();
         }
     }
 }

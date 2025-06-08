@@ -148,9 +148,6 @@ void USER_Tasks(void* parameter){
                 }
             }
         }
-        else {
-            LED_BLE_Clear();
-        }
     }
 }
 

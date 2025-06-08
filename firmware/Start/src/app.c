@@ -52,6 +52,7 @@
 // *****************************************************************************
 // *****************************************************************************
 #include <string.h>
+#include <stdio.h>
 #include "app.h"
 #include "definitions.h"
 #include "app_ble.h"
@@ -107,7 +108,77 @@ APP_DATA appData;
 /* TODO:  Add any necessary local functions.
 */
 
-void USER_tasks(void* parameter){
+unsigned char Ql_Check_XOR(const unsigned char *pData, unsigned int Length) {
+    unsigned char result = 0;
+    unsigned int i = 0;
+    if((NULL == pData) || (Length < 1)){
+        return 0;
+    }
+    for(i = 0; i < Length; i++) {
+        result ^= *(pData + i);
+    }
+    return result;
+}
+
+char* USER_GetMSG(){
+    char* msg;
+    scanf("%s", &msg);
+    return msg;
+}
+
+int USER_CheckValidity_of_PMTKMSG(char* msg){
+    
+    if (msg[12] == '0') return 0;//invalid packet
+    else if (msg[12] == '1') return 1;//unsupported packet type
+    else if (msg[12] == '2') return 2;//valid packet action failed
+    else if (msg[12] == '3') return 3;//valid packet action succeeded
+}
+int USER_CheckValidity_of_PQMSG(char* msg,int chpos){
+    if (msg[chpos] == 'O') return 0;//OK
+    else if (msg[chops] == 'E') return 1;//ERROR
+}
+
+void USER_ChangeBLEResponseData(uint8_t* data, int length){
+    BLE_GAP_AdvDataParams_T         appScanRspData;
+
+    //Configure advertising scan response data
+    appScanRspData.advLen=length;
+    (void)memcpy(appScanRspData.advData, data, appScanRspData.advLen);     /* Scan Response Data */
+    BLE_GAP_SetScanRspData(&appScanRspData);
+}
+
+int USER_InitializeGPS(){
+    printf("$PMTK104*37\r\n");//cold start
+    vTaskDelay(300);
+    printf("$PMTK220,1000*1F\r\n");
+    if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;//set interval to 1000
+    vTaskDelay(300);
+    printf("$PMTK353,$PMTK353,1,1,1,0,0*2A\r\n");//start gps, glonass, galileo
+    if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+    printf("$PQECEF,W,1,1*7F");//enable output
+    if (USER_CheckValidity_of_MSG(USER_GetPQMSG()) != 1) return 0;
+    return 1;
+}
+
+int USER_SuspendGPS(){
+    printf("$PMTK161,0*28\r\n");
+    if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+    return 1;
+}
+
+int USER_StartStopGPSLogger(char start_or_stop){ //start = 0, stop = 1
+    if(start_or_stop == 0) {
+        printf("$PMTK185,0*23");
+        if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+    }
+    else {
+        printf("$PMTK185,1*23");
+        if (USER_CheckValidity_of_MSG(USER_GetPMTKMSG()) != 3) return 0;
+    }
+    return 1;
+}
+
+void USER_Tasks(void* parameter){
     uint8_t app_led_ble_state = APP_LED_BLE_NULL;
     uint8_t app_tracing_state = APP_TRACING_NULL;
 
@@ -194,6 +265,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    xTaskCreate(USER_Tasks, "USER_Tasks", 1024, NULL, 1, NULL);
 }
 
 

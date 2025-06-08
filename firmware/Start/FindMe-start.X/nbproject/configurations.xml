@@ -122,6 +122,12 @@
             <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
               <itemPath>../src/config/default/peripheral/nvm/plib_nvm.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="sercom" displayName="sercom" projectFiles="true">
+              <logicalFolder name="usart" displayName="usart" projectFiles="true">
+                <itemPath>../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.h</itemPath>
+                <itemPath>../src/config/default/peripheral/sercom/usart/plib_sercom_usart_common.h</itemPath>
+              </logicalFolder>
+            </logicalFolder>
             <logicalFolder name="tc" displayName="tc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/tc/plib_tc_common.h</itemPath>
               <itemPath>../src/config/default/peripheral/tc/plib_tc0.h</itemPath>
@@ -447,6 +453,7 @@
       </logicalFolder>
       <itemPath>../src/app.h</itemPath>
       <itemPath>../src/app_idle_task.h</itemPath>
+      <itemPath>../src/init.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -537,6 +544,11 @@
             </logicalFolder>
             <logicalFolder name="nvm" displayName="nvm" projectFiles="true">
               <itemPath>../src/config/default/peripheral/nvm/plib_nvm.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="sercom" displayName="sercom" projectFiles="true">
+              <logicalFolder name="usart" displayName="usart" projectFiles="true">
+                <itemPath>../src/config/default/peripheral/sercom/usart/plib_sercom0_usart.c</itemPath>
+              </logicalFolder>
             </logicalFolder>
             <logicalFolder name="tc" displayName="tc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/tc/plib_tc0.c</itemPath>
@@ -688,6 +700,7 @@
       <itemPath>../src/app_user_edits.c</itemPath>
       <itemPath>../src/main.c</itemPath>
       <itemPath>../src/app_idle_task.c</itemPath>
+      <itemPath>../src/init.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>

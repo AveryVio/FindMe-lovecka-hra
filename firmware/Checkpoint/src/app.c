@@ -104,7 +104,7 @@ APP_DATA appData;
  * IT
  * WORK
  */
-void USER_tasks(void* parameter){
+void USER_Tasks(void* parameter){
     // register callbacks
     uint8_t app_led_ble_state = APP_LED_BLE_NULL;
     EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
@@ -187,7 +187,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    xTaskCreate(USER_tasks, "USER_tasks", 1024, NULL, 1, NULL);
+    xTaskCreate(USER_Tasks, "USER_Tasks", 1024, NULL, 1, NULL);
 }
 
 

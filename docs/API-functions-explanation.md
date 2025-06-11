@@ -45,12 +45,26 @@ If an error occurs it prints the error message and returns False.
 
 The function creates a cursor and makes a column list string that it inserts into a query, then executes it. Then it turns the returned values into a list of dictionaries and returns that.
 If an error occurs it prints the error message and returns an empty list.
+
+#### fetch_and_sort
+>params: generic_params, columns(list), sort_column(str), limit=None(int)  
+>returns: list of dictionaries/Empty list  
+
+The function creates a cursor and makes a column list string which it inserts into a query, with a order by a column, then executes it. Then it turns the returned values into a lis of dictionaries and returns that.
+If an error occurs it prints the error message and returns an empty list.
+
 #### entry_exists
 >params: generic_params, column(str), value(str)  
 >returns: True/False  
 
 The function creates a cursor and makes a query filtering for the value in a specific column, then executes it and returns the output.
 If an error occurs it prints the error message and returns False.
+#### count_rows
+>params: generic_params
+>returns: int  
+
+The function creates a cursor and makes a query counting the rows, then it executes it and returns the output.
+If an error occurs it prints the  message and returns -1.
 ## Insert functions
 #### insert_into_table
 >params: generic_params, data(dict)  
@@ -115,8 +129,9 @@ For GET requests this page only serves to tell a lost traveller that this is a P
 #### /i_venture_forth_to_hunt
 
 The function separates the parameters from the path. If the parameters are empty or incorrect, it responds with an error message.
-If they're correct they separate the key value pairs into a list of dictionaries, then it then uses fetch_columns_with_filter() to get the desired data and sends it to the client as a JSON file.
-If an error occurs, it send's that message to the client.
+If the parameters are a filter ("f"), then they separate the key value pairs into a list of dictionaries, then it then uses fetch_columns_with_filter() to get the desired data and sends it to the client as a JSON file.
+If the parameters are for getting top ("t"), then it first gets the amount from the parameters. It then checks for the amount in the db using count_rows(), if it's over that amount, it caps out. The amount is inserted into fetch_and_sort() and gets the data from that. Those get sent to the client in a JSON file.
+If a meta character ("\*") is used then it get's the whole db using fetch_all_from_table() and sends it to the client in a JSON file. (this will get rectified to only send huntid and count in the future)
 
 #### /spse
 

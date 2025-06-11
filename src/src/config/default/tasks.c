@@ -109,7 +109,7 @@ void SYS_Tasks ( void )
 
 
     /* Maintain the application's state machine. */
-    
+
     /* Create OS Thread for APP_Tasks. */
     (void) xTaskCreate(
            (TaskFunction_t) lAPP_Tasks,

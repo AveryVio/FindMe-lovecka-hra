@@ -69,6 +69,14 @@
 #define BUTTON_TEST_OutputEnable()      (GPIOA_REGS->GPIO_TRISCLR = (1U<<11U))
 #define BUTTON_TEST_InputEnable()       (GPIOA_REGS->GPIO_TRISSET = (1U<<11U))
 #define BUTTON_TEST_PIN                  GPIO_PIN_RA11
+/*** Macros for LED_POWER pin ***/
+#define LED_POWER_Set()               (GPIOB_REGS->GPIO_LATSET = (1U<<6U))
+#define LED_POWER_Clear()             (GPIOB_REGS->GPIO_LATCLR = (1U<<6U))
+#define LED_POWER_Toggle()            (GPIOB_REGS->GPIO_LATINV= (1U<<6U))
+#define LED_POWER_Get()               ((GPIOB_REGS->GPIO_PORT >> 6U) & 0x1U)
+#define LED_POWER_OutputEnable()      (GPIOB_REGS->GPIO_TRISCLR = (1U<<6U))
+#define LED_POWER_InputEnable()       (GPIOB_REGS->GPIO_TRISSET = (1U<<6U))
+#define LED_POWER_PIN                  GPIO_PIN_RB6
 
 
 // *****************************************************************************

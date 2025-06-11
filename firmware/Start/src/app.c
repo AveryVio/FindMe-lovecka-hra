@@ -135,7 +135,7 @@ int USER_CheckValidity_of_PMTKMSG(char* msg){
 }
 int USER_CheckValidity_of_PQMSG(char* msg,int chpos){
     if (msg[chpos] == 'O') return 0;//OK
-    else if (msg[chops] == 'E') return 1;//ERROR
+    else if (msg[chpos] == 'E') return 1;//ERROR
 }
 
 void USER_ChangeBLEResponseData(uint8_t* data, int length){
@@ -156,7 +156,7 @@ int USER_InitializeGPS(){
     printf("$PMTK353,$PMTK353,1,1,1,0,0*2A\r\n");//start gps, glonass, galileo
     if (USER_CheckValidity_of_PMTKMSG(USER_GetMSG()) != 3) return 0;
     printf("$PQECEF,W,1,1*7F");//enable output
-    if (USER_CheckValidity_of_PQMSG(USER_GetMSG()) != 1) return 0;
+    if (USER_CheckValidity_of_PQMSG(USER_GetMSG(),12) != 1) return 0;
     return 1;
 }
 
@@ -193,7 +193,8 @@ void USER_Tasks(void* parameter){
     TC0_TimerStart();
     TC0_Timer16bitPeriodSet(1024);
     
-    while(1){
+    LED_POWER_Set();
+    
         // app tasks
         if(onoff_flag){
             //handle button flags
@@ -240,7 +241,9 @@ void USER_Tasks(void* parameter){
                 }
             }
         }
-    }
+        else{
+            LED_POWER_Clear();
+        }
 }
 
 
@@ -268,7 +271,7 @@ void APP_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    xTaskCreate(USER_Tasks, "USER_Tasks", 1024, NULL, 1, NULL);
+    //xTaskCreate(USER_Tasks, "USER_Tasks", 1024, NULL, 1, NULL);
 }
 
 
@@ -356,6 +359,7 @@ void APP_Tasks ( void )
             /* TODO: Handle error in application's state machine. */
             break;
         }
+        USER_Tasks();
     }
 }
 

@@ -104,7 +104,7 @@ APP_DATA appData;
  * IT
  * WORK
  */
-void USER_Tasks(void* parameter){
+void USER_Tasks(/*void* parameter*/){
     // register callbacks
     uint8_t app_led_ble_state = APP_LED_BLE_NULL;
     EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);

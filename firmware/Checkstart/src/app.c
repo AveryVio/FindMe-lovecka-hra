@@ -106,15 +106,15 @@ APP_DATA appData;
  * IT
  * WORK
  */
-void USER_Tasks(void* parameter){
+void USER_Tasks(/*void* parameter*/){
     // register callbacks
     uint8_t app_led_ble_state = APP_LED_BLE_NULL;
-    EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
-    TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
+    //EIC_CallbackRegister(EIC_PIN_2, onoff_button_callback, (uintptr_t) NULL);
+    //TC0_TimerCallbackRegister(test_timer_callback, (uintptr_t) NULL);
     
     // start timer
-    TC0_TimerStart();
-    TC0_Timer16bitPeriodSet(1024);
+    //TC0_TimerStart();
+    //TC0_Timer16bitPeriodSet(1024);
    
     LED_POWER_Set();
     
@@ -245,7 +245,7 @@ void APP_Tasks ( void )
             break;
         }
     }
-    USER_Tasks();
+    //USER_Tasks();
 }
 
 
